@@ -7,7 +7,8 @@
 //
 
 import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View, Alert } from "react-native"
+import { TouchableOpacity, TextInput } from "react-native-gesture-handler"
 
 
 export default class AdminModalInputOfInventory extends React.Component {
@@ -24,14 +25,40 @@ export default class AdminModalInputOfInventory extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			units: 0,
+			packs: 1,
+			cups:  1,
+			ice:   0,
+			straw: 0,
+		};
 	}
 
 	componentDidMount() {
 	
 	}
 
+	updateFields() {
+		Alert.alert("updated!");
+	}
+
+	cancelFields() {
+		Alert.alert("cancelled!");
+	}
+
+	parseNumField(text, minVal) {
+		var num = parseInt(text)
+		if (isNaN(num) || num < minVal) {
+			num = minVal;
+		}
+		return num;
+	}
+
+	parseNumButton(num, minVal) {
+		return Math.max(num, minVal);
+	}
+
 	render() {
-	
 		return <View
 				style={styles.viewView}>
 				<View
@@ -127,28 +154,30 @@ export default class AdminModalInputOfInventory extends React.Component {
 											alignItems: "flex-end",
 										}}>
 										<Text
-											style={styles.inputDrinkNameTwoText}>Total Units:</Text>
+											style={styles.inputDrinkNameTwoText}>Total Units: {this.state.units * this.state.packs}</Text>
 										<Text
-											style={styles.inputDrinkNameThreeText}>Available:</Text>
+											style={styles.inputDrinkNameThreeText}>Available: {this.state.units * this.state.packs}</Text>
 										<View
 											style={{
 												flex: 1,
 											}}/>
 										<View
 											style={styles.editFiveView}>
-											<Text
-												style={styles.editFiveText}>Update</Text>
+											<TouchableOpacity onPress={() => this.updateFields()}>
+												<Text
+													style={styles.editFiveText}>Update</Text>
+											</TouchableOpacity>
 										</View>
 									</View>
 								</View>
 							</View>
 							<Text
-								style={styles.inputDrinkNameFourText}>Inventory Value:</Text>
+								style={styles.inputDrinkNameFourText}>Inventory Value: {this.state.units * this.state.packs}</Text>
 						</View>
 					</View>
 				</View>
 				<View
-					style={styles.preorderQueCardView}>
+					style={styles.preorderQueCardTwoView}>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -160,85 +189,43 @@ export default class AdminModalInputOfInventory extends React.Component {
 							justifyContent: "center",
 						}}>
 						<Image
-							source={require("./../../assets/images/background-24.png")}
-							style={styles.backgroundImage}/>
+							source={require("./../../assets/images/background-32.png")}
+							style={styles.backgroundTwoImage}/>
 					</View>
 					<View
 						pointerEvents="box-none"
 						style={{
 							position: "absolute",
-							left: 19,
+							left: 20,
 							right: 20,
 							top: 19,
 							bottom: 20,
 							alignItems: "flex-start",
 						}}>
 						<View
-							style={styles.drinkCardElementsView}>
+							style={styles.drinkCardElementsTwoView}>
 							<Text
-								style={styles.drinkNameText}>Current Quantity:</Text>
+								style={styles.drinkNameElevenText}>Current Quantity:</Text>
 							<Image
 								source={require("./../../assets/images/seperator-6.png")}
-								style={styles.seperatorImage}/>
+								style={styles.seperatorNineImage}/>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 19,
-									marginRight: 1,
-									marginBottom: 1,
-								}}>
-								<Text
-									style={styles.drinkNameTwoText}>+</Text>
-								<Text
-									style={styles.drinkNameThreeText}>-</Text>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 1,
-									marginLeft: 1,
-									marginRight: 2,
-									flexDirection: "row",
-									alignItems: "flex-end",
-								}}>
-								<Image
-									source={require("./../../assets/images/seperator-2.png")}
-									style={styles.seperatorTwoImage}/>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									pointerEvents="box-none"
-									style={{
-										width: 129,
-										height: 1,
-									}}>
-									<Image
-										source={require("./../../assets/images/seperator-2.png")}
-										style={styles.seperatorThreeImage}/>
-									<Image
-										source={require("./../../assets/images/seperator-2.png")}
-										style={styles.seperatorFourImage}/>
-								</View>
-							</View>
+							<Image
+								source={require("./../../assets/images/seperator-2.png")}
+								style={styles.seperatorTenImage}/>
 						</View>
 						<Text
-							style={styles.drinkNameFourText}>Unit:</Text>
+							style={styles.drinkNameTwelveText}>Unit:</Text>
 						<Text
-							style={styles.drinkNameFiveText}>Pack:</Text>
+							style={styles.drinkNameThirteenText}>Pack:</Text>
 						<Text
-							style={styles.drinkNameNineText}>Updated Quantity:</Text>
+							style={styles.drinkNameSixteenText}>Updated Quantity:</Text>
 						<Image
 							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorFiveImage}/>
-						<Image
-							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorEightImage}/>
+							style={styles.seperatorElevenImage}/>
 						<View
 							style={{
 								flex: 1,
@@ -255,8 +242,10 @@ export default class AdminModalInputOfInventory extends React.Component {
 							}}>
 							<View
 								style={styles.editTwoView}>
-								<Text
-									style={styles.editTwoText}>Cancel</Text>
+								<TouchableOpacity onPress={() => this.cancelFields()}>
+									<Text
+										style={styles.editTwoText}>Cancel</Text>
+								</TouchableOpacity>
 							</View>
 							<View
 								style={{
@@ -264,8 +253,10 @@ export default class AdminModalInputOfInventory extends React.Component {
 								}}/>
 							<View
 								style={styles.editView}>
-								<Text
-									style={styles.editText}>Update</Text>
+								<TouchableOpacity onPress={() => this.updateFields()}>
+									<Text
+										style={styles.editTwoText}>Update</Text>
+								</TouchableOpacity>
 							</View>
 						</View>
 					</View>
@@ -273,21 +264,59 @@ export default class AdminModalInputOfInventory extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							position: "absolute",
-							right: 19,
-							width: 147,
-							top: 21,
-							height: 107,
+							right: 20,
+							width: 146,
+							top: 79,
+							height: 49,
 							alignItems: "flex-end",
 						}}>
-						<Text
-							style={styles.drinkNameEightText}>0</Text>
-						<Text
-							style={styles.drinkNameSixText}>10</Text>
-						<Text
-							style={styles.drinkNameSevenText}>100</Text>
+						<View style={{ flexDirection: 'row' }}>
+							<TextInput 
+								defaultValue="0"
+								value={this.state.units.toString()}
+								keyboardType="number-pad"
+								onChangeText={(text) => {this.setState({units: this.parseNumField(text, 0)})}}
+								style={styles.drinkNameFourteenText}/>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({units: this.parseNumButton(this.state.units + 1, 0)})}>
+								<Image
+									source={require("./../../assets/images/plus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({units: this.parseNumButton(this.state.units - 1, 0)})}>
+							<Image
+									source={require("./../../assets/images/minus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+						</View>
+						<Image
+							source={require("./../../assets/images/seperator-2.png")}
+							style={styles.seperatorElevenImage}/>
+						<View style={{ flexDirection: 'row' }}>
+						<TextInput 
+								defaultValue="0"
+								value={this.state.packs.toString()}
+								keyboardType="number-pad"
+								onChangeText={(text) => {this.setState({packs: this.parseNumField(text, 1)})}}
+								style={styles.drinkNameFourteenText}/>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({packs: this.parseNumButton(this.state.packs + 1, 1)})}>
+								<Image
+									source={require("./../../assets/images/plus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({packs: this.parseNumButton(this.state.packs - 1, 1)})}>
+							<Image
+									source={require("./../../assets/images/minus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+						</View>
+						<Image
+							source={require("./../../assets/images/seperator-2.png")}
+							style={styles.seperatorElevenImage}/>
+						<View style={{ flexDirection: 'row' }}>
+							<Text 
+								style={styles.drinkNameFourteenText}>{this.state.units * this.state.packs}</Text>
+						</View>
 					</View>
-					<Text
-						style={styles.drinkNameTenText}>1,000</Text>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -298,12 +327,6 @@ export default class AdminModalInputOfInventory extends React.Component {
 							height: 31,
 							alignItems: "flex-end",
 						}}>
-						<Image
-							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorSixImage}/>
-						<Image
-							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorSevenImage}/>
 					</View>
 				</View>
 				<View
@@ -360,13 +383,34 @@ export default class AdminModalInputOfInventory extends React.Component {
 							style={{
 								flex: 1,
 							}}/>
-						<Image
-							source={require("./../../assets/images/plus-circle.png")}
-							style={styles.plusCircleImage}/>
 						<View
-							style={styles.editFourView}>
-							<Text
-								style={styles.editFourText}>Cancel</Text>
+							pointerEvents="box-none"
+							style={{
+								alignSelf: "stretch",
+								height: 18,
+								marginLeft: 76,
+								marginRight: 57,
+								flexDirection: "row",
+								alignItems: "flex-end",
+							}}>
+							<View
+								style={styles.editTwoView}>
+								<TouchableOpacity onPress={() => this.cancelFields()}>
+									<Text
+										style={styles.editTwoText}>Cancel</Text>
+								</TouchableOpacity>
+							</View>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<View
+								style={styles.editView}>
+								<TouchableOpacity onPress={() => this.updateFields()}>
+									<Text
+										style={styles.editTwoText}>Update</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 					<View
@@ -379,13 +423,67 @@ export default class AdminModalInputOfInventory extends React.Component {
 							height: 49,
 							alignItems: "flex-end",
 						}}>
-						<Text
-							style={styles.drinkNameFourteenText}>1</Text>
-						<Text
-							style={styles.drinkNameFifteenText}>1</Text>
+						<View style={{ flexDirection: 'row' }}>
+							<TextInput 
+								defaultValue="0"
+								value={this.state.cups.toString()}
+								keyboardType="number-pad"
+								onChangeText={(text) => {this.setState({cups: this.parseNumField(text, 1)})}}
+								style={styles.drinkNameFourteenText}/>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({cups: this.parseNumButton(this.state.cups + 1, 1)})}>
+								<Image
+									source={require("./../../assets/images/plus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({cups: this.parseNumButton(this.state.cups - 1, 1)})}>
+							<Image
+									source={require("./../../assets/images/minus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+						</View>
+						<Image
+							source={require("./../../assets/images/seperator-2.png")}
+							style={styles.seperatorElevenImage}/>
+						<View style={{ flexDirection: 'row' }}>
+							<TextInput 
+								defaultValue="0"
+								value={this.state.ice.toString()}
+								keyboardType="number-pad"
+								onChangeText={(text) => {this.setState({ice: this.parseNumField(text, 0)})}}
+								style={styles.drinkNameFourteenText}/>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({ice: this.parseNumButton(this.state.ice + 1, 0)})}>
+								<Image
+									source={require("./../../assets/images/plus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({ice: this.parseNumButton(this.state.ice - 1, 0)})}>
+							<Image
+									source={require("./../../assets/images/minus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+						</View>
+						<Image
+							source={require("./../../assets/images/seperator-2.png")}
+							style={styles.seperatorElevenImage}/>
+						<View style={{ flexDirection: 'row' }}>
+							<TextInput 
+								defaultValue="0"
+								value={this.state.straw.toString()}
+								keyboardType="number-pad"
+								onChangeText={(text) => {this.setState({straw: this.parseNumField(text, 0)})}}
+								style={styles.drinkNameFourteenText}/>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({straw: this.parseNumButton(this.state.straw + 1, 0)})}>
+								<Image
+									source={require("./../../assets/images/plus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={ .5 } onPress={() => this.setState({straw: this.parseNumButton(this.state.straw - 1, 0)})}>
+							<Image
+									source={require("./../../assets/images/minus-circle.png")}
+									style={styles.plusCircleImage}/>
+							</TouchableOpacity>
+						</View>
 					</View>
-					<Text
-						style={styles.drinkNameSeventeenText}>1</Text>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -396,12 +494,6 @@ export default class AdminModalInputOfInventory extends React.Component {
 							height: 31,
 							alignItems: "flex-end",
 						}}>
-						<Image
-							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorTwelveImage}/>
-						<Image
-							source={require("./../../assets/images/seperator-2.png")}
-							style={styles.seperatorThirteenImage}/>
 					</View>
 				</View>
 			</View>
