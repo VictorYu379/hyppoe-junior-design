@@ -59,7 +59,7 @@ export default class AdminModalInputOfInventory extends React.Component {
 								alignSelf: "stretch",
 								height: 20,
 								marginLeft: 8,
-								marginRight: 55,
+								marginRight: 10,
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>

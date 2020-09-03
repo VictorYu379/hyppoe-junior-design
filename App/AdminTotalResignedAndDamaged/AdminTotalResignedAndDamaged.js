@@ -51,7 +51,7 @@ export default class AdminTotalResignedAndDamaged extends React.Component {
 						style={{
 							height: 20,
 							marginLeft: 11,
-							marginRight: 55,
+							marginRight: 10,
 							flexDirection: "row",
 							alignItems: "flex-start",
 						}}>
