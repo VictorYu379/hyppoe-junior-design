@@ -75,11 +75,11 @@ import { AppLoading, DangerZone } from "expo"
 import { createAppContainer, createStackNavigator } from "react-navigation"
 
 const PushRouteOne = createStackNavigator({
-	AdminTotalInventoryAndSetAlerts: {
-		screen: AdminTotalInventoryAndSetAlerts,
+	AdminDashboard: {
+		screen: AdminDashboard,
 	},
 }, {
-	initialRouteName: "AdminTotalInventoryAndSetAlerts",
+	initialRouteName: "AdminDashboard",
 })
 
 const RootNavigator = createStackNavigator({
