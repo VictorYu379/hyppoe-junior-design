@@ -7,8 +7,8 @@
 //
 
 import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
-
+import { Image, StyleSheet, Text, View, ScrollView } from "react-native"
+import { TouchableOpacity, TextInput } from "react-native-gesture-handler"
 
 export default class AdminAddStandsAndAssignInventory extends React.Component {
 
@@ -24,6 +24,122 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 
 	constructor(props) {
 		super(props)
+
+		this.state = {
+			Stations: [
+				{
+					name: 'Big Tent',
+					tablets: 4,
+					runners: 4,
+					drinks: [
+						{ name: 'Bud Light', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Coors', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Coca Cola', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Water', unit: 0, pack: 0, percent: 0 }
+					],
+					total: 0
+				},
+				{
+					name: 'Main Stage',
+					tablets: 4,
+					runners: 4,
+					drinks: [
+						{ name: 'Bud Light', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Coors', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Coca Cola', unit: 0, pack: 0, percent: 0 },
+						{ name: 'Water', unit: 0, pack: 0, percent: 0 }
+					],
+					total: 0
+				}
+			],
+			Temp: [
+				{
+					name: 'Big Tent',
+					tablets: 4,
+					runners: 4,
+					drinks: [
+						{ name: 'Bud Light', unit: 0, pack: 0 },
+						{ name: 'Coors', unit: 0, pack: 0 },
+						{ name: 'Coca Cola', unit: 0, pack: 0 },
+						{ name: 'Water', unit: 0, pack: 0 }
+					]
+				},
+				{
+					name: 'Main Stage',
+					tablets: 4,
+					runners: 4,
+					drinks: [
+						{ name: 'Bud Light', unit: 0, pack: 0 },
+						{ name: 'Coors', unit: 0, pack: 0 },
+						{ name: 'Coca Cola', unit: 0, pack: 0 },
+						{ name: 'Water', unit: 0, pack: 0 }
+					]
+				}
+			]
+		}
+	}
+
+	parseNumField(text) {
+		var num = parseInt(text);
+		if (isNaN(num) || num <= 0) {
+			num = 0;
+		}
+		return num;
+	}
+
+	updateTablet(stationId, text) {
+		var num = this.parseNumField(text);
+		let temp = [...this.state.Temp];
+		temp[stationId] = {...temp[stationId], tablets: num};
+		this.setState({Temp: temp});
+	}
+
+	updateRunner(stationId, text) {
+		var num = this.parseNumField(text);
+		let temp = [...this.state.Temp];
+		temp[stationId] = {...temp[stationId], runners: num};
+		this.setState({Temp: temp});
+	}
+
+	updateDrinkUnit(stationId, drinkId, text) {
+		var num = this.parseNumField(text);
+		let temp = [...this.state.Temp];
+		let drinks = [...temp[stationId].drinks];
+		drinks[drinkId] = {...drinks[drinkId], unit: num};
+		temp[stationId] = {...temp[stationId], drinks: drinks};
+		this.setState({Temp: temp});
+	}
+
+	updateDrinkPack(stationId, drinkId, text) {
+		var num = this.parseNumField(text);
+		let temp = [...this.state.Temp];
+		let drinks = [...temp[stationId].drinks];
+		drinks[drinkId] = {...drinks[drinkId], pack: num};
+		temp[stationId] = {...temp[stationId], drinks: drinks};
+		this.setState({Temp: temp});
+	}
+
+	updateFields() {
+		let stations = [...this.state.Temp];
+		for (let i = 0; i < stations.length; i++) {
+			let sum = 0;
+			let drinks = [...stations[i].drinks];
+			for (let j = 0; j < drinks.length; j++) {
+				let drink = drinks[j];
+				sum += drink.unit * drink.pack;
+			}
+			stations[i] = {...stations[i], total: sum};
+			for (let j = 0; j < drinks.length; j++) {
+				let drink = drinks[j];
+				let per = 0;
+				if (sum != 0) {
+					per = Math.floor(drink.unit * drink.pack * 100 / sum);
+				}
+				drinks[j] = {...drinks[j], percent: per};
+			}
+			stations[i] = {...stations[i], drinks: drinks};
+		}
+		this.setState({Stations: stations});
 	}
 
 	componentDidMount() {
@@ -73,1181 +189,334 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 								source={require("./../../assets/images/menu-button.png")}
 								style={styles.menuButtonImage}/>
 						</View>
-						<View
-							style={styles.preorderQueCardView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/background-44.png")}
-									style={styles.backgroundImage}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 20,
-									right: 19,
-									top: 36,
-									bottom: 20,
-									alignItems: "flex-end",
-								}}>
-								<View
-									style={styles.drinkCardElementsView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-										}}>
-										<Text
-											style={styles.drinkNameText}>Station 1: Big Tent</Text>
-										<Image
-											source={require("./../../assets/images/seperator-6.png")}
-											style={styles.seperatorImage}/>
-										<Text
-											style={styles.inputDrinkNameTwentyText}>Total:</Text>
-										<Text
-											style={styles.inputDrinkNameNineteenText}>Tablets:</Text>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 63,
-												marginRight: 0,
-												marginTop: 32,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameEighteenText}>Available: Unit / Pack</Text>
+						<View style ={styles.scrollView}>
+							<ScrollView style={styles.scrollView}>
+								<View>
+									{
+									this.state.Stations.map((item, index) => (
+
+										<View key={index}
+											style={styles.preorderQueCardView}>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameTwentyThreeText}>Assign: Unit / Pack</Text>
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/background-44.png")}
+													style={styles.backgroundImage}/>
+											</View>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameThreeText}>Total Inventory</Text>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 16,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameText}>Bud Light:</Text>
-											<View
-												style={styles.unitPerPackView}>
-												<Text
-													style={styles.inputDrinkNameElevenText}>0</Text>
+													position: "absolute",
+													left: 20,
+													right: 19,
+													top: 24,
+													bottom: 20,
+													alignItems: "flex-end",
+												}}>
+												<View
+													style={styles.drinkCardElementsView}>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+														}}>
+														<Text
+															style={styles.drinkNameText}>Station {index+1}: {item.name}</Text>
+														<Image
+															source={require("./../../assets/images/seperator-6.png")}
+															style={styles.seperatorImage}/>
+														<Text
+															style={styles.inputDrinkNameTwentyText}>Total:</Text>
+														<View
+															pointerEvents="box-none"
+															style={{
+																height: 16,
+																marginLeft: 63,
+																marginRight: 0,
+																marginTop: 48,
+																marginBottom: 16,
+																flexDirection: "row",
+																alignItems: "flex-start",
+															}}>
+															<Text
+																style={styles.inputDrinkNameEighteenText}>Available: Unit / Pack</Text>
+															<View
+																style={{
+																	flex: 1,
+																}}/>
+															<Text
+																style={styles.inputDrinkNameTwentyThreeText}>Assign: Unit / Pack</Text>
+															<View
+																style={{
+																	flex: 1,
+																}}/>
+															<Text
+																style={styles.inputDrinkNameThreeText}>Total Inventory</Text>
+														</View>
+														<View>
+															{
+															item.drinks.map((drink, i) => (
+																<View
+																	key={i}
+																	pointerEvents="box-none"
+																	style={{
+																		height: 16,
+																		marginLeft: 6,
+																		marginRight: 5,
+																		marginTop: 2,
+																		flexDirection: "row",
+																		alignItems: "flex-start",
+																	}}>
+																	<Text
+																		style={styles.inputDrinkNameText}>{drink.name}:</Text>
+																	<View
+																		style={styles.unitPerPackView}>
+																		<Text
+																			style={styles.inputDrinkNameElevenText}>{drink.unit}</Text>
+																		<View
+																			style={{
+																				flex: 1,
+																			}}/>
+																		<Text
+																			style={styles.inputDrinkNameTwelveText}>{drink.pack}</Text>
+																	</View>
+																	<View
+																		style={{
+																			flex: 1,
+																		}}/>
+																	<View
+																		style={styles.numberBoxTwoView}>
+																		<View
+																			pointerEvents="box-none"
+																			style={{
+																				position: "absolute",
+																				left: 0,
+																				right: 0,
+																				top: 0,
+																				bottom: 0,
+																				justifyContent: "center",
+																			}}>
+																			<Image
+																				source={require("./../../assets/images/rectangle.png")}
+																				style={styles.rectangleTwoImage}/>
+																		</View>
+																		<View
+																			pointerEvents="box-none"
+																			style={{
+																				position: "absolute",
+																				left: 0,
+																				right: 0,
+																				top: 0,
+																				bottom: 0,
+																				justifyContent: "center",
+																			}}>
+																			<TextInput 
+																				value={this.state.Temp[index].drinks[i].unit.toString()}
+																				keyboardType="number-pad"
+																				maxLength={3}
+																				onChangeText={(text) => {this.updateDrinkUnit(index, i, text)}}
+																				style={styles.textTenText}/>
+																		</View>
+																	</View>
+																	<View
+																		style={styles.numberBoxView}>
+																		<View
+																			pointerEvents="box-none"
+																			style={{
+																				position: "absolute",
+																				left: 0,
+																				right: 0,
+																				top: 0,
+																				bottom: 0,
+																				justifyContent: "center",
+																			}}>
+																			<Image
+																				source={require("./../../assets/images/rectangle.png")}
+																				style={styles.rectangleImage}/>
+																		</View>
+																		<View
+																			pointerEvents="box-none"
+																			style={{
+																				position: "absolute",
+																				left: 0,
+																				right: 0,
+																				top: 0,
+																				bottom: 0,
+																				justifyContent: "center",
+																			}}>
+																			<TextInput 
+																				value={this.state.Temp[index].drinks[i].pack.toString()}
+																				keyboardType="number-pad"
+																				maxLength={3}
+																				onChangeText={(text) => {this.updateDrinkPack(index, i, text)}}
+																				style={styles.textTenText}/>
+																		</View>
+																	</View>
+																	<View
+																		style={{
+																			flex: 1,
+																		}}/>
+																	<Text
+																		style={styles.inputDrinkNameFourText}>{drink.percent}%</Text>
+																</View>
+															))
+															}
+															<View
+																pointerEvents="box-none"
+																style={{
+																	height: 17,
+																	marginLeft: 6,
+																	marginRight: 5,
+																	marginTop: 2,
+																	marginBottom: 16,
+																	flexDirection: "row",
+																	alignItems: "flex-end",
+																}}>
+																<Text
+																	style={styles.inputDrinkNameTwentyOneText}>Total Units:</Text>
+																<View
+																	style={{
+																		flex: 1,
+																	}}/>
+																<Text
+																	style={styles.inputDrinkNameTwentyTwoText}>{item.total}</Text>
+															</View>
+														</View>
+													</View>
+												</View>
 												<View
 													style={{
 														flex: 1,
 													}}/>
-												<Text
-													style={styles.inputDrinkNameTwelveText}>0</Text>
+												<View
+													style={styles.editTwoView}>
+													<TouchableOpacity onPress={() => this.updateFields()}>
+														<Text
+															style={styles.editTwoText}>Update</Text>
+													</TouchableOpacity>
+												</View>
 											</View>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>15</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>25%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameTwoText}>Coors:</Text>
-											<View
-												style={styles.unitPerPackView}>
+													position: "absolute",
+													left: 26,
+													right: 24,
+													top: 75,
+													height: 19,
+													flexDirection: "row",
+													alignItems: "flex-start",
+												}}>
 												<Text
-													style={styles.inputDrinkNameElevenText}>0</Text>
+													style={styles.inputDrinkNameTwentySixText}>Tablets:</Text>
 												<View
 													style={{
 														flex: 1,
 													}}/>
-												<Text
-													style={styles.inputDrinkNameTwelveText}>0</Text>
+												<View
+													style={styles.numberBoxTenView}>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<Image
+															source={require("./../../assets/images/rectangle.png")}
+															style={styles.rectangleTenImage}/>
+													</View>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<TextInput 
+															value={this.state.Temp[index].tablets.toString()}
+															keyboardType="number-pad"
+															maxLength={3}
+															onChangeText={(text) => {this.updateTablet(index, text)}}
+															style={styles.textTenText}/>
+													</View>
+												</View>
 											</View>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>25</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>10%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameSixText}>Coca Cola:</Text>
-											<View
-												style={styles.unitPerPackTwoView}>
+													position: "absolute",
+													left: 26,
+													right: 24,
+													top: 93,
+													height: 19,
+													flexDirection: "row",
+													alignItems: "flex-start",
+												}}>
 												<Text
-													style={styles.inputDrinkNameThirteenText}>0</Text>
+													style={styles.inputDrinkNameTwentySixText}>Runners:</Text>
 												<View
 													style={{
 														flex: 1,
 													}}/>
-												<Text
-													style={styles.inputDrinkNameFourteenText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
 												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>20</Text>
+													style={styles.numberBoxTenView}>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<Image
+															source={require("./../../assets/images/rectangle.png")}
+															style={styles.rectangleTenImage}/>
+													</View>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<TextInput 
+															value={this.state.Temp[index].runners.toString()}
+															keyboardType="number-pad"
+															maxLength={3}
+															onChangeText={(text) => {this.updateRunner(index, text)}}
+															style={styles.textTenText}/>
+													</View>
 												</View>
 											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>5%</Text>
 										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameSevenText}>Water:</Text>
-											<View
-												style={styles.unitPerPackThreeView}>
-												<Text
-													style={styles.inputDrinkNameFifteenText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.inputDrinkNameSixteenText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>20</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>4%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 17,
-												marginLeft: 6,
-												marginRight: 5,
-												flexDirection: "row",
-												alignItems: "flex-end",
-											}}>
-											<Text
-												style={styles.inputDrinkNameTwentyOneText}>Total Units:</Text>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameTwentyTwoText}>2,000</Text>
-										</View>
-									</View>
+									))
+									}
 								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.editTwoView}>
-									<Text
-										style={styles.editTwoText}>Update</Text>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 90,
-									right: 20,
-									top: 20,
-									height: 150,
-									alignItems: "flex-end",
-								}}>
-								<View
-									style={styles.editView}>
-									<Text
-										style={styles.editText}>Assign Supplies</Text>
-								</View>
-								<View
-									style={styles.numberBoxNineView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/rectangle.png")}
-											style={styles.rectangleNineImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.textNineText}>4</Text>
-									</View>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 26,
-									right: 24,
-									top: 99,
-									height: 19,
-									flexDirection: "row",
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.inputDrinkNameTwentySixText}>Runners:</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.numberBoxTenView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/rectangle.png")}
-											style={styles.rectangleTenImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.textTenText}>4</Text>
-									</View>
-								</View>
-							</View>
-						</View>
-						<View
-							style={styles.preorderQueCardView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/background-44.png")}
-									style={styles.backgroundImage}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 20,
-									right: 19,
-									top: 36,
-									bottom: 20,
-									alignItems: "flex-end",
-								}}>
-								<View
-									style={styles.drinkCardElementsView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-										}}>
-										<Text
-											style={styles.drinkNameText}>Station 2: Main Stage</Text>
-										<Image
-											source={require("./../../assets/images/seperator-6.png")}
-											style={styles.seperatorImage}/>
-										<Text
-											style={styles.inputDrinkNameTwentyText}>Total:</Text>
-										<Text
-											style={styles.inputDrinkNameNineteenText}>Tablets:</Text>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 63,
-												marginRight: 0,
-												marginTop: 32,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameEighteenText}>Available: Unit / Pack</Text>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameTwentyThreeText}>Assign: Unit / Pack</Text>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameThreeText}>Total Inventory</Text>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 16,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameText}>Bud Light:</Text>
-											<View
-												style={styles.unitPerPackView}>
-												<Text
-													style={styles.inputDrinkNameElevenText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.inputDrinkNameTwelveText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>15</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>25%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameTwoText}>Coors:</Text>
-											<View
-												style={styles.unitPerPackView}>
-												<Text
-													style={styles.inputDrinkNameElevenText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.inputDrinkNameTwelveText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>25</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>10%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameSixText}>Coca Cola:</Text>
-											<View
-												style={styles.unitPerPackTwoView}>
-												<Text
-													style={styles.inputDrinkNameThirteenText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.inputDrinkNameFourteenText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>20</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>5%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 16,
-												marginLeft: 6,
-												marginRight: 5,
-												marginTop: 2,
-												flexDirection: "row",
-												alignItems: "flex-start",
-											}}>
-											<Text
-												style={styles.inputDrinkNameSevenText}>Water:</Text>
-											<View
-												style={styles.unitPerPackThreeView}>
-												<Text
-													style={styles.inputDrinkNameFifteenText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.inputDrinkNameSixteenText}>0</Text>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<View
-												style={styles.numberBoxTwoView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleTwoImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textTwoText}>20</Text>
-												</View>
-											</View>
-											<View
-												style={styles.numberBoxView}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/rectangle.png")}
-														style={styles.rectangleImage}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Text
-														style={styles.textText}>100</Text>
-												</View>
-											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameFourText}>4%</Text>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												height: 17,
-												marginLeft: 6,
-												marginRight: 5,
-												flexDirection: "row",
-												alignItems: "flex-end",
-											}}>
-											<Text
-												style={styles.inputDrinkNameTwentyOneText}>Total Units:</Text>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.inputDrinkNameTwentyTwoText}>2,000</Text>
-										</View>
-									</View>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.editTwoView}>
-									<Text
-										style={styles.editTwoText}>Update</Text>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 90,
-									right: 20,
-									top: 20,
-									height: 150,
-									alignItems: "flex-end",
-								}}>
-								<View
-									style={styles.editView}>
-									<Text
-										style={styles.editText}>Assign Supplies</Text>
-								</View>
-								<View
-									style={styles.numberBoxNineView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/rectangle.png")}
-											style={styles.rectangleNineImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.textNineText}>4</Text>
-									</View>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 26,
-									right: 24,
-									top: 99,
-									height: 19,
-									flexDirection: "row",
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.inputDrinkNameTwentySixText}>Runners:</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.numberBoxTenView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/rectangle.png")}
-											style={styles.rectangleTenImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.textTenText}>4</Text>
-									</View>
-								</View>
-							</View>
+							</ScrollView>
 						</View>
 					</View>
 				</View>
@@ -1268,6 +537,9 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	scrollView: {
+		height: 525,
+	},
 	viewView: {
 		backgroundColor: "rgb(247, 247, 247)",
 		flex: 1,
@@ -1313,7 +585,6 @@ const styles = StyleSheet.create({
 	drinkCardElementsView: {
 		backgroundColor: "transparent",
 		alignSelf: "stretch",
-		height: 203,
 	},
 	drinkNameText: {
 		backgroundColor: "transparent",
@@ -1604,7 +875,7 @@ const styles = StyleSheet.create({
 		width: 69,
 		height: 18,
 		marginRight: 32,
-		marginTop: 16,
+		marginTop: 32,
 		justifyContent: "center",
 	},
 	editTwoText: {
