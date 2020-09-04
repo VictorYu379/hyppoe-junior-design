@@ -7,7 +7,8 @@
 //
 
 import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View, Alert } from "react-native"
+import { TouchableOpacity, TextInput } from "react-native-gesture-handler"
 
 
 export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.Component {
@@ -24,10 +25,29 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			MaxUnits: 5000,
+			icePrice: 5,
+			cupsPrice: 5,
+			smartWaterPrice: 5,
+			iceUnit: 5,
+			icePack: 20,
+			cupsUnit: 5,
+			cupsPack: 20,
+			smartWaterUnit: 5,
+			smartWaterPack: 20,	
+			iceAvailable: 50,
+			cupsAvailable: 50,
+			smartWaterAvailable: 50
+			};
 	}
 
 	componentDidMount() {
 	
+	}
+
+	updateFields() {
+		Alert.alert("updated!");
 	}
 
 	render() {
@@ -118,7 +138,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.inputDrinkNameNineText}>$1,000.00</Text>
+										style={styles.inputDrinkNameNineText}>{this.state.icePack * this.state.iceUnit * this.state.icePrice + this.state.cupsPack * this.state.cupsUnit * this.state.cupsPrice + this.state.smartWaterPack * this.state.smartWaterUnit * this.state.smartWaterPrice}</Text>
 								</View>
 								<View
 									pointerEvents="box-none"
@@ -136,11 +156,11 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.inputDrinkNameElevenText}>4,450 of 5,000</Text>
+										style={styles.inputDrinkNameElevenText}>{this.state.icePack * this.state.iceUnit + this.state.cupsPack * this.state.cupsUnit + this.state.smartWaterPack * this.state.smartWaterUnit} of {this.state.MaxUnits}</Text>
 								</View>
 							</View>
 							<Text
-								style={styles.priceText}>95%</Text>
+								style={styles.priceText}>{(this.state.icePack * this.state.iceUnit + this.state.cupsPack * this.state.cupsUnit + this.state.smartWaterPack * this.state.smartWaterUnit)/this.state.MaxUnits * 100}%</Text>
 						</View>
 					</View>
 				</View>
@@ -171,7 +191,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.inputDrinkNameTwentyNineText}>Bud Light</Text>
+							style={styles.inputDrinkNameTwentyNineText}>Ice</Text>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -197,23 +217,25 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.inputDrinkNameThirtyText}>Total Units:</Text>
+									style={styles.inputDrinkNameThirtyText}>Total Units: {this.state.icePack * this.state.iceUnit}</Text>
 								<Text
-									style={styles.inputDrinkNameThirtyOneText}>Available:</Text>
+									style={styles.inputDrinkNameThirtyOneText}>Available: {this.state.iceAvailable}</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<View
 									style={styles.editFourView}>
-									<Text
-										style={styles.editFourText}>Update</Text>
+										<TouchableOpacity onPress={() => this.updateFields()}>
+											<Text
+												style={styles.editFourText}>Update</Text>
+										</TouchableOpacity>
 								</View>
 							</View>
 						</View>
 					</View>
 					<Text
-						style={styles.inputDrinkNameThirtyTwoText}>Inventory Value:</Text>
+						style={styles.inputDrinkNameThirtyTwoText}>Inventory Value: {this.state.icePack * this.state.iceUnit * this.state.icePrice} </Text>
 				</View>
 				<View
 					style={styles.preorderQueCardView}>
@@ -250,7 +272,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.inputDrinkNameText}>Bud Light:</Text>
+								style={styles.inputDrinkNameText}>Ice:</Text>
 							<View
 								style={styles.eventLogoView}/>
 						</View>
@@ -270,13 +292,13 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 							<View
 								style={styles.unitPerPackView}>
 								<Text
-									style={styles.inputDrinkNameSixText}>0</Text>
+									style={styles.inputDrinkNameSixText}>{this.state.iceUnit}</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.inputDrinkNameSevenText}>0</Text>
+									style={styles.inputDrinkNameSevenText}>{this.state.icePack}</Text>
 							</View>
 						</View>
 						<View
@@ -291,9 +313,9 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								alignItems: "flex-end",
 							}}>
 							<Text
-								style={styles.inputDrinkNameEightText}>$500.00</Text>
+								style={styles.inputDrinkNameEightText}>${this.state.icePrice*this.state.icePack*this.state.iceUnit}.00</Text>
 							<Text
-								style={styles.inputDrinkNameTwoText}>Total Units</Text>
+								style={styles.inputDrinkNameTwoText}>Total Units:</Text>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -307,14 +329,18 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								}}>
 								<View
 									style={styles.editView}>
+									<TouchableOpacity onPress={() => this.updateFields()}>
 									<Text
 										style={styles.editText}>Update</Text>
+									</TouchableOpacity>	
 								</View>
 								<Text
-									style={styles.inputDrinkNameThreeText}>0</Text>
+									style={styles.inputDrinkNameThreeText}>{this.state.iceUnit*this.state.icePack}</Text>
 							</View>
 						</View>
+						
 					</View>
+					
 				</View>
 				<View
 					style={styles.preorderQueCardThreeView}>
@@ -351,7 +377,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.inputDrinkNameThirteenText}>Coors:</Text>
+								style={styles.inputDrinkNameThirteenText}>Cups:</Text>
 							<View
 								style={styles.eventLogoTwoView}/>
 						</View>
@@ -371,13 +397,13 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 							<View
 								style={styles.unitPerPackTwoView}>
 								<Text
-									style={styles.inputDrinkNameEighteenText}>0</Text>
+									style={styles.inputDrinkNameEighteenText}>{this.state.cupsUnit}</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.inputDrinkNameNineteenText}>0</Text>
+									style={styles.inputDrinkNameNineteenText}>{this.state.cupsPack}</Text>
 							</View>
 						</View>
 						<View
@@ -392,7 +418,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								alignItems: "flex-end",
 							}}>
 							<Text
-								style={styles.inputDrinkNameTwentyText}>$500.00</Text>
+								style={styles.inputDrinkNameTwentyText}>${this.state.cupsPack*this.state.cupsUnit*this.state.cupsPrice}.00</Text>
 							<Text
 								style={styles.inputDrinkNameFourteenText}>Total Units</Text>
 							<View
@@ -408,11 +434,13 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								}}>
 								<View
 									style={styles.editTwoView}>
+									<TouchableOpacity onPress={() => this.updateFields()}>
 									<Text
-										style={styles.editTwoText}>Update</Text>
+										style={styles.editText}>Update</Text>
+									</TouchableOpacity>	
 								</View>
 								<Text
-									style={styles.inputDrinkNameFifteenText}>0</Text>
+									style={styles.inputDrinkNameFifteenText}>{this.state.cupsPack*this.state.cupsUnit}</Text>
 							</View>
 						</View>
 					</View>
@@ -448,7 +476,7 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.inputDrinkNameTwentyOneText}>Coca Cola:</Text>
+							style={styles.inputDrinkNameTwentyOneText}>SmartWater:</Text>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -476,13 +504,13 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 								<View
 									style={styles.unitPerPackThreeView}>
 									<Text
-										style={styles.inputDrinkNameTwentySixText}>0</Text>
+										style={styles.inputDrinkNameTwentySixText}>{this.state.smartWaterUnit}</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.inputDrinkNameTwentySevenText}>0</Text>
+										style={styles.inputDrinkNameTwentySevenText}>{this.state.smartWaterPack}</Text>
 								</View>
 							</View>
 							<View
@@ -512,11 +540,13 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 									}}>
 									<View
 										style={styles.editThreeView}>
-										<Text
-											style={styles.editThreeText}>Update</Text>
+									<TouchableOpacity onPress={() => this.updateFields()}>
+									<Text
+										style={styles.editText}>Update</Text>
+									</TouchableOpacity>	
 									</View>
 									<Text
-										style={styles.inputDrinkNameTwentyThreeText}>0</Text>
+										style={styles.inputDrinkNameTwentyThreeText}>{this.state.smartWaterPack * this.state.smartWaterUnit}</Text>
 								</View>
 							</View>
 						</View>
@@ -524,11 +554,19 @@ export default class AdminInitialInputOfTotalInventoryAndSupplies extends React.
 					<Text
 						style={styles.inputDrinkNameTwentyEightText}>$500.00</Text>
 				</View>
+
+
+
+
+
 				<View
 					style={styles.savePreorderMenuBView}>
 					<Text
 						style={styles.savePreorderMenuText}>Create Stations</Text>
 				</View>
+
+
+				
 			</View>
 	}
 }
