@@ -224,7 +224,7 @@ export default class AdminDashboard extends React.Component {
 					</View>
 					<TouchableOpacity
 						activeOpacity={0.8}
-						style={[styles.preorderQueCardTwoView, { shadowRadius: 5 }]}>
+						style={styles.preorderQueCardTwoView}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -285,8 +285,47 @@ export default class AdminDashboard extends React.Component {
 							style={styles.inputDrinkNameEightText}>Total:</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
+						style={styles.preorderQueCardThreeView}
+						activeOpacity={0.8}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 20,
+								right: 19,
+								top: 19,
+								height: 46,
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.drinkNameThreeText}>Assigned and Confirmed:</Text>
+							<Image
+								source={require("./../../assets/images/seperator.png")}
+								style={styles.seperatorThreeImage}/>
+							<View
+								pointerEvents="box-none"
+								style={{
+									alignSelf: "stretch",
+									height: 16,
+									marginLeft: 2,
+									marginTop: 9,
+									flexDirection: "row",
+									alignItems: "flex-start",
+								}}>
+								<Text
+									style={styles.inputDrinkNameElevenText}>Station 1: Big Tent</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={styles.inputDrinkNameTenText}>Pending</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
 						activeOpacity={0.8}
-						style={[styles.preorderQueCardFourView, { shadowRadius: 5 }]}>
+						style={styles.preorderQueCardFourView}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -323,13 +362,9 @@ export default class AdminDashboard extends React.Component {
 							</View>
 						</View>
 					</TouchableOpacity>
-					<View
-						style={{
-							flex: 1,
-						}}/>
 					<TouchableOpacity
 						activeOpacity={0.8}
-						style={[styles.preorderQueCardFiveView, { shadowRadius: 5 }]}>
+						style={styles.preorderQueCardFiveView}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -369,45 +404,7 @@ export default class AdminDashboard extends React.Component {
 					<TouchableOpacity
 						activeOpacity={0.8}
 						pointerEvents="box-none"
-						style={{
-							width: 311,
-							height: 87,
-						}}>
-						<View
-							style={styles.preorderQueCardSixView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 20,
-									right: 19,
-									top: 19,
-									height: 46,
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.drinkNameSixText}>Alerts:</Text>
-								<Image
-									source={require("./../../assets/images/seperator.png")}
-									style={styles.seperatorSixImage}/>
-								<Text
-									style={styles.inputDrinkNameSixteenText}>ON</Text>
-							</View>
-						</View>
-					</TouchableOpacity>
-				</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						position: "absolute",
-						alignSelf: "center",
-						top: 0,
-						bottom: 0,
-						justifyContent: "center",
-					}}>
-					<TouchableOpacity
-						style={[styles.preorderQueCardThreeView, { shadowRadius: 5 }]}
-						activeOpacity={0.8}>
+						style={styles.preorderQueCardSixView}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -419,29 +416,12 @@ export default class AdminDashboard extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.drinkNameThreeText}>Assigned and Confirmed:</Text>
+								style={styles.drinkNameSixText}>Alerts:</Text>
 							<Image
 								source={require("./../../assets/images/seperator.png")}
-								style={styles.seperatorThreeImage}/>
-							<View
-								pointerEvents="box-none"
-								style={{
-									alignSelf: "stretch",
-									height: 16,
-									marginLeft: 2,
-									marginTop: 9,
-									flexDirection: "row",
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.inputDrinkNameElevenText}>Station 1: Big Tent</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.inputDrinkNameTenText}>Pending</Text>
-							</View>
+								style={styles.seperatorSixImage}/>
+							<Text
+								style={styles.inputDrinkNameSixteenText}>ON</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
@@ -647,7 +627,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: 314,
 		height: 119,
-		marginTop: 25,
+		marginTop: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -756,7 +736,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: 311,
 		height: 87,
-		marginTop: 131,
+		marginTop: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -819,7 +799,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: 311,
 		height: 87,
-		marginBottom: 13,
+		marginTop: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -827,7 +807,6 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
-		
 		elevation: 5,
 	},
 	backgroundFiveImage: {
@@ -880,11 +859,11 @@ const styles = StyleSheet.create({
 	preorderQueCardSixView: {
 		backgroundColor: "white",
 		borderRadius: 10,
-		position: "absolute",
 		alignSelf: "center",
 		width: 311,
 		bottom: 0,
 		height: 87,
+		marginTop: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -960,6 +939,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: 311,
 		height: 87,
+		marginTop: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
