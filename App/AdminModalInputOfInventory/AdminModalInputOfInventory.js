@@ -46,6 +46,14 @@ export default class AdminModalInputOfInventory extends React.Component {
 		Alert.alert("cancelled!");
 	}
 
+	back() {
+		Alert.alert("back!");
+	}
+
+	menu() {
+		Alert.alert("menu!");
+	}
+
 	parseNumField(text, minVal) {
 		var num = parseInt(text)
 		if (isNaN(num) || num < minVal) {
@@ -90,16 +98,20 @@ export default class AdminModalInputOfInventory extends React.Component {
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>
-							<Image
-								source={require("./../../assets/images/back-button.png")}
-								style={styles.backButtonImage}/>
+							<TouchableOpacity onPress={() => this.back()}>
+								<Image
+									source={require("./../../assets/images/back-button.png")}
+									style={styles.backButtonImage}/>
+							</TouchableOpacity>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<Image
-								source={require("./../../assets/images/menu-button.png")}
-								style={styles.menuButtonImage}/>
+							<TouchableOpacity onPress={() => this.menu()}>
+								<Image
+									source={require("./../../assets/images/menu-button.png")}
+									style={styles.menuButtonImage}/>
+							</TouchableOpacity>
 						</View>
 						<View
 							style={styles.preorderQueCardThreeView}>
