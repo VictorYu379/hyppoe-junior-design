@@ -78,6 +78,9 @@ const PushRouteOne = createStackNavigator({
 	AdminDashboard: {
 		screen: AdminDashboard,
 	},
+	AdminTotalAvailableInventory: {
+		screen: AdminTotalAvailableInventory,
+	}
 }, {
 	initialRouteName: "AdminDashboard",
 })

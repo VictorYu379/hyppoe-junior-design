@@ -7,7 +7,7 @@
 //
 
 import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native"
 
 
 export default class AdminDashboard extends React.Component {
@@ -30,6 +30,21 @@ export default class AdminDashboard extends React.Component {
 	
 	}
 
+	goBack() {
+		// placeholder
+		console.log("go back")
+	}
+
+	goMenu() {
+		// placeholder
+		console.log("go to menu")
+	}
+
+	goPocket() {
+		// placeholder
+		console.log("go to pocket")
+	}
+
 	render() {
 	
 		return <View
@@ -50,10 +65,8 @@ export default class AdminDashboard extends React.Component {
 							alignSelf: "stretch",
 							height: 196,
 						}}>
-						<Text
-							style={styles.pageTitlePreordeText}>Preorder Que</Text>
 						<Image
-							source={require("./../../assets/images/top-image-4.png")}
+							source={require("./../../assets/images/top-image-8.png")}
 							style={styles.topImageImage}/>
 						<View
 							pointerEvents="box-none"
@@ -78,11 +91,8 @@ export default class AdminDashboard extends React.Component {
 										bottom: 0,
 										justifyContent: "center",
 									}}>
-									<Image
-										source={require("./../../assets/images/oval.png")}
-										style={styles.ovalTwoImage}/>
 								</View>
-								<View
+								<TouchableOpacity
 									pointerEvents="box-none"
 									style={{
 										position: "absolute",
@@ -90,12 +100,13 @@ export default class AdminDashboard extends React.Component {
 										right: 0,
 										top: 0,
 										bottom: 0,
-										justifyContent: "center",
-									}}>
+										justifyContent: "center"
+									}}
+									onPress={() => this.goBack()}>
 									<Image
 										source={require("./../../assets/images/back-button.png")}
 										style={styles.backButtonImage}/>
-								</View>
+								</TouchableOpacity>
 							</View>
 							<View
 								style={{
@@ -113,11 +124,8 @@ export default class AdminDashboard extends React.Component {
 										bottom: 0,
 										justifyContent: "center",
 									}}>
-									<Image
-										source={require("./../../assets/images/oval-3.png")}
-										style={styles.ovalImage}/>
 								</View>
-								<View
+								<TouchableOpacity
 									pointerEvents="box-none"
 									style={{
 										position: "absolute",
@@ -125,16 +133,17 @@ export default class AdminDashboard extends React.Component {
 										right: 0,
 										top: 0,
 										bottom: 0,
-										justifyContent: "center",
-									}}>
+										justifyContent: "center"
+									}}
+									onPress={() => this.goMenu()}>
 									<Image
 										source={require("./../../assets/images/menu-button.png")}
 										style={styles.menuButtonImage}/>
-								</View>
+								</TouchableOpacity>
 							</View>
 							<View
 								style={styles.cartButtonView}>
-								<View
+								<TouchableOpacity
 									pointerEvents="box-none"
 									style={{
 										position: "absolute",
@@ -142,32 +151,18 @@ export default class AdminDashboard extends React.Component {
 										right: 0,
 										top: 0,
 										bottom: 0,
-										justifyContent: "center",
-									}}>
+										justifyContent: "center"
+									}}
+									onPress={() => this.goPocket()}>
 									<Image
 										source={require("./../../assets/images/pocket-2.png")}
 										style={styles.pocketImage}/>
-								</View>
+								</TouchableOpacity>
 								<View
 									style={styles.ovalView}/>
 							</View>
 						</View>
-						<View
-							style={styles.preorderQueCardView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/background-17.png")}
-									style={styles.backgroundImage}/>
-							</View>
+						<TouchableOpacity style={styles.preorderQueCardView} activeOpacity={0.8}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -177,6 +172,7 @@ export default class AdminDashboard extends React.Component {
 									top: 20,
 									height: 70,
 									alignItems: "flex-start",
+									shadowRadius: 5
 								}}>
 								<Text
 									style={styles.drinkNameText}>Available Inventory:</Text>
@@ -224,24 +220,11 @@ export default class AdminDashboard extends React.Component {
 							</View>
 							<Text
 								style={styles.priceText}>95%</Text>
-						</View>
+						</TouchableOpacity>
 					</View>
-					<View
-						style={styles.preorderQueCardTwoView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/background-8.png")}
-								style={styles.backgroundTwoImage}/>
-						</View>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={[styles.preorderQueCardTwoView, { shadowRadius: 5 }]}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -300,23 +283,10 @@ export default class AdminDashboard extends React.Component {
 							style={styles.priceTwoText}>3.7%</Text>
 						<Text
 							style={styles.inputDrinkNameEightText}>Total:</Text>
-					</View>
-					<View
-						style={styles.preorderQueCardFourView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/background-35.png")}
-								style={styles.backgroundFourImage}/>
-						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={[styles.preorderQueCardFourView, { shadowRadius: 5 }]}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -352,27 +322,14 @@ export default class AdminDashboard extends React.Component {
 									style={styles.inputDrinkNameTwelveText}>Pending</Text>
 							</View>
 						</View>
-					</View>
+					</TouchableOpacity>
 					<View
 						style={{
 							flex: 1,
 						}}/>
-					<View
-						style={styles.preorderQueCardFiveView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/background-35.png")}
-								style={styles.backgroundFiveImage}/>
-						</View>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={[styles.preorderQueCardFiveView, { shadowRadius: 5 }]}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -408,8 +365,9 @@ export default class AdminDashboard extends React.Component {
 									style={styles.inputDrinkNameFourteenText}>100 Units</Text>
 							</View>
 						</View>
-					</View>
-					<View
+					</TouchableOpacity>
+					<TouchableOpacity
+						activeOpacity={0.8}
 						pointerEvents="box-none"
 						style={{
 							width: 311,
@@ -417,20 +375,6 @@ export default class AdminDashboard extends React.Component {
 						}}>
 						<View
 							style={styles.preorderQueCardSixView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/background-35.png")}
-									style={styles.backgroundSixImage}/>
-							</View>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -450,12 +394,7 @@ export default class AdminDashboard extends React.Component {
 									style={styles.inputDrinkNameSixteenText}>ON</Text>
 							</View>
 						</View>
-						<View
-							style={styles.editView}>
-							<Text
-								style={styles.editText}>Modify</Text>
-						</View>
-					</View>
+					</TouchableOpacity>
 				</View>
 				<View
 					pointerEvents="box-none"
@@ -466,22 +405,9 @@ export default class AdminDashboard extends React.Component {
 						bottom: 0,
 						justifyContent: "center",
 					}}>
-					<View
-						style={styles.preorderQueCardThreeView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/background-50.png")}
-								style={styles.backgroundThreeImage}/>
-						</View>
+					<TouchableOpacity
+						style={[styles.preorderQueCardThreeView, { shadowRadius: 5 }]}
+						activeOpacity={0.8}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -517,7 +443,7 @@ export default class AdminDashboard extends React.Component {
 									style={styles.inputDrinkNameTenText}>Pending</Text>
 							</View>
 						</View>
-					</View>
+					</TouchableOpacity>
 				</View>
 			</View>
 	}
@@ -619,12 +545,22 @@ const styles = StyleSheet.create({
 		height: 8,
 	},
 	preorderQueCardView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		position: "absolute",
 		alignSelf: "center",
 		width: 315,
 		top: 85,
 		height: 111,
+		borderRadius: 10,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundImage: {
 		backgroundColor: "transparent",
@@ -707,10 +643,20 @@ const styles = StyleSheet.create({
 		top: 20,
 	},
 	preorderQueCardTwoView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
+		borderRadius: 10,
 		width: 314,
 		height: 119,
 		marginTop: 25,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundTwoImage: {
 		backgroundColor: "transparent",
@@ -806,10 +752,20 @@ const styles = StyleSheet.create({
 		top: 75,
 	},
 	preorderQueCardFourView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
+		borderRadius: 10,
 		width: 311,
 		height: 87,
 		marginTop: 131,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundFourImage: {
 		backgroundColor: "transparent",
@@ -859,10 +815,20 @@ const styles = StyleSheet.create({
 		width: 68,
 	},
 	preorderQueCardFiveView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
+		borderRadius: 10,
 		width: 311,
 		height: 87,
 		marginBottom: 13,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundFiveImage: {
 		backgroundColor: "transparent",
@@ -912,12 +878,22 @@ const styles = StyleSheet.create({
 		width: 68,
 	},
 	preorderQueCardSixView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
+		borderRadius: 10,
 		position: "absolute",
 		alignSelf: "center",
 		width: 311,
 		bottom: 0,
 		height: 87,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundSixImage: {
 		resizeMode: "cover",
@@ -980,9 +956,19 @@ const styles = StyleSheet.create({
 		marginRight: 4,
 	},
 	preorderQueCardThreeView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
+		borderRadius: 10,
 		width: 311,
 		height: 87,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	backgroundThreeImage: {
 		backgroundColor: "transparent",
