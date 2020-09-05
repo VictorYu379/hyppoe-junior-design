@@ -119,27 +119,34 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 		this.setState({Temp: temp});
 	}
 
-	updateFields() {
-		let stations = [...this.state.Temp];
-		for (let i = 0; i < stations.length; i++) {
-			let sum = 0;
-			let drinks = [...stations[i].drinks];
-			for (let j = 0; j < drinks.length; j++) {
-				let drink = drinks[j];
-				sum += drink.unit * drink.pack;
-			}
-			stations[i] = {...stations[i], total: sum};
-			for (let j = 0; j < drinks.length; j++) {
-				let drink = drinks[j];
-				let per = 0;
-				if (sum != 0) {
-					per = Math.floor(drink.unit * drink.pack * 100 / sum);
-				}
-				drinks[j] = {...drinks[j], percent: per};
-			}
-			stations[i] = {...stations[i], drinks: drinks};
+	updateFields(stationId) {
+		let stations = [...this.state.Stations];
+		let sum = 0;
+		let drinks = [...this.state.Temp[stationId].drinks];
+		for (let j = 0; j < drinks.length; j++) {
+			let drink = drinks[j];
+			sum += drink.unit * drink.pack;
 		}
+		stations[stationId] = {...this.state.Temp[stationId], total: sum};
+		for (let j = 0; j < drinks.length; j++) {
+			let drink = drinks[j];
+			let per = 0;
+			if (sum != 0) {
+				per = Math.floor(drink.unit * drink.pack * 100 / sum);
+			}
+			drinks[j] = {...drinks[j], percent: per};
+		}
+		stations[stationId] = {...stations[stationId], drinks: drinks};
+		console.log(stations);
 		this.setState({Stations: stations});
+
+		let temp = [...this.state.Temp];
+		drinks = [...this.state.Temp[stationId].drinks];
+		for (let j = 0; j < drinks.length; j++) {
+			drinks[j] = {...drinks[j], unit: 0, pack: 0};
+		}
+		temp[stationId] = {...temp[stationId], drinks: drinks};
+		this.setState({Temp: temp});
 	}
 
 	componentDidMount() {
@@ -190,7 +197,9 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 								style={styles.menuButtonImage}/>
 						</View>
 						<View style ={styles.scrollView}>
-							<ScrollView style={styles.scrollView}>
+							<ScrollView 
+								style={styles.scrollView}
+								keyboardDismissMode='on-drag'>
 								<View>
 									{
 									this.state.Stations.map((item, index) => (
@@ -226,7 +235,6 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 													<View
 														pointerEvents="box-none"
 														style={{
-															position: "absolute",
 															left: 0,
 															right: 0,
 															top: 0,
@@ -297,7 +305,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 																			flex: 1,
 																		}}/>
 																	<View
-																		style={styles.numberBoxTwoView}>
+																		style={styles.numberBoxView}>
 																		<View
 																			pointerEvents="box-none"
 																			style={{
@@ -310,7 +318,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 																			}}>
 																			<Image
 																				source={require("./../../assets/images/rectangle.png")}
-																				style={styles.rectangleTwoImage}/>
+																				style={styles.rectangleImage}/>
 																		</View>
 																		<View
 																			pointerEvents="box-none"
@@ -400,13 +408,14 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 													style={{
 														flex: 1,
 													}}/>
-												<View
-													style={styles.editTwoView}>
-													<TouchableOpacity onPress={() => this.updateFields()}>
-														<Text
-															style={styles.editTwoText}>Update</Text>
-													</TouchableOpacity>
-												</View>
+												
+											</View>
+											<View
+												style={styles.editTwoView}>
+												<TouchableOpacity onPress={() => this.updateFields(index)}>
+													<Text
+														style={styles.editTwoText}>Update</Text>
+												</TouchableOpacity>
 											</View>
 											<View
 												pointerEvents="box-none"
@@ -426,7 +435,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 														flex: 1,
 													}}/>
 												<View
-													style={styles.numberBoxTenView}>
+													style={styles.numberBoxView}>
 													<View
 														pointerEvents="box-none"
 														style={{
@@ -439,7 +448,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 														}}>
 														<Image
 															source={require("./../../assets/images/rectangle.png")}
-															style={styles.rectangleTenImage}/>
+															style={styles.rectangleImage}/>
 													</View>
 													<View
 														pointerEvents="box-none"
@@ -478,7 +487,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 														flex: 1,
 													}}/>
 												<View
-													style={styles.numberBoxTenView}>
+													style={styles.numberBoxView}>
 													<View
 														pointerEvents="box-none"
 														style={{
@@ -491,7 +500,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 														}}>
 														<Image
 															source={require("./../../assets/images/rectangle.png")}
-															style={styles.rectangleTenImage}/>
+															style={styles.rectangleImage}/>
 													</View>
 													<View
 														pointerEvents="box-none"
@@ -516,6 +525,10 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 									))
 									}
 								</View>
+								<View
+									style={{
+										height: 300,
+									}}/>
 							</ScrollView>
 						</View>
 					</View>
@@ -538,7 +551,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 
 const styles = StyleSheet.create({
 	scrollView: {
-		height: 525,
+		height: 600,
 	},
 	viewView: {
 		backgroundColor: "rgb(247, 247, 247)",
@@ -651,26 +664,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 68,
 	},
-	inputDrinkNameTenText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "Arial-BoldMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "right",
-		width: 68,
-	},
-	inputDrinkNameSeventeenText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "Arial-BoldMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "right",
-		width: 68,
-	},
 	inputDrinkNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(92, 90, 90)",
@@ -690,17 +683,6 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "right",
 		width: 60,
-	},
-	inputDrinkNameTwoText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		width: 62,
-		marginTop: 1,
 	},
 	unitPerPackView: {
 		backgroundColor: "transparent",
@@ -730,113 +712,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		width: 29,
-	},
-	inputDrinkNameFiveText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "Arial-BoldMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "right",
-		width: 60,
-	},
-	inputDrinkNameSixText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		width: 62,
-	},
-	unitPerPackTwoView: {
-		backgroundColor: "transparent",
-		width: 61,
-		height: 16,
-		marginLeft: 2,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	inputDrinkNameThirteenText: {
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		width: 28,
-	},
-	inputDrinkNameFourteenText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		width: 29,
-	},
-	inputDrinkNameEightText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "Arial-BoldMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "right",
-		width: 60,
-	},
-	inputDrinkNameSevenText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		width: 62,
-	},
-	unitPerPackThreeView: {
-		backgroundColor: "transparent",
-		width: 61,
-		height: 16,
-		marginLeft: 2,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	inputDrinkNameFifteenText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		width: 28,
-	},
-	inputDrinkNameSixteenText: {
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		width: 29,
-	},
-	inputDrinkNameNineText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "Arial-BoldMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "right",
-		width: 60,
-		marginBottom: 1,
 	},
 	inputDrinkNameTwentyOneText: {
 		backgroundColor: "transparent",
@@ -874,8 +749,8 @@ const styles = StyleSheet.create({
 		borderRadius: 7,
 		width: 69,
 		height: 18,
-		marginRight: 32,
-		marginTop: 32,
+		marginLeft: 225,
+		marginTop: 24,
 		justifyContent: "center",
 	},
 	editTwoText: {
@@ -889,76 +764,6 @@ const styles = StyleSheet.create({
 		marginLeft: 13,
 		marginRight: 14,
 	},
-	editView: {
-		backgroundColor: "rgb(0, 112, 247)",
-		borderRadius: 7,
-		width: 103,
-		height: 18,
-		justifyContent: "center",
-	},
-	editText: {
-		backgroundColor: "transparent",
-		color: "white",
-		fontFamily: "ArialMT",
-		fontSize: 11,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginLeft: 8,
-		marginRight: 0,
-	},
-	numberBoxNineView: {
-		backgroundColor: "transparent",
-		width: 23,
-		height: 17,
-		marginRight: 4,
-		marginTop: 43,
-	},
-	rectangleNineImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 17,
-	},
-	textNineText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		letterSpacing: 0.15,
-	},
-	unitPerPackFourView: {
-		backgroundColor: "transparent",
-		alignSelf: "flex-start",
-		width: 61,
-		height: 16,
-		marginTop: 56,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	inputDrinkNameTwentyFourText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		width: 28,
-	},
-	inputDrinkNameTwentyFiveText: {
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		width: 29,
-	},
 	inputDrinkNameTwentySixText: {
 		backgroundColor: "transparent",
 		color: "rgb(92, 90, 90)",
@@ -969,17 +774,6 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		width: 62,
 		marginTop: 3,
-	},
-	numberBoxTenView: {
-		backgroundColor: "transparent",
-		width: 23,
-		height: 17,
-	},
-	rectangleTenImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 17,
 	},
 	textTenText: {
 		backgroundColor: "transparent",
@@ -1022,34 +816,12 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
-	numberBoxTwoView: {
-		backgroundColor: "transparent",
-		width: 23,
-		height: 17,
-		marginRight: 10,
-		marginTop: 1,
-	},
-	rectangleTwoImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 17,
-	},
-	textTwoText: {
-		backgroundColor: "transparent",
-		color: "rgb(92, 90, 90)",
-		fontFamily: "ArialMT",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		letterSpacing: 0.15,
-	},
 	numberBoxView: {
 		backgroundColor: "transparent",
 		width: 23,
 		height: 17,
-		marginTop: 1,
+		marginBottom: 5,
+		marginLeft: 5,
 	},
 	rectangleImage: {
 		resizeMode: "center",
