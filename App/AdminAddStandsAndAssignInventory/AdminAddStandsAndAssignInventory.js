@@ -181,7 +181,7 @@ export default class AdminAddStandsAndAssignInventory extends React.Component {
 								alignSelf: "stretch",
 								height: 20,
 								marginLeft: 11,
-								marginRight: 10,
+								marginRight: 55,
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>

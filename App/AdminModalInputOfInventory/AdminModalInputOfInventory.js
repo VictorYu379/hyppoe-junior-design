@@ -46,6 +46,7 @@ export default class AdminModalInputOfInventory extends React.Component {
 		Alert.alert("cancelled!");
 	}
 
+<<<<<<< HEAD
 	back() {
 		Alert.alert("back!");
 	}
@@ -54,6 +55,8 @@ export default class AdminModalInputOfInventory extends React.Component {
 		Alert.alert("menu!");
 	}
 
+=======
+>>>>>>> michaelq
 	parseNumField(text, minVal) {
 		var num = parseInt(text)
 		if (isNaN(num) || num < minVal) {
