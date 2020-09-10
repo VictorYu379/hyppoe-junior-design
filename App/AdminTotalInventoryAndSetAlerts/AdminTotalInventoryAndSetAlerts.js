@@ -8,6 +8,8 @@
 
 import React from "react"
 import { Image, StyleSheet, Text, View } from "react-native"
+import { TouchableOpacity, TextInput } from "react-native-gesture-handler"
+
 
 
 export default class AdminTotalInventoryAndSetAlerts extends React.Component {
@@ -24,6 +26,13 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			units: 0,
+			packs: 1,
+			coolers:  1,
+			tablets: 0,
+			tables: 0,
+		};
 	}
 
 	componentDidMount() {
@@ -438,7 +447,8 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 								<Text
 									style={styles.editText}>Update</Text>
 							</View>
-							<Image
+
+								<Image
 								source={require("./../../assets/images/plus-circle.png")}
 								style={styles.plusCircleTwoImage}/>
 						</View>
@@ -478,6 +488,7 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
+							<div contentEditable="true">
 							<View
 								style={styles.numberBoxTwoView}>
 								<View
@@ -507,7 +518,10 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 									<Text
 										style={styles.textTwoText}>15</Text>
 								</View>
-							</View>
+							</View>		
+							</div>
+
+							<div contentEditable="true">
 							<View
 								style={styles.numberBoxView}>
 								<View
@@ -538,6 +552,108 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 										style={styles.textText}>100</Text>
 								</View>
 							</View>
+							</div>
+							
+							<div contentEditable="true">
+							<View
+								style={styles.suppliesBoxView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/rectangle.png")}
+										style={styles.rectangleImage}/>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Text
+										style={styles.textText}>15</Text>
+								</View>
+							</View>
+							</div>
+							
+							<div contentEditable="true">
+							<View
+								style={styles.suppliesBoxTwoView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/rectangle.png")}
+										style={styles.rectangleImage}/>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Text
+										style={styles.textText}>15</Text>
+								</View>
+							</View>
+							</div>
+							
+
+						<div contentEditable="true">
+							<View
+								style={styles.suppliesBoxThreeView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/rectangle.png")}
+										style={styles.rectangleImage}/>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Text
+										style={styles.textText}>15</Text>
+								</View>
+							</View>
+						</div>
+						
 						</View>
 						<Image
 							source={require("./../../assets/images/plus-circle.png")}
@@ -548,7 +664,7 @@ export default class AdminTotalInventoryAndSetAlerts extends React.Component {
 					<Text
 						style={styles.inputDrinkNameThirtyFourText}>Quantity</Text>
 					<Text
-						style={styles.inputDrinkNameThirtySixText}>Assign:</Text>
+						style={styles.inputDrinkNameThirtySixText}>Assign Quantity:</Text>
 				</View>
 				<View
 					style={{
@@ -726,7 +842,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 61,
 		width: 60,
-		bottom: 0,
+		bottom: 4,
 	},
 	inputDrinkNameNineText: {
 		color: "rgb(92, 90, 90)",
@@ -739,7 +855,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0,
 		width: 62,
-		bottom: 0,
+		bottom: 4,
 	},
 	inputDrinkNameTwelveText: {
 		color: "rgb(92, 90, 90)",
@@ -750,6 +866,7 @@ const styles = StyleSheet.create({
 		textAlign: "right",
 		backgroundColor: "transparent",
 		width: 60,
+		marginBottom: 4,
 	},
 	inputDrinkNameTenText: {
 		color: "rgb(92, 90, 90)",
@@ -762,7 +879,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 61,
 		width: 60,
-		bottom: 0,
+		bottom: 4,
 	},
 	inputDrinkNameElevenText: {
 		color: "rgb(92, 90, 90)",
@@ -775,7 +892,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0,
 		width: 62,
-		bottom: 0,
+		bottom: 4,
 	},
 	inputDrinkNameThirteenText: {
 		backgroundColor: "transparent",
@@ -786,7 +903,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "right",
 		width: 60,
-		marginBottom: 1,
+		marginBottom: 4,
 	},
 	preorderQueCardTwoView: {
 		backgroundColor: "transparent",
@@ -975,6 +1092,7 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-end",
 		width: 60,
 		marginRight: 5,
+		marginTop: 5,
 	},
 	inputDrinkNameFifteenText: {
 		backgroundColor: "transparent",
@@ -985,6 +1103,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		width: 62,
+		marginBottom: 12,
 	},
 	inputDrinkNameTwentyFourText: {
 		backgroundColor: "transparent",
@@ -996,6 +1115,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		width: 28,
 		marginLeft: 2,
+		marginBottom: 12,
 	},
 	inputDrinkNameNineteenText: {
 		color: "rgb(92, 90, 90)",
@@ -1006,6 +1126,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		width: 62,
+		marginBottom: 12,
 	},
 	inputDrinkNameTwentyFiveText: {
 		color: "rgb(92, 90, 90)",
@@ -1017,6 +1138,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 28,
 		marginLeft: 2,
+		marginBottom: 12,
 	},
 	inputDrinkNameTwentyOneText: {
 		color: "rgb(92, 90, 90)",
@@ -1027,6 +1149,7 @@ const styles = StyleSheet.create({
 		textAlign: "right",
 		backgroundColor: "transparent",
 		width: 60,
+		marginBottom: 13,
 	},
 	inputDrinkNameTwentyText: {
 		backgroundColor: "transparent",
@@ -1037,6 +1160,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		width: 62,
+		marginBottom: 12,
 	},
 	inputDrinkNameTwentySixText: {
 		backgroundColor: "transparent",
@@ -1048,6 +1172,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		width: 28,
 		marginLeft: 2,
+		marginBottom: 12,
 	},
 	inputDrinkNameTwentyTwoText: {
 		backgroundColor: "transparent",
@@ -1058,7 +1183,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "right",
 		width: 60,
-		marginBottom: 1,
+		marginBottom: 12,
 	},
 	editView: {
 		backgroundColor: "rgb(0, 112, 247)",
@@ -1067,6 +1192,7 @@ const styles = StyleSheet.create({
 		height: 18,
 		marginRight: 31,
 		justifyContent: "center",
+		top: 5,
 	},
 	editText: {
 		backgroundColor: "transparent",
@@ -1084,6 +1210,8 @@ const styles = StyleSheet.create({
 		resizeMode: "center",
 		width: 23,
 		height: 23,
+		top: 5,
+		left: 5,
 	},
 	unitPerPackView: {
 		backgroundColor: "transparent",
@@ -1118,6 +1246,7 @@ const styles = StyleSheet.create({
 		height: 17,
 		marginRight: 10,
 		marginTop: 3,
+		marginLeft: 20,
 	},
 	rectangleTwoImage: {
 		backgroundColor: "transparent",
@@ -1146,6 +1275,27 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: null,
 		height: 17,
+	},
+	suppliesBoxView: {
+		backgroundColor: "transparent",
+		width: 23,
+		height: 17,
+		marginTop: 117,
+		right: 40,
+	},
+	suppliesBoxTwoView: {
+		backgroundColor: "transparent",
+		width: 23,
+		height: 17,
+		marginTop: 136,
+		right: 63,
+	},
+	suppliesBoxThreeView: {
+		backgroundColor: "transparent",
+		width: 23,
+		height: 17,
+		marginTop: 155,
+		right: 86,
 	},
 	textText: {
 		color: "rgb(92, 90, 90)",
