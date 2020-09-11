@@ -21,7 +21,7 @@ export default function App() {
 						component={TotalInventoryScreen}
 						options={{
 							header: ({ navigation, props }) => {
-								return <HyppoeHeader navigation={navigation} mode="simple"/>;
+								return <HyppoeHeader navigation={navigation} mode="full"/>;
 							}
 						}}
 					/>
