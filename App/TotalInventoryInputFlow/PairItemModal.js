@@ -6,11 +6,11 @@ export default class PairItemModal extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
 		const { params = {} } = navigation.state
-		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+        return {
+            headerShown: false,
+            headerLeft: () => null,
+            headerRight: () => null
+        }
     }
     
     constructor(props) {

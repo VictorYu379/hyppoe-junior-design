@@ -3,7 +3,8 @@ import StationModal from "./App/TotalInventoryInputFlow/StationModal"
 import PairItemModal from "./App/TotalInventoryInputFlow/PairItemModal"
 import { AppLoading } from "expo"
 import * as Font from "expo-font"
-import { createAppContainer, createStackNavigator } from "react-navigation"
+import { createAppContainer } from "react-navigation"
+import { createStackNavigator } from "react-navigation-stack"
 
 const PushRouteOne = createStackNavigator({
   StationModal: {

@@ -7,10 +7,10 @@ export default class StationModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+            headerShown: false,
+            headerLeft: () => null,
+            headerRight: () => null
+        }
     }
     
     constructor(props) {
