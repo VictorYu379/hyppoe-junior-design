@@ -2,14 +2,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal'
 
 export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
-				onPress={() => navigation.navigate('Total Inventory')}>
+				onPress={() => navigation.navigate('Input Total')}>
 				<Text>Open up App.js to start working on your app!</Text>
 			</TouchableOpacity>
+			<InputUpdateInventoryModal></InputUpdateInventoryModal>
 			<StatusBar style="auto" />
 		</View>
 	);
