@@ -22,7 +22,10 @@ export default function App() {
 						options={{
 							header: ({ navigation, props }) => {
 								return <HyppoeHeader navigation={navigation} mode="full"/>;
-							}
+              },
+              headerStyle: {
+                zIndex: 0
+              }
 						}}
 					/>
 				</Stack.Navigator>
