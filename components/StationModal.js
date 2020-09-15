@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, KeyboardAvoid
 import { TextInput } from "react-native-gesture-handler"
 
 export default class StationModal extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {

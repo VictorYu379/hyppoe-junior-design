@@ -23,7 +23,7 @@ export default class PairItemModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: val}})
     }
 
-	render() {
+	  render() {
         return (
                 <View style={styles.centeredView}>
                     {/* Below is the modal for pop up module */} 
