@@ -24,19 +24,19 @@ export default function App() {
 				{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 				<NavigationContainer>
 					<Stack.Navigator>
-					<Stack.Screen name="Dummy" component={DummyScreen} />
-					<Stack.Screen
-						name="Total Inventory"
-						component={TotalInventoryStationOverviewScreen}
-						options={{
-							header: ({ navigation, props }) => {
-								return <HyppoeHeader navigation={navigation} mode="full"/>;
-              },
-              headerStyle: {
-                zIndex: 0
-              }
-						}}
-					/>
+						<Stack.Screen name="Dummy" component={DummyScreen} />
+						<Stack.Screen
+							name="Total Inventory"
+							component={TotalInventoryStationOverviewScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								},
+								headerStyle: {
+									zIndex: 0
+								}
+							}}
+						/>
 					</Stack.Navigator>
 				</NavigationContainer>
 			</View>

@@ -19,24 +19,30 @@ export default function DummyScreen({ navigation }) {
 
 				<View style={{
 					flexDirection: 'row',
+					margin: 5,
+					height: '80%',
+					alignItems: 'center',
+					// borderWidth: 1,
 				}}>
 
 					<Image 
 						source={img}
 						style={{
-							width: '50%',
-							height: '50%',
+							width: '60%',
+							height: '100%',
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 							borderRadius: 15,
 							overflow: 'hidden',
-							resizeMode: 'contain'
+							resizeMode: 'contain',
+							marginHorizontal: 2
+							// borderWidth: 5
 						}} />
 
 
 
 					<View style={{
-						width: '50%',
+						width: '40%',
 						height: '50%',
 						flexDirection: 'column',
 						justifyContent: 'flex-end',
