@@ -3,16 +3,6 @@ import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal } from "react-
 import { TextInput } from "react-native-gesture-handler"
 
 export default class PairItemModal extends React.Component {
-
-    static navigationOptions = ({ navigation }) => {
-		const { params = {} } = navigation.state
-        return {
-            headerShown: false,
-            headerLeft: () => null,
-            headerRight: () => null
-        }
-    }
-    
     constructor(props) {
         super(props)
         this.state = {
@@ -25,11 +15,6 @@ export default class PairItemModal extends React.Component {
             }
         }
     }
-    
-
-    setModalVisible(val) {
-        this.setState({modalVisible: val})
-    }
 
     updateItem(key, val) {
         if (Number(val) < 0) {
@@ -38,22 +23,21 @@ export default class PairItemModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: val}})
     }
 
-    componentDidMount() {
-	
-	}
-
-	render() {
+	  render() {
         return (
                 <View style={styles.centeredView}>
                     {/* Below is the modal for pop up module */} 
                     <Modal
                         animationType="slide"
                         transparent={true}
-                        visible={this.state.modalVisible}
+                        visible={this.props.visible}
                         onRequestClose={() => {
                             Alert.alert("Modal has been closed.");
                     }}>
-                        <View style={styles.centeredView}>
+                        <KeyboardAvoidingView 
+                            style={styles.centeredView}
+                            behavior="padding"
+                        >
                             <View style={styles.modalView}>
                                 <TextInput
                                     style={styles.sectionTitle}
@@ -161,23 +145,13 @@ export default class PairItemModal extends React.Component {
                                 <TouchableHighlight
                                     style={styles.openButton}
                                     onPress={() => {
-                                        this.setModalVisible(!this.state.modalVisible);
+                                        this.setModalVisible(!this.props.onSave());
                                     }}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>
                             </View>
-                        </View>
+                        </KeyboardAvoidingView>
                     </Modal>
-                    
-                    {/* Here is the button to trigger the popup */} 
-                    <TouchableHighlight
-                        style={styles.openButton}
-                        onPress={() => {
-                            this.setModalVisible(true);
-                        }}
-                        >
-                        <Text style={styles.textStyle}>Pair Item</Text>
-                    </TouchableHighlight>
                 </View>
         )
     }
