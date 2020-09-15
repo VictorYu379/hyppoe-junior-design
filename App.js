@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 import DummyScreen from './screens/DummyScreen';
-import TotalInventoryScreen from './screens/TotalInventoryScreen';
+import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStationOverviewScreen';
 import HyppoeHeader from './components/HyppoeHeader';
 
 const Stack = createStackNavigator();
@@ -27,7 +27,7 @@ export default function App() {
 					<Stack.Screen name="Dummy" component={DummyScreen} />
 					<Stack.Screen
 						name="Total Inventory"
-						component={TotalInventoryScreen}
+						component={TotalInventoryStationOverviewScreen}
 						options={{
 							header: ({ navigation, props }) => {
 								return <HyppoeHeader navigation={navigation} mode="full"/>;
