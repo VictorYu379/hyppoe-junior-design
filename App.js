@@ -3,6 +3,8 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Header } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useFonts } from 'expo-font';
+import { AppLoading } from 'expo';
 import DummyScreen from './screens/DummyScreen';
 import TotalInventoryScreen from './screens/TotalInventoryScreen';
 import HyppoeHeader from './components/HyppoeHeader';
@@ -10,11 +12,18 @@ import HyppoeHeader from './components/HyppoeHeader';
 const Stack = createStackNavigator();
 
 export default function App() {
-	return (
-		<View style={styles.container}>
-			{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-			<NavigationContainer>
-				<Stack.Navigator>
+	let [fontsLoaded] = useFonts({
+		'Arial-BoldMT': require('./assets/fonts/ArialBold.ttf'),
+		'Arial': require('./assets/fonts/Arial.ttf')
+	});
+	if (!fontsLoaded) {
+		return <AppLoading />;
+	} else {
+		return (
+			<View style={styles.container}>
+				{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+				<NavigationContainer>
+					<Stack.Navigator>
 					<Stack.Screen name="Dummy" component={DummyScreen} />
 					<Stack.Screen
 						name="Total Inventory"
@@ -28,10 +37,11 @@ export default function App() {
               }
 						}}
 					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</View>
-	);
+					</Stack.Navigator>
+				</NavigationContainer>
+			</View>
+		);
+	}
 }
 
 const styles = StyleSheet.create({

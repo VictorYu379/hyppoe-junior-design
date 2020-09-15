@@ -1,8 +1,15 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
+import StationModal from '../components/StationModal';
 
 export default function DummyScreen({ navigation }) {
+	const [stationModalVisible, setStationModalVisible] = useState(false);
+
+	const onSave = function() {
+		setStationModalVisible(false);
+	}
+
 	const imageList = [
 		require('../assets/event-logo.png'),
 		require('../assets/coorslight.jpg'),
@@ -32,6 +39,7 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+			<StationModal visible={stationModalVisible} onSave={onSave} />
 			<TouchableOpacity
 				style={{
 					position: 'absolute',
@@ -51,7 +59,8 @@ export default function DummyScreen({ navigation }) {
 					elevation: 9,
 					backgroundColor: 'blue',
 					zIndex: 1
-				}}>
+				}}
+				onPress={() => setStationModalVisible(true)}>
 				<Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Complete Inventory and Add Stations</Text>
 			</TouchableOpacity>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
