@@ -92,7 +92,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'flex-start',
 						}}>
 							<View  style={styles.sectionTitle}>
-							<Text style={{fontSize: 20}}>Station 1:</Text>
+							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
 							</View>
 							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080</Text>
 							<Text style={{fontSize: 10, color: 'gray'}}>Qty $480,960</Text>
