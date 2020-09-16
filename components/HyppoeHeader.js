@@ -6,12 +6,15 @@ export default function HyppoeHeader(props) {
 		<View
 			style={{
 				height: 120,
-				paddingHorizontal: 30,
 				justifyContent: 'flex-end',
 				overflow: 'hidden'
 			}}>
 			<Image
-				style={StyleSheet.absoluteFill}
+				style={{
+					width: '100%',
+					position: 'absolute',
+					top: 0
+				}}
 				source={require('../assets/top-image-8.png')}
 			/>
 			<View 
@@ -19,7 +22,8 @@ export default function HyppoeHeader(props) {
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					marginBottom: 10
+					marginBottom: 10,
+					paddingHorizontal: 30,
 				}}>
 				<TouchableOpacity onPress={props.navigation.goBack}>
 					<Image source={require('../assets/back-button.png')} />
