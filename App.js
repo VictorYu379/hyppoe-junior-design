@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 import DummyScreen from './screens/DummyScreen';
 import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStationOverviewScreen';
+import RunnerStationInventoryScreen from './screens/RunnerStationInventoryScreen';
 import HyppoeHeader from './components/HyppoeHeader';
 
 const Stack = createStackNavigator();
@@ -27,7 +28,7 @@ export default function App() {
 						<Stack.Screen name="Dummy" component={DummyScreen} />
 						<Stack.Screen
 							name="Total Inventory"
-							component={TotalInventoryStationOverviewScreen}
+							component={RunnerStationInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
