@@ -7,12 +7,12 @@ export default function DummyScreen({ navigation }) {
 
 	
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
-		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
-		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
-		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
-		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
-		{img:require('../assets/cup.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'}
+		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:8016, name:'BudLight'},
+		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Coorslight'},
+		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:8016, name:'Terrapin'},
+		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:8016, name:'Truly'},
+		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
+		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:10000, name:'Cups'}
 	]
 	const iconList = imageList.map(item => {
 		return (
@@ -49,8 +49,10 @@ export default function DummyScreen({ navigation }) {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 7, fontWeight: 'bold', color: 'gray'}}> {item.name}</Text>
-						<Text style={{fontSize: 16, color: 'dodgerblue'}}>100%</Text>
+						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
+						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
+						<Text style={{fontSize: 16, color: 'dodgerblue'}}>{item.currentCapacity*100/item.maxCapacity}%</Text>
+						</View>
 						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
 					
@@ -89,10 +91,11 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 						}}>
-							<Text style={styles.sectionTitle}>
-								Station 1:
-							</Text>
-							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080 Qty $480,960</Text>
+							<View  style={styles.sectionTitle}>
+							<Text style={{fontSize: 20}}>Station 1:</Text>
+							</View>
+							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>Qty $480,960</Text>
 						</View>
 
 
@@ -100,7 +103,7 @@ export default function DummyScreen({ navigation }) {
 							width: '70%',
 							height: '50%',
 							flexDirection: 'column',
-							justifyContent: 'flex-start',
+							justifyContent: 'center',
 							alignItems: 'flex-start',
 						}}>
 							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      4</Text>
@@ -167,13 +170,13 @@ const styles = StyleSheet.create({
 		fontFamily: 'Arial'
 	},
     sectionTitle: {
-        color: "black",
+        color: "lightgrey",
         fontFamily: "Arial-BoldMT",
         fontSize: 20,
         fontWeight: "bold",
 		textAlign: "left",
         borderBottomColor: "grey",
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: 1,
         width: "100%"
     },
 	rowView: {
