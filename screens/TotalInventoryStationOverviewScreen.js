@@ -7,14 +7,14 @@ export default function DummyScreen({ navigation }) {
 
 	
 	const imageList = [
-		require('../assets/event-logo.png'),
-		require('../assets/coorslight.jpg'),
-		require('../assets/terrapin.png'),
-		require('../assets/truly.jpeg'),
-		require('../assets/smartwater.png'),
-		require('../assets/cup.jpg'),
+		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
+		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
+		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
+		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
+		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'},
+		{img:require('../assets/cup.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Budlight'}
 	]
-	const iconList = imageList.map(img => {
+	const iconList = imageList.map(item => {
 		return (
 			<ShadowedBox width={'40%'} height={'25%'}  margin={5}>
 
@@ -27,7 +27,7 @@ export default function DummyScreen({ navigation }) {
 				}}>
 
 					<Image 
-						source={img}
+						source={item.img}
 						style={{
 							width: '60%',
 							height: '100%',
@@ -49,9 +49,9 @@ export default function DummyScreen({ navigation }) {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 7, fontWeight: 'bold', color: 'gray'}}> PlaceHolder</Text>
+						<Text style={{fontSize: 7, fontWeight: 'bold', color: 'gray'}}> {item.name}</Text>
 						<Text style={{fontSize: 16, color: 'dodgerblue'}}>100%</Text>
-						<Text style={{fontSize: 6, color: 'gray'}}> 0 of 0</Text>
+						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
 					
 				</View>
@@ -89,7 +89,7 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 						}}>
-							<Text style={{fontSize: 17, fontWeight: 'bold', fontFamily: 'Arial'}}>
+							<Text style={styles.sectionTitle}>
 								Station 1:
 							</Text>
 							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080 Qty $480,960</Text>
@@ -165,5 +165,22 @@ const styles = StyleSheet.create({
 	normalText: {
 		fontSize: 17,
 		fontFamily: 'Arial'
-	}
+	},
+    sectionTitle: {
+        color: "black",
+        fontFamily: "Arial-BoldMT",
+        fontSize: 20,
+        fontWeight: "bold",
+		textAlign: "left",
+        borderBottomColor: "grey",
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        width: "100%"
+    },
+	rowView: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 2
+	},
+	
 });
