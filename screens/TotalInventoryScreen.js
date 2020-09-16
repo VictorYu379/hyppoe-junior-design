@@ -2,12 +2,18 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import StationModal from '../components/StationModal';
+import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
+	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
 
 	const onSave = function() {
 		setStationModalVisible(false);
+	}
+
+	const onInvModalSave = function() {
+		setInputInvUpdateModalVisible(false);
 	}
 
 	const imageList = [
@@ -21,19 +27,24 @@ export default function DummyScreen({ navigation }) {
 		require('../assets/table.jpg'),
 		require('../assets/ice.png')
 	]
+
 	const iconList = imageList.map(img => {
 		return (
 			<ShadowedBox width={'30%'} square margin={5}>
-				<Image 
-					source={img}
-					style={{
-						width: '85%',
-						height: '85%',
-						borderRadius: 15,
-						overflow: 'hidden',
-						resizeMode: 'contain'
-					}} />
-			</ShadowedBox>
+				<TouchableOpacity onPress={() => setInputInvUpdateModalVisible(true)}>
+					<Image 
+						source={img}
+						style={{
+							width: 100,
+							height: 100,
+							borderRadius: 15,
+							overflow: 'hidden',
+							resizeMode: 'contain'
+						}}/>
+						<InputUpdateInventoryModal source={img} visible={inputInvUpdateModalVisible} onSave={onInvModalSave}></InputUpdateInventoryModal>
+			
+				</TouchableOpacity>
+				</ShadowedBox>
 		);
 	});
 

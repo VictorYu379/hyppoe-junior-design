@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image } from "react-native"
+import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
 import PairItemModal from './PairItemModal'
@@ -20,6 +20,7 @@ export default class InputUpdateInventoryModal extends React.Component {
         this.state = {
             modalVisible: false,
             includeInInvCount: true,
+            pairItemModalVisible: false,
             Item: {
                 Name: "Bud Light",
                 Unit: 0,
@@ -79,6 +80,10 @@ export default class InputUpdateInventoryModal extends React.Component {
         });
     }
 
+    onPairItemSave() {
+        this.setState({pairItemModalVisible: false});
+    }
+
     updatePack(val) {
         if (Number(val) < 0) {
             val = 0;
@@ -112,10 +117,6 @@ export default class InputUpdateInventoryModal extends React.Component {
         });
     }
 
-    componentDidMount() {
-        
-	}
-
 	render() {
         return (
                 <View style={styles.centeredView}>
@@ -138,7 +139,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     }}>
                                         <Image
                                             style={StyleSheet.absoluteFill}
-                                            source={require('../assets/bud-light.png')}
+                                            source={this.props.source}
                                         />
                                     </View>
                                     <View style={{
@@ -395,7 +396,16 @@ export default class InputUpdateInventoryModal extends React.Component {
                                         />
                                 </View>
                                 <View style={styles.rowView}>
-                                    <PairItemModal></PairItemModal>
+                                    
+                                    <PairItemModal 
+                                        visible={this.state.pairItemModalVisible} 
+                                        onSave={this.onPairItemSave}>
+                                    </PairItemModal>
+                                    <TouchableOpacity
+                                        style={styles.openButton}
+                                        onPress={() => this.setState({pairItemModalVisible: true})}>
+                                        <Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
+                                    </TouchableOpacity>
                                 </View>
 
                                 <Text style={styles.sectionTitle}> Details: </Text>
@@ -417,26 +427,14 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     value={this.state.Item.Details}
                                     />
                                     
-                                <TouchableHighlight
-                                    style={styles.openButton}
-                                    onPress={() => {
-                                        this.setModalVisible(!this.state.modalVisible);
-                                    }}>
-                                    <Text style={styles.textStyle}>Save</Text>
-                                </TouchableHighlight>
+                                    <TouchableHighlight
+                                        style={styles.openButton}
+                                        onPress={() => this.props.onSave()}>
+                                        <Text style={styles.textStyle}>Save</Text>
+                                    </TouchableHighlight>
                             </View>
                         </View>
                     </Modal>
-                    
-                    {/* Here is the button to trigger the popup */} 
-                    <TouchableHighlight
-                        style={styles.openButton}
-                        onPress={() => {
-                            this.setModalVisible(true);
-                        }}
-                        >
-                        <Text style={styles.textStyle}>Edit Item</Text>
-                    </TouchableHighlight>
                 </View>
         )
     }
