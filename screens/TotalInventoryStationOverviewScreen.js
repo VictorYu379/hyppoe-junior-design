@@ -5,6 +5,7 @@ import ShadowedBox from '../components/ShadowedBox';
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
+	
 	const imageList = [
 		require('../assets/event-logo.png'),
 		require('../assets/coorslight.jpg'),
@@ -15,11 +16,11 @@ export default function DummyScreen({ navigation }) {
 	]
 	const iconList = imageList.map(img => {
 		return (
-			<ShadowedBox width={'40%'} square margin={5}>
+			<ShadowedBox width={'40%'} height={'25%'}  margin={5}>
 
 				<View style={{
 					flexDirection: 'row',
-					margin: 5,
+					margin: 3,
 					height: '80%',
 					alignItems: 'center',
 					// borderWidth: 1,
@@ -45,11 +46,12 @@ export default function DummyScreen({ navigation }) {
 						width: '40%',
 						height: '50%',
 						flexDirection: 'column',
-						justifyContent: 'flex-end',
-						alignItems: 'flex-end',
+						justifyContent: 'center',
+						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 13, fontWeight: 'bold', color: 'gray'}}> ItemNamePlaceHolder</Text>
-						<Text style={{fontSize: 13, color: 'gray'}}>Runners:      2</Text>
+						<Text style={{fontSize: 7, fontWeight: 'bold', color: 'gray'}}> PlaceHolder</Text>
+						<Text style={{fontSize: 16, color: 'dodgerblue'}}>100%</Text>
+						<Text style={{fontSize: 6, color: 'gray'}}> 0 of 0</Text>
 					</View>
 					
 				</View>
@@ -74,6 +76,7 @@ export default function DummyScreen({ navigation }) {
 					<View style={{
 							width: '70%',
 							//height: '40%',
+							marginVertical: 15,
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'center',
@@ -89,7 +92,7 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 17, fontWeight: 'bold', fontFamily: 'Arial'}}>
 								Station 1:
 							</Text>
-							<Text style={{fontSize: 13, color: 'gray'}}>40,080 of 40,080 Qty $480,960</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080 Qty $480,960</Text>
 						</View>
 
 
@@ -97,11 +100,11 @@ export default function DummyScreen({ navigation }) {
 							width: '70%',
 							height: '50%',
 							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
+							justifyContent: 'flex-start',
+							alignItems: 'flex-start',
 						}}>
-							<Text style={{fontSize: 13, color: 'gray'}}>Servers:      4</Text>
-							<Text style={{fontSize: 13, color: 'gray'}}>Runners:      2</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      4</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      2</Text>
 						</View>
 					</View>
 
@@ -123,7 +126,7 @@ export default function DummyScreen({ navigation }) {
 						<Text style={{fontSize: 24, color: 'dodgerblue', fontWeight: 'bold', fontFamily: 'Arial'}}>
 								100%
 						</Text>
-						<Text style={{fontSize: 13, color: 'dodgerblue', fontWeight: 'bold', fontFamily: 'Arial'}}>
+						<Text style={{fontSize: 13, color: 'dodgerblue', fontFamily: 'Arial'}}>
 								Available Inventory
 						</Text>
 					</View>
