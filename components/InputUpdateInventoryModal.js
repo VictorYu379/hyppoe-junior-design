@@ -119,331 +119,328 @@ export default class InputUpdateInventoryModal extends React.Component {
 
 	render() {
         return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.props.visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+            }}>
                 <View style={styles.centeredView}>
-                    {/* Below is the modal for pop up module */} 
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.props.visible}
-                        onRequestClose={() => {
-                            Alert.alert("Modal has been closed.");
-                    }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <View style={{
-                                    ...styles.rowView,
-                                    height: 110
-                                }}>
-                                    <View style={{
-                                        width: 100
-                                    }}>
-                                        <Image
-                                            style={{
-                                                width: 100,
-                                                height: 100,
-                                                borderRadius: 15,
-                                                overflow: 'hidden',
-                                                resizeMode: 'contain'
-                                            }}
-                                            source={this.props.source}
-                                        />
-                                    </View>
-                                    <View style={{
-                                        flexDirection:"column",
-                                        width:100
-                                    }}>
-                                        <TextInput
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            width: 100,
-                                            fontSize: 20,
-                                            lineHeight: 20,
-                                        }}
-                                        multiline={true}
-                                        onChangeText={text => this.updateItem("Name", text)}
-                                        value={this.state.Item.Name}
-                                        />
-                                        <Text style={{
-                                         fontSize: 12
-                                        }}>                        
-                                            {this.state.Item.CurrentQuantity+this.state.Item.AddedQuantity} of {this.state.Item.TotalQuantity} Qty
-                                        </Text>
-                                        <Text tyle={{
-                                         fontSize: 12
-                                        }}>
-                                            ${this.state.Item.Price * this.state.Item.TotalQuantity}
-                                        </Text>
-                                    </View>
-                                    <View style={{
-                                        width: 100,
-                                        flexDirection:"column-reverse",
-                                        alignContent: "center"
-                                    }}>
-                                        <Text style={{
-                                            fontSize: 12,
-                                        }}> 
-                                            Available Inventory
-                                        </Text>
-                                        <Text style={{
-                                            color: ((this.getPercentage() >= 26) ? 
-                                                        ((this.getPercentage() <= 69) ?
-                                                            "orange" : 
-                                                            "green") :
-                                                        "red"),
-                                            fontSize: 30,
-                                        }}>
-                                            {this.getPercentage()}%
-                                        </Text>
-                                        
-                                    </View>  
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Total Inventory
-                                    </Text>
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Image
-                                        style={{
-                                            ...StyleSheet.absoluteFill,
-                                        }}
-                                        source={require('../assets/Seperator.png')}
-                                    />
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Current Quantity:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateCurrentQuantity(text)}
-                                        value={this.state.Item.CurrentQuantity.toString()}
-                                        />
-                                </View>
-                                <View style={styles.rowView}>
-                                    <TouchableHighlight
-                                        style={{
-                                            ...styles.clickButton,
-                                        }}
-                                        onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity + 1) }}>
-                                        <Text style={styles.textStyle}> + </Text>
-                                    </TouchableHighlight>
-                                    <TouchableHighlight
-                                        style={{
-                                            ...styles.clickButton,
-                                            backgroundColor: "white",
-                                            borderColor: "#D2D2D2",
-                                            borderWidth: 1,
-                                        }}
-                                        onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity - 1) }}>
-                                        <Text style={styles.textStyle}> - </Text>
-                                    </TouchableHighlight>
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Unit:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateUnit(text)}
-                                        value={this.state.Item.Unit.toString()}
-                                        />   
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Pack:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updatePack(text)}
-                                        value={this.state.Item.Pack.toString()}
-                                        />   
-                                </View>
-                                <View style={{
-                                    ...styles.rowView
-                                }}>
-                                    <Text
-                                        style={{color:"gray"}}
-                                    >
-                                        Or
-                                    </Text>
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Quantity:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateQuantity(text)}
-                                        value={this.state.Item.Quantity.toString()}
-                                        />   
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Updated Quantity:
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...styles.sectionTitle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}>
-                                        { this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity }
-                                    </Text>
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle1,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Ounces per Unit:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.inputStyle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateItem("Ounces", text)}
-                                        value={this.state.Item.Ounces.toString()}
-                                        />
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle1,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Price per Unit:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.inputStyle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateItem("Price", text)}
-                                        value={this.state.Item.Price.toString()}
-                                        />
-                                </View>
-                                <View style={styles.rowView}>
-                                    <Text 
-                                        style={{
-                                            ...styles.textStyle1,
-                                            textAlign: "left",
-                                            flex: 1
-                                        }}> 
-                                        Cost per Pack:
-                                    </Text>
-                                    <TextInput
-                                        style={{
-                                            ...styles.inputStyle,
-                                            textAlign: "right",
-                                            flex: 1
-                                        }}
-                                        onChangeText={text => this.updateItem("Cost", text)}
-                                        value={this.state.Item.Cost.toString()}
-                                        />
-                                </View>
-                                <View style={styles.rowView}>
-                                    <CheckBox
-                                        title="Include in Inventory Count"
-                                        checked={this.state.includeInInvCount}
-                                        onPress={() => this.setState({includeInInvCount: !this.state.includeInInvCount})}
-                                        />
-                                </View>
-                                <View style={styles.rowView}>
-                                    
-                                    <PairItemModal 
-                                        visible={this.state.pairItemModalVisible} 
-                                        onSave={this.onPairItemSave}>
-                                    </PairItemModal>
-                                    <TouchableOpacity
-                                        style={styles.openButton}
-                                        onPress={() => this.setState({pairItemModalVisible: true})}>
-                                        <Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
-                                    </TouchableOpacity>
-                                </View>
-
-                                <Text style={styles.sectionTitle}> Details: </Text>
-                                <TextInput
+                    <View style={styles.modalView}>
+                        <View style={{
+                            ...styles.rowView,
+                            height: 110
+                        }}>
+                            <View style={{
+                                width: 100
+                            }}>
+                                <Image
                                     style={{
-                                        ...styles.textStyle,
-                                        textAlign: "left", 
-                                        borderColor: 'gray', 
-                                        borderWidth: 1,
-                                        width: "98%",
-                                        marginTop: 5,
-                                        marginLeft: 5,
-                                        marginBottom: 10,
-                                        fontSize: 14
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 15,
+                                        overflow: 'hidden',
+                                        resizeMode: 'contain'
                                     }}
-                                    multiline={true}
-                                    onChangeText={text => this.updateItem("Details", text)}
-                                    placeholder="Notes ..."
-                                    value={this.state.Item.Details}
-                                    />
-                                    
-                                    <TouchableHighlight
-                                        style={styles.openButton}
-                                        onPress={() => {
-                                            this.setModalVisible(this.props.onSave());
-                                        }}>
-                                        <Text style={styles.textStyle}>Save</Text>
-                                    </TouchableHighlight>
+                                    source={this.props.source}
+                                />
                             </View>
+                            <View style={{
+                                flexDirection:"column",
+                                width:100
+                            }}>
+                                <TextInput
+                                style={{
+                                    ...styles.sectionTitle,
+                                    width: 100,
+                                    fontSize: 20,
+                                    lineHeight: 20,
+                                }}
+                                multiline={true}
+                                onChangeText={text => this.updateItem("Name", text)}
+                                value={this.state.Item.Name}
+                                />
+                                <Text style={{
+                                    fontSize: 12
+                                }}>                        
+                                    {this.state.Item.CurrentQuantity+this.state.Item.AddedQuantity} of {this.state.Item.TotalQuantity} Qty
+                                </Text>
+                                <Text tyle={{
+                                    fontSize: 12
+                                }}>
+                                    ${this.state.Item.Price * this.state.Item.TotalQuantity}
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: 100,
+                                flexDirection:"column-reverse",
+                                alignContent: "center"
+                            }}>
+                                <Text style={{
+                                    fontSize: 12,
+                                }}> 
+                                    Available Inventory
+                                </Text>
+                                <Text style={{
+                                    color: ((this.getPercentage() >= 26) ? 
+                                                ((this.getPercentage() <= 69) ?
+                                                    "orange" : 
+                                                    "green") :
+                                                "red"),
+                                    fontSize: 30,
+                                }}>
+                                    {this.getPercentage()}%
+                                </Text>
+                                
+                            </View>  
                         </View>
-                    </Modal>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Total Inventory
+                            </Text>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Image
+                                style={{
+                                    ...StyleSheet.absoluteFill,
+                                }}
+                                source={require('../assets/Seperator.png')}
+                            />
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Current Quantity:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.sectionTitle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateCurrentQuantity(text)}
+                                value={this.state.Item.CurrentQuantity.toString()}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                }}
+                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity + 1) }}>
+                                <Text style={styles.textStyle}> + </Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                    backgroundColor: "white",
+                                    borderColor: "#D2D2D2",
+                                    borderWidth: 1,
+                                }}
+                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity - 1) }}>
+                                <Text style={styles.textStyle}> - </Text>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Unit:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.sectionTitle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateUnit(text)}
+                                value={this.state.Item.Unit.toString()}
+                                />   
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Pack:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.sectionTitle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updatePack(text)}
+                                value={this.state.Item.Pack.toString()}
+                                />   
+                        </View>
+                        <View style={{
+                            ...styles.rowView
+                        }}>
+                            <Text
+                                style={{color:"gray"}}
+                            >
+                                Or
+                            </Text>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Quantity:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.sectionTitle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateQuantity(text)}
+                                value={this.state.Item.Quantity.toString()}
+                                />   
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Updated Quantity:
+                            </Text>
+                            <Text
+                                style={{
+                                    ...styles.sectionTitle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}>
+                                { this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity }
+                            </Text>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle1,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Ounces per Unit:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.inputStyle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateItem("Ounces", text)}
+                                value={this.state.Item.Ounces.toString()}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle1,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Price per Unit:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.inputStyle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateItem("Price", text)}
+                                value={this.state.Item.Price.toString()}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle1,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Cost per Pack:
+                            </Text>
+                            <TextInput
+                                style={{
+                                    ...styles.inputStyle,
+                                    textAlign: "right",
+                                    flex: 1
+                                }}
+                                onChangeText={text => this.updateItem("Cost", text)}
+                                value={this.state.Item.Cost.toString()}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            <CheckBox
+                                title="Include in Inventory Count"
+                                checked={this.state.includeInInvCount}
+                                onPress={() => this.setState({includeInInvCount: !this.state.includeInInvCount})}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            
+                            <PairItemModal 
+                                visible={this.state.pairItemModalVisible} 
+                                onSave={this.onPairItemSave}>
+                            </PairItemModal>
+                            <TouchableOpacity
+                                style={styles.openButton}
+                                onPress={() => this.setState({pairItemModalVisible: true})}>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={styles.sectionTitle}> Details: </Text>
+                        <TextInput
+                            style={{
+                                ...styles.textStyle,
+                                textAlign: "left", 
+                                borderColor: 'gray', 
+                                borderWidth: 1,
+                                width: "98%",
+                                marginTop: 5,
+                                marginLeft: 5,
+                                marginBottom: 10,
+                                fontSize: 14
+                            }}
+                            multiline={true}
+                            onChangeText={text => this.updateItem("Details", text)}
+                            placeholder="Notes ..."
+                            value={this.state.Item.Details}
+                            />
+                            
+                            <TouchableHighlight
+                                style={styles.openButton}
+                                onPress={() => {
+                                    this.setModalVisible(this.props.onSave());
+                                }}>
+                                <Text style={styles.textStyle}>Save</Text>
+                            </TouchableHighlight>
+                    </View>
                 </View>
+            </Modal>
         )
     }
 }

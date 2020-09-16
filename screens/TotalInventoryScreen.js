@@ -7,8 +7,9 @@ import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
+	const [inputImgSource, setInputImgSource] = useState(false);
 
-	const onSave = function() {
+	const onStationSave = function() {
 		setStationModalVisible(false);
 	}
 
@@ -31,7 +32,10 @@ export default function DummyScreen({ navigation }) {
 	const iconList = imageList.map(img => {
 		return (
 			<ShadowedBox key={img} width={'30%'} square margin={5}>
-				<TouchableOpacity key={img} onPress={() => setInputInvUpdateModalVisible(true)}>
+				<TouchableOpacity key={img} onPress={() => {
+					setInputInvUpdateModalVisible(true);
+					setInputImgSource(img);
+				}}>
 					<Image 
 						source={img}
 						style={{
@@ -41,7 +45,6 @@ export default function DummyScreen({ navigation }) {
 							overflow: 'hidden',
 							resizeMode: 'contain'
 						}}/>
-					<InputUpdateInventoryModal key={img} source={img} visible={inputInvUpdateModalVisible} onSave={onInvModalSave}></InputUpdateInventoryModal>
 				</TouchableOpacity>
 				</ShadowedBox>
 		);
@@ -49,7 +52,8 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StationModal visible={stationModalVisible} onSave={onSave} />
+			<StationModal visible={stationModalVisible} onSave={onStationSave} />
+			<InputUpdateInventoryModal key={inputImgSource} source={inputImgSource} visible={inputInvUpdateModalVisible} onSave={onInvModalSave}></InputUpdateInventoryModal>
 			<TouchableOpacity
 				style={{
 					position: 'absolute',
