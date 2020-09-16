@@ -30,8 +30,8 @@ export default function DummyScreen({ navigation }) {
 
 	const iconList = imageList.map(img => {
 		return (
-			<ShadowedBox width={'30%'} square margin={5}>
-				<TouchableOpacity onPress={() => setInputInvUpdateModalVisible(true)}>
+			<ShadowedBox key={img} width={'30%'} square margin={5}>
+				<TouchableOpacity key={img} onPress={() => setInputInvUpdateModalVisible(true)}>
 					<Image 
 						source={img}
 						style={{
@@ -41,8 +41,7 @@ export default function DummyScreen({ navigation }) {
 							overflow: 'hidden',
 							resizeMode: 'contain'
 						}}/>
-						<InputUpdateInventoryModal source={img} visible={inputInvUpdateModalVisible} onSave={onInvModalSave}></InputUpdateInventoryModal>
-			
+					<InputUpdateInventoryModal key={img} source={img} visible={inputInvUpdateModalVisible} onSave={onInvModalSave}></InputUpdateInventoryModal>
 				</TouchableOpacity>
 				</ShadowedBox>
 		);

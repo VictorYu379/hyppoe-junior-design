@@ -124,7 +124,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                     <Modal
                         animationType="slide"
                         transparent={true}
-                        visible={this.state.modalVisible}
+                        visible={this.props.visible}
                         onRequestClose={() => {
                             Alert.alert("Modal has been closed.");
                     }}>
@@ -138,7 +138,13 @@ export default class InputUpdateInventoryModal extends React.Component {
                                         width: 100
                                     }}>
                                         <Image
-                                            style={StyleSheet.absoluteFill}
+                                            style={{
+                                                width: 100,
+                                                height: 100,
+                                                borderRadius: 15,
+                                                overflow: 'hidden',
+                                                resizeMode: 'contain'
+                                            }}
                                             source={this.props.source}
                                         />
                                     </View>
@@ -429,7 +435,9 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     
                                     <TouchableHighlight
                                         style={styles.openButton}
-                                        onPress={() => this.props.onSave()}>
+                                        onPress={() => {
+                                            this.setModalVisible(this.props.onSave());
+                                        }}>
                                         <Text style={styles.textStyle}>Save</Text>
                                     </TouchableHighlight>
                             </View>
