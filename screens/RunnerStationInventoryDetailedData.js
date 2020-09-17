@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import Accordion from 'react-native-collapsible/Accordion';
 
 export default function RunnerStationInventoryDetailedData({ navigation }) {
 
 	const station = "1"
+
+	const [sections, setSections] = useState([0]);
 
 	const items = [
         {key: 1, name: 'Bud Light', total: 8016, avail: 2004, sold: 6012, price: 12},
@@ -56,34 +59,36 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 	}
 
 	const itemList = (text) => {
-		return items.map(item => {
-			return (
-				<View style={styles.rowView}>
-					<View style={{
-						width: "100%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}>
-						<Text style={styles.rowTitle}>{item.name}</Text>
-						<Text style={{
-							...styles.rowTitle, 
-							color: textColor(percent(item[text], item.total)), 
-							fontSize: 20,
-							textAlign: "right",
-							flex: 1
-						}}>{percent(item[text], item.total)}%</Text>
+		return <View style={{marginLeft: 30}}>
+			{items.map(item => {
+				return (
+					<View style={styles.rowView}>
+						<View style={{
+							width: "100%",
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}>
+							<Text style={styles.rowTitle}>{item.name}</Text>
+							<Text style={{
+								...styles.rowTitle, 
+								color: textColor(percent(item[text], item.total)), 
+								fontSize: 20,
+								textAlign: "right",
+								flex: 1
+							}}>{percent(item[text], item.total)}%</Text>
+						</View>
+						<View style={{
+							width: "100%",
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}>
+							<Text style={styles.rowText}> Qty: {formatNum(item[text])} of {formatNum(item.total)}</Text>
+							<Text style={styles.rowText}>$ {formatNum(value(item, text))} </Text>
+						</View>
 					</View>
-					<View style={{
-						width: "100%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}>
-						<Text style={styles.rowText}> Qty: {formatNum(item[text])} of {formatNum(item.total)}</Text>
-						<Text style={styles.rowText}>$ {formatNum(value(item, text))} </Text>
-					</View>
-				</View>
-			);
-		});
+				);
+			})}
+		</View>
 	}
 
 	const getTitle = (text) => {
@@ -124,7 +129,9 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
                     marginBottom: 10,
                     flexDirection: "row",
                     justifyContent: "space-between",
-                    alignItems: "flex-start",
+					alignItems: "flex-start",
+					borderBottomColor: "grey",
+					borderBottomWidth: StyleSheet.hairlineWidth
 				}}>
 					<Text style={styles.sectionTitle}>Station {station} Inventory:</Text>
 					<View style={{
@@ -146,7 +153,16 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 				</View>
                 <View style = {{width: '90%', marginBottom: 25, maxHeight: '80%'}}>
                     <ScrollView>
-						{listTitle('avail')}
+						<Accordion
+							activeSections={sections}
+							sections={['avail', 'sold']}
+							renderHeader={listTitle}
+							renderContent={itemList}
+							onChange={setSections}
+							underlayColor='#f2f2f2'
+							expandMultiple={true}
+						/>
+						{/* {listTitle('avail')}
 						<View style={{
 							marginLeft: 30
 						}}>
@@ -157,7 +173,7 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 							marginLeft: 30
 						}}>
 							{itemList('sold')}
-						</View>
+						</View> */}
                     </ScrollView>
                 </View>
 			</ShadowedBox>
