@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,8 +7,12 @@ import Accordion from 'react-native-collapsible/Accordion';
 export default function RunnerStationInventoryDetailedData({ navigation }) {
 
 	const station = "1"
-
-	const [sections, setSections] = useState([0]);
+	const [activeSections, setSections] = useState([0]);
+	const sections = ['avail', 'sold'];
+	const images = {
+		dropDownIcon: require('../assets/drop-down-arrow.png'),
+		dropUpIcon: require('../assets/drop-up-arrow.png')
+	}
 
 	const items = [
         {key: 1, name: 'Bud Light', total: 8016, avail: 2004, sold: 6012, price: 12},
@@ -99,14 +103,35 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 		}
 	}
 
+	const getImage = (text) => {
+		let index = sections.findIndex(item => item === text)
+		if (activeSections.findIndex(item => item === index) > -1) {
+			return images.dropUpIcon
+		} else {
+			return images.dropDownIcon
+		}
+	}
+
 	const listTitle = (text) => {
 		return (
 			<View style={styles.rowView}>
 				<View style={{
 					width: "100%",
+					height: 20,
 					flexDirection: "row",
+					justifyContent: "space-between",
+					alignItems: "center"
 				}}>
 					<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
+					<Image 
+						source={getImage(text)}
+						style={{
+							width: "5%",
+							marginHorizontal: 10,
+							tintColor: "grey"
+						}}
+						resizeMode="contain"
+					/>
 				</View>
 				<View style={{
 					width: "100%",
@@ -154,26 +179,14 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
                 <View style = {{width: '90%', marginBottom: 25, maxHeight: '80%'}}>
                     <ScrollView>
 						<Accordion
-							activeSections={sections}
-							sections={['avail', 'sold']}
+							activeSections={activeSections}
+							sections={sections}
 							renderHeader={listTitle}
 							renderContent={itemList}
 							onChange={setSections}
 							underlayColor='#f2f2f2'
 							expandMultiple={true}
 						/>
-						{/* {listTitle('avail')}
-						<View style={{
-							marginLeft: 30
-						}}>
-							{itemList('avail')}
-						</View>
-						{listTitle('sold')}
-						<View style={{
-							marginLeft: 30
-						}}>
-							{itemList('sold')}
-						</View> */}
                     </ScrollView>
                 </View>
 			</ShadowedBox>
@@ -218,5 +231,5 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: "normal",
         textAlign: "left",
-    }
+	}
 });
