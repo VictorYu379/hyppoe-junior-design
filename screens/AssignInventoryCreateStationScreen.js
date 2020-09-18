@@ -89,7 +89,6 @@ export default function AssignInventoryCreateStationScreen() {
                         height: '80%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        zIndex: (inventorySelected !== null) ? 2 : 0,
                         backgroundColor: 'white'
                     }}>
                         <Text style={{fontSize: 20}}>Add to</Text>
