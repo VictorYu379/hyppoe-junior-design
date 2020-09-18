@@ -6,29 +6,29 @@ import InventoryTopBox from '../components/InventoryTopBox';
 import BottomBlueButton from '../components/BottomBlueButton';
 import StationModal from '../components/StationModal';
 import { Ionicons } from '@expo/vector-icons';
+import update from 'immutability-helper';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this._scrollView1 = React.createRef();
-        this.state = {
-            inventorySelected: null,
-            scrollViewHeight: 0,
-            elementHeight: 0,
-            stationModalVisible: false,
-            stations: [{
+    state = {
+        inventorySelected: null,
+        scrollViewHeight: 0,
+        elementHeight: 0,
+        stationModalVisible: false,
+        stations: {
+            1: {
                 id: 1,
                 percentage: 100,
                 totalAvailable: '$480,960' 
             },
-            {
+            2: {
                 id: 2,
                 percentage: 0,
                 totalAvailable: '$0'
-            }],
-            stationId: 3
-        }
-    }
+            },
+        },
+        stationId: 3
+    };
+    _scrollView1 = React.createRef();
 
     render() {
         const imageList = [
@@ -51,7 +51,8 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                     margin={5}
                     touchable
                     onPress={() => {
-                        this.setState({inventorySelected: index});
+                        this.setState(update(this.state, {inventorySelected: {$set: index}}));
+                        // this.setState({inventorySelected: index});
                         this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
                     }}
                     greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
@@ -95,16 +96,18 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 <StationModal
                     visible={this.state.stationModalVisible}
                     onSave={() => {
-                        this.setState({stationModalVisible: false});
                         var newStation = {
                             id: this.state.stationId,
                             percentage: 0,
                             totalAvailable: "$0"
                         };
+                        this.setState(update(this.state, {
+                            stations: {
+                                $merge: {
+                                    [this.state.stationId]: newStation
+                                }}}));
                         this.setState({stationId: this.state.stationId + 1});
-                        var newStations = this.state.stations;
-                        newStations.push(newStation);
-                        this.setState({stations: newStations});
+                        this.setState({stationModalVisible: false});
                     }} />
                 <View style={{
                     height: '68%',
@@ -136,8 +139,9 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {this.state.stations.map(station => {
-                                if (station === null) {
+                            {Object.keys(this.state.stations).map(stationId => {
+                                var station = this.state.stations[stationId];
+                                if (station.deleted === true) {
                                     return;
                                 }
                                 var color = 'green';
@@ -172,7 +176,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                                     justifyContent: 'center',
                                                     backgroundColor: 'white'
                                                 }}
-                                                onPress={() => navigation.navigate("Total Inventory Station Overview")}>
+                                                onPress={() => this.props.navigation.navigate("Total Inventory Station Overview")}>
                                                 <TouchableOpacity
                                                     style={{
                                                         position: 'absolute',
@@ -180,9 +184,18 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                                         top: '-5%',
                                                     }}
                                                     onPress={() => {
-                                                        var newStations = this.state.stations;
-                                                        newStations[station.id - 1] = null;
-                                                        this.setState({stations: newStations});
+                                                        this.setState(update(
+                                                            this.state,
+                                                            {
+                                                                stations: {
+                                                                    [station.id]: {
+                                                                        $merge: {
+                                                                            deleted: true
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        ));
                                                     }}>
                                                     <Ionicons name="md-close-circle-outline" size={20} color="black"/>
                                                 </TouchableOpacity>
