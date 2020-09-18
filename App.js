@@ -29,26 +29,29 @@ export default function App() {
 					<Stack.Navigator>
 						<Stack.Screen name="Dummy" component={DummyScreen} />
 						<Stack.Screen
-							name="Assign Inventory Create Station"
-							component={AssignInventoryCreateStationScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								},
-								headerStyle: {
-									zIndex: 0
-								}
-							}}
-						/>
-						<Stack.Screen
 							name="Total Inventory"
 							component={TotalInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								},
-								headerStyle: {
-									zIndex: 0
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Assign Inventory Create Station"
+							component={AssignInventoryCreateStationScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Total Inventory Station Overview"
+							component={TotalInventoryStationOverviewScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}
 						/>

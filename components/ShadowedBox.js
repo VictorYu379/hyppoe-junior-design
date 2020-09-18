@@ -2,6 +2,11 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import * as React from 'react';
 
 export default function ShadowedBox(props) {
+	if (props.hidden) {
+		return (
+			<View></View>
+		);
+	}
 	return props.touchable == null ? (
 		<View style={[styles.shadowView, {
 			width: props.width,

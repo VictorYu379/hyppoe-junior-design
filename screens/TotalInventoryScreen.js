@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
-import StationModal from '../components/StationModal';
 import BottomBlueBUtton from '../components/BottomBlueButton';
 
 export default function DummyScreen({ navigation }) {
@@ -40,8 +39,7 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StationModal visible={stationModalVisible} onSave={onSave} />
-			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => setStationModalVisible(true)} />
+			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 				<View style={{
 					width: '90%',
