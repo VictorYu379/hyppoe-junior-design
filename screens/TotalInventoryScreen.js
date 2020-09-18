@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import StationModal from '../components/StationModal';
+import BottomBlueBUtton from '../components/BottomBlueButton';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
@@ -40,29 +41,7 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<StationModal visible={stationModalVisible} onSave={onSave} />
-			<TouchableOpacity
-				style={{
-					position: 'absolute',
-					bottom: 20,
-					width: '85%',
-					height: '10%',
-					justifyContent: 'center',
-					alignItems: 'center',
-					borderRadius: 25,
-					shadowColor: "#000",
-					shadowOffset: {
-						width: 0,
-						height: 4,
-					},
-					shadowOpacity: 0.32,
-					shadowRadius: 5.46,
-					elevation: 9,
-					backgroundColor: 'blue',
-					zIndex: 1
-				}}
-				onPress={() => setStationModalVisible(true)}>
-				<Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Complete Inventory and Add Stations</Text>
-			</TouchableOpacity>
+			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => setStationModalVisible(true)} />
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 				<View style={{
 					width: '90%',
