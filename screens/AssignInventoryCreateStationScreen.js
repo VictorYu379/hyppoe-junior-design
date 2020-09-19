@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from '../components/ShadowedBox';
+import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
 import BottomBlueButton from '../components/BottomBlueButton';
 import StationModal from '../components/StationModal';
-import { Ionicons } from '@expo/vector-icons';
 import update from 'immutability-helper';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
@@ -52,29 +52,15 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                     touchable
                     onPress={() => {
                         this.setState(update(this.state, {inventorySelected: {$set: index}}));
-                        // this.setState({inventorySelected: index});
                         this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
                     }}
                     greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
                     <View
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
+                        style={styles.iconBox}
                         onLayout={(event) => {
                             this.setState({elementHeight: event.nativeEvent.layout.height});
                         }}>
-                        <Image
-                            source={img}
-                            style={{
-                                width: '80%',
-                                height: '80%',
-                                borderRadius: 15,
-                                overflow: 'hidden',
-                                resizeMode: 'contain'
-                            }} />
+                        <Image source={img} style={styles.icon} />
                     </View>
                 </ShadowedBox>
             );
@@ -109,16 +95,9 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                         this.setState({stationId: this.state.stationId + 1});
                         this.setState({stationModalVisible: false});
                     }} />
-                <View style={{
-                    height: '68%',
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around'
-                }}>
+                <View style={styles.scrollsContainer}>
                     <View
-                        style={{
-                            width: '40%',
-                        }}
+                        style={{width: '40%'}}
                         onLayout={(event) => {
                             this.setState({scrollViewHeight: event.nativeEvent.layout.height});
                         }}>
@@ -131,9 +110,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             {iconList}
                         </ScrollView>
                     </View>
-                    <View style={{
-                        width: '50%',
-                    }}>
+                    <View style={{width: '50%'}}>
                         <ScrollView
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={{
@@ -144,104 +121,27 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 if (station.deleted === true) {
                                     return;
                                 }
-                                var color = 'green';
-                                if (station.percentage < 26) {
-                                    color = 'red';
-                                } else if (station.percentage < 70) {
-                                    color = 'yellow';
-                                }
                                 return (
-                                    <ShadowedBox
-                                        key={station.id}
-                                        width={'80%'}
-                                        square
-                                        margin={5}>
-                                        {this.state.inventorySelected !== null &&
-                                            <TouchableOpacity style={{
-                                                position: 'absolute',
-                                                width: '80%',
-                                                height: '80%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: 'white'
-                                            }}>
-                                                <Text style={{fontSize: 20}}>Add to</Text>
-                                                <Text style={{fontSize: 20}}>Stations {station.id}</Text>
-                                            </TouchableOpacity>
-                                        }
-                                        {this.state.inventorySelected === null &&
-                                            <TouchableOpacity
-                                                style={{
-                                                    width: '70%',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: 'white'
-                                                }}
-                                                onPress={() => this.props.navigation.navigate("Total Inventory Station Overview")}>
-                                                <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: '-15%',
-                                                        top: '-5%',
-                                                    }}
-                                                    onPress={() => {
-                                                        this.setState(update(
-                                                            this.state,
-                                                            {
-                                                                stations: {
-                                                                    [station.id]: {
-                                                                        $merge: {
-                                                                            deleted: true
-                                                                        }
-                                                                    }
-                                                                }
+                                    <StationBox
+                                        station={station}
+                                        inventorySelected={this.state.inventorySelected}
+                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
+                                        enableDelete={true}
+                                        onDelete={() => {
+                                            this.setState(update(
+                                                this.state,
+                                                {
+                                                    stations: {
+                                                        [station.id]: {
+                                                            $merge: {
+                                                                deleted: true
                                                             }
-                                                        ));
-                                                    }}>
-                                                    <Ionicons name="md-close-circle-outline" size={20} color="black"/>
-                                                </TouchableOpacity>
-                                                <View style={{
-                                                    height: '20%',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'flex-end'
-                                                }}>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        fontWeight: '600'
-                                                    }}>Station {station.id}</Text>
-                                                </View>
-                                                <View style={{
-                                                    height: '35%',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                }}>
-                                                    <Text style={{
-                                                        fontSize: 30,
-                                                        fontWeight: '300',
-                                                        color
-                                                    }}>{station.percentage}%</Text>
-                                                </View>
-                                                <View style={{
-                                                    height: '15%',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'flex-start',
-                                                    borderBottomWidth: 1,
-                                                }}>
-                                                    <Text style={{
-                                                        fontSize: 10,
-                                                        fontWeight: '300',
-                                                        color
-                                                    }}>Total Available</Text>
-                                                </View>
-                                                <View style={{
-                                                    height: '20%',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Text>{station.totalAvailable}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        }
-                                    </ShadowedBox>
+                                                        }
+                                                    }
+                                                }
+                                            ));
+                                        }}
+                                        />
                                 );
                             })}
                             <ShadowedBox
@@ -289,5 +189,24 @@ const styles = StyleSheet.create({
     boldText: {
         fontSize: 18,
         fontWeight: 'bold'
-    }
+    },
+    iconBox: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    icon: {
+        width: '80%',
+        height: '80%',
+        borderRadius: 15,
+        overflow: 'hidden',
+        resizeMode: 'contain'
+    },
+    scrollsContainer: {
+        height: '68%',
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
 });

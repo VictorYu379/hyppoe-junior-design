@@ -9,7 +9,8 @@ import DummyScreen from './screens/DummyScreen';
 import TotalInventoryScreen from './screens/TotalInventoryScreen';
 import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStationOverviewScreen';
 import AssignInventoryCreateStationScreen from './screens/AssignInventoryCreateStationScreen';
-import RunnerStationInventoryScreen from './screens/RunnerStationInventoryScreen';
+import RunnerRequestInventoryScreen from './screens/RunnerRequestInventoryScreen';
+import RunnerReturnInventoryScreen from './screens/RunnerReturnInventoryScreen';
 import HyppoeHeader from './components/HyppoeHeader';
 
 const Stack = createStackNavigator();
@@ -28,6 +29,22 @@ export default function App() {
 				<NavigationContainer>
 					<Stack.Navigator>
 						<Stack.Screen name="Dummy" component={DummyScreen} />
+						<Stack.Screen
+							name="Runner Request Inventory"
+							component={RunnerRequestInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner Return Inventory"
+							component={RunnerReturnInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
 						<Stack.Screen
 							name="Total Inventory"
 							component={TotalInventoryScreen}
