@@ -45,8 +45,12 @@ export default class ConfirmDeliveryModal extends React.Component {
         return itemList.map(item => {
             return (
                 <View style={styles.rowView}>
+                    <Text style={styles.checkBoxTextStyle}> 
+                        {item}:
+                    </Text>
                     <CheckBox
-                        title={item}
+                        checkedIcon={<Image source={require('../assets/checked.png')} />}
+                        uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                         checked={this.state.Item.Paired.get(item)}
                         onPress={() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
                         />
@@ -492,5 +496,15 @@ const styles = StyleSheet.create({
         borderBottomColor: "grey",
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: "100%"
+    },
+    checkBoxTextStyle: {
+        color: "black",
+        fontFamily: "Arial-BoldMT",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+        margin: 15,
+        textAlign: "auto",
+        flex: 1
     }
   });

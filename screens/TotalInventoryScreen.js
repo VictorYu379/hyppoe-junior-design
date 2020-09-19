@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import StationModal from '../components/StationModal';
 import ReturnInventoryModal from '../components/ReturnInventoryModal';
+import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
 
 
 export default function DummyScreen({ navigation }) {
@@ -56,13 +57,13 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<StationModal visible={stationModalVisible} onSave={onStationSave} />
-			<ReturnInventoryModal 
+			<InputUpdateInventoryModal
 				key={inputDrinkName} 
 				sourceImg={inputImgSource} 
 				drinkName={inputDrinkName}
 				visible={inputInvUpdateModalVisible} 
 				onSave={onInvModalSave}>
-			</ReturnInventoryModal>
+			</InputUpdateInventoryModal>
 			<TouchableOpacity
 				style={{
 					position: 'absolute',

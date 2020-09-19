@@ -394,8 +394,12 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 />
                         </View>
                         <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Include in inventory count:
+                            </Text>
                             <CheckBox
-                                title="Include in Inventory Count"
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                                 checked={this.state.includeInInvCount}
                                 onPress={() => this.setState({includeInInvCount: !this.state.includeInInvCount})}
                                 />
@@ -518,5 +522,14 @@ const styles = StyleSheet.create({
         borderBottomColor: "grey",
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: "100%"
+    },
+    checkBoxTextStyle: {
+        color: "black",
+        fontFamily: "Arial-BoldMT",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "left",
+        margin: 10,
+        flex: 1
     }
   });

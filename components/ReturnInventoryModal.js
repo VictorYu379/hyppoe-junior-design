@@ -372,29 +372,45 @@ export default class ReturnInventoryModal extends React.Component {
                             />
                         </View>
                         <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Damaged:
+                            </Text>
                             <CheckBox
-                                title="Damaged"
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                                 checked={this.state.Item.Damaged}
                                 onPress={() => this.updateItem("Damaged", !this.state.Item.Damaged)}
                                 />
                         </View>
                         <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Unhappy Customer:
+                            </Text>
                             <CheckBox
-                                title="Unhappy Customer"
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                                 checked={this.state.Item.Unhappy}
                                 onPress={() => this.updateItem("Unhappy", !this.state.Item.Unhappy)}
                                 />
                         </View>
                         <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Misorder:
+                            </Text>
                             <CheckBox
-                                title="Misorder"
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                                 checked={this.state.Item.Misorder}
                                 onPress={() => this.updateItem("Misorder", !this.state.Item.Misorder)}
                                 />
                         </View>
                         <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Spilled:
+                            </Text>
                             <CheckBox
-                                title="Spilled"
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                                 checked={this.state.Item.Spilled}
                                 onPress={() => this.updateItem("Spilled", !this.state.Item.Spilled)}
                                 />
@@ -504,5 +520,15 @@ const styles = StyleSheet.create({
         borderBottomColor: "grey",
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: "100%"
+    },
+    checkBoxTextStyle: {
+        color: "black",
+        fontFamily: "Arial-BoldMT",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+        margin: 15,
+        textAlign: "auto",
+        flex: 1
     }
   });
