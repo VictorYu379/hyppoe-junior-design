@@ -123,6 +123,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 }
                                 return (
                                     <StationBox
+                                        verb={"Add"}
                                         station={station}
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}

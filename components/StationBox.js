@@ -18,7 +18,7 @@ export default function StationBox(props) {
             margin={5}>
             {props.inventorySelected !== null &&
                 <TouchableOpacity style={styles.addToStationBox} onPress={props.onAdd}>
-                    <Text style={{fontSize: 20}}>Add to</Text>
+                    <Text style={{fontSize: 20}}>{props.verb} to</Text>
                     <Text style={{fontSize: 20}}>Stations {props.station.id}</Text>
                 </TouchableOpacity>
             }
