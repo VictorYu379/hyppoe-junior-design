@@ -16,6 +16,10 @@ export default class PairItemModal extends React.Component {
         }
     }
 
+    setModalVisible(val) {
+        this.setState({modalVisible: val});
+    }
+
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
