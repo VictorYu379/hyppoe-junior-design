@@ -18,7 +18,6 @@ export default class InputUpdateInventoryModal extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            modalVisible: false,
             includeInInvCount: true,
             pairItemModalVisible: false,
             Item: {
@@ -35,11 +34,6 @@ export default class InputUpdateInventoryModal extends React.Component {
                 Details: "",
             }
         }
-    }
-    
-
-    setModalVisible(val) {
-        this.setState({modalVisible: val});
     }
 
     updateItem(key, val) {
@@ -81,7 +75,6 @@ export default class InputUpdateInventoryModal extends React.Component {
     }
 
     onPairItemSave() {
-        console.log(this);
         this.setState({pairItemModalVisible: false});
     }
 
@@ -437,9 +430,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                             
                             <TouchableHighlight
                                 style={styles.openButton}
-                                onPress={() => {
-                                    this.setModalVisible(this.props.onSave());
-                                }}>
+                                onPress={() => { this.props.onSave(); }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>
                     </View>

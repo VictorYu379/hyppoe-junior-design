@@ -16,9 +16,6 @@ export default class PairItemModal extends React.Component {
         }
     }
 
-    setModalVisible(val) {
-        this.setState({modalVisible: val});
-    }
 
     updateItem(key, val) {
         if (Number(val) < 0) {
@@ -148,9 +145,7 @@ export default class PairItemModal extends React.Component {
                                 
                                 <TouchableHighlight
                                     style={styles.openButton}
-                                    onPress={() => {
-                                        this.props.onSave();
-                                    }}>
+                                    onPress={() => {this.props.onSave();}}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>
                             </View>
