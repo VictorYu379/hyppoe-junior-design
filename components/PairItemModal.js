@@ -149,7 +149,7 @@ export default class PairItemModal extends React.Component {
                                 <TouchableHighlight
                                     style={styles.openButton}
                                     onPress={() => {
-                                        this.setModalVisible(this.props.onSave());
+                                        this.props.onSave();
                                     }}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>

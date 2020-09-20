@@ -81,6 +81,7 @@ export default class InputUpdateInventoryModal extends React.Component {
     }
 
     onPairItemSave() {
+        console.log(this);
         this.setState({pairItemModalVisible: false});
     }
 
@@ -406,7 +407,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                         <View style={styles.rowView}>
                             <PairItemModal 
                                 visible={this.state.pairItemModalVisible} 
-                                onSave={this.onPairItemSave}>
+                                onSave={this.onPairItemSave.bind(this)}>
                             </PairItemModal>
                             <TouchableOpacity
                                 style={styles.openButton}
