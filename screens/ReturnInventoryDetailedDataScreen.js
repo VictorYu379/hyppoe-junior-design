@@ -10,6 +10,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	const [activeStations, setStations] = useState([]);
 	const sections = ['item', 'station'];
 	const stations = ['1', '2']
+	
 	const images = {
 		dropDownIcon: require('../assets/drop-down-arrow.png'),
 		dropUpIcon: require('../assets/drop-up-arrow.png')
@@ -50,7 +51,10 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	}
 
 	const percent = (a, b) => {
-		return  Math.floor(a * 100 / b);
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
 	}
 
 	const totalValue = (text) => {
@@ -219,8 +223,6 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
                     flexDirection: "row",
                     justifyContent: "space-between",
 					alignItems: "flex-start",
-					borderBottomColor: "grey",
-					borderBottomWidth: StyleSheet.hairlineWidth
 				}}>
 					<Text style={styles.sectionTitle}>Return Inventory:</Text>
 				</View>
