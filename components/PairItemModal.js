@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal } from "react-native"
+import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, KeyboardAvoidingView } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 
 export default class PairItemModal extends React.Component {
@@ -16,6 +16,7 @@ export default class PairItemModal extends React.Component {
         }
     }
 
+
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
@@ -23,7 +24,7 @@ export default class PairItemModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: val}})
     }
 
-	  render() {
+	render() {
         return (
                 <View style={styles.centeredView}>
                     {/* Below is the modal for pop up module */} 
@@ -144,9 +145,7 @@ export default class PairItemModal extends React.Component {
                                 
                                 <TouchableHighlight
                                     style={styles.openButton}
-                                    onPress={() => {
-                                        this.setModalVisible(!this.props.onSave());
-                                    }}>
+                                    onPress={() => {this.props.onSave();}}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>
                             </View>
