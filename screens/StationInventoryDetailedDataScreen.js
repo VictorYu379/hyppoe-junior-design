@@ -4,7 +4,7 @@ import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 
-export default function RunnerStationInventoryDetailedData({ navigation }) {
+export default function StationInventoryDetailedDataScreen({ navigation }) {
 
 	const station = "1"
 	const [activeSections, setSections] = useState([0]);
@@ -147,7 +147,7 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'90%'} margin={10}>
+			<ShadowedBox width={'90%'} margin={10} justifyContent={'flex-start'}>
 				<View style={{
 					width: '90%',
 					marginTop: 25,

@@ -7,7 +7,8 @@ export default function ShadowedBox(props) {
 			width: props.width,
 			height: props.height,
 			aspectRatio: props.square ? 1 : null,
-			margin: props.margin
+			margin: props.margin,
+			justifyContent: (props.justifyContent == null) ? 'center' : props.justifyContent
 		}]}>
 			{props.children}
 		</View>

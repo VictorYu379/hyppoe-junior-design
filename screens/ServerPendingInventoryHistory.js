@@ -3,15 +3,13 @@ import React from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function RunnerHistoryScreen({ navigation }) {
+export default function ServerPendingInventoryHistory({ navigation }) {
 
 	const taskList = [
 		{key: 1, item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
 		{key: 2, item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
 		{key: 3, item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
 	]
-
-	const runner = '1'
 
 	const textColor = (text) => {
 		if (text == 'Complete') {
@@ -48,7 +46,7 @@ export default function RunnerHistoryScreen({ navigation }) {
 		<View style={styles.container}>
 			<ShadowedBox width={'90%'} margin={10}>
 				<View style={{width: '90%', marginTop: 25, marginBottom: 10}}>
-					<Text style={styles.sectionTitle}>Runner {runner}: Task History</Text>
+					<Text style={styles.sectionTitle}>Pending Inventory History:</Text>
 				</View>
 				<View style = {{width: '90%', marginBottom: 25, maxHeight: '85%'}}>
                     <ScrollView>
