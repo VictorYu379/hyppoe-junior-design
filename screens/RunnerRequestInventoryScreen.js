@@ -62,7 +62,7 @@ export default function RunnerRequestInventoryScreen(props) {
             <InventoryTopBox inventory={"Request"} />
             <View style={styles.scrollsContainer}>
                 <View
-                    style={{width: '40%'}}
+                    style={{width: '50%'}}
                     onLayout={(event) => {
                         setScrollViewHeight(event.nativeEvent.layout.height);
                     }}>
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
     },
     scrollsContainer: {
         height: '80%',
-        width: '100%',
+        width: '90%',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'center'
     }
 });

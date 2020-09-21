@@ -97,7 +97,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                     }} />
                 <View style={styles.scrollsContainer}>
                     <View
-                        style={{width: '40%'}}
+                        style={{width: '50%'}}
                         onLayout={(event) => {
                             this.setState({scrollViewHeight: event.nativeEvent.layout.height});
                         }}>
@@ -205,9 +205,9 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     scrollsContainer: {
-        height: '68%',
-        width: '100%',
+        height: '80%',
+        width: '90%',
         flexDirection: 'row',
-        justifyContent: 'space-around'
-    },
+        justifyContent: 'center'
+    }
 });
