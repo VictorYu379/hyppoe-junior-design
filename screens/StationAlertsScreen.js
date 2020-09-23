@@ -3,7 +3,7 @@ import React from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function RunnerAlertsScreen({ navigation }) {
+export default function StationAlertsScreen({ navigation }) {
 
 	const alerts = [
         {key: 1, name: 'Station Total Remaining', type: 'Push Notification', rate: '15%'},

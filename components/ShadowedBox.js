@@ -13,6 +13,7 @@ export default function ShadowedBox(props) {
 			height: props.height,
 			aspectRatio: props.square ? 1 : null,
 			margin: props.margin,
+			justifyContent: (props.justifyContent == null) ? 'center' : props.justifyContent,
 			backgroundColor: 'white'
 		}]}>
 			{props.greyed &&
@@ -35,6 +36,8 @@ export default function ShadowedBox(props) {
 				height: props.height,
 				aspectRatio: props.square ? 1 : null,
 				margin: props.margin,
+				justifyContent: (props.justifyContent == null) ? 'center' : props.justifyContent,
+				backgroundColor: 'white'
 			}]}
 			onPress={props.onPress}
 			disabled={props.disabled}>
