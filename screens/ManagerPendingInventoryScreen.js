@@ -9,7 +9,7 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 
 
@@ -18,43 +18,14 @@ export default function DummyScreen({ navigation }) {
 							width: '100%',
 							height: '100%',
 							flexDirection: 'column',
-							justifyContent: 'flex-start',
+							justifyContent: 'center',
 							alignItems: 'flex-start',
 							margin: 10
 					}}>
 							
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Runner 1:</Text>
-						<View style={styles.rowView}>
-							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
-								<Text style={{fontSize: 12, color: 'gray'}}>
-									Station 1: 
-								</Text>
-								<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gray', marginLeft:0}}>
-									Big Tent
-								</Text>
-							</View>
-
-
-							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
-									Pending
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
-								<Text style={{fontSize: 12, color: 'gray'}}>
-									Station 2: 
-								</Text>
-								<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gray', marginLeft:0}}>
-									Small Tent
-								</Text>
-							</View>
-
-
-							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
-									Pending
-							</Text>
-						</View>
+						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
+						
+						
 					</View>
 
 
@@ -65,13 +36,14 @@ export default function DummyScreen({ navigation }) {
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				width: '100%',
 				//height: '60%',
-				paddingLeft: '2%'
+				paddingLeft: '2%',
+				marginLeft:50,
 			}}>
 				
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'30%'}  margin={5}>
 
 					<View style={{
 						flexDirection: 'column',
@@ -127,7 +99,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'30%'}  margin={5}>
 
 					<View style={{
 						flexDirection: 'column',
@@ -182,7 +154,61 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
+				<ShadowedBox width={'40%'} height={'30%'} margin={5}>
 
+					<View style={{
+						flexDirection: 'column',
+						margin: 3,
+						height: '90%',
+						width: '90%',
+						alignItems: 'flex-start',
+						//borderWidth: 1,
+					}}>
+
+						<View style={styles.sectionTitle}>
+							<View style={{...styles.rowView, width:'90%'}}>
+								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+									Station 1:
+								</Text>
+								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+									Bud Light
+								</Text>
+							</View>
+						</View>
+							
+						<View style={styles.rowView}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								Pick Up:
+							</Text>
+						</View>
+
+						<View style={styles.rowView}>
+							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+								Inventory
+							</Text>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'green'}}>
+									Completed
+							</Text>
+						</View>
+
+						<View style={styles.rowView}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								Drop off:
+							</Text>
+						</View>
+
+						<View style={styles.rowView}>
+							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+								Station 1
+							</Text>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
+									Pending
+							</Text>
+						</View>
+					</View>
+
+
+				</ShadowedBox>
 			</View>
 		</View>
 	);

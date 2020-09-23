@@ -8,7 +8,7 @@ export default function DummyScreen({ navigation }) {
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2000, name:'BudLight'},
+		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
 		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
 		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
 		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
@@ -17,7 +17,7 @@ export default function DummyScreen({ navigation }) {
 	]
 	const iconList = imageList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'25%'}  margin={5}>
+			<ShadowedBox width={'40%'}  square margin={5}>
 
 				<View style={{
 					flexDirection: 'row',
@@ -69,58 +69,18 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 
 
-				<View style={{
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
-				}}>
+				<View style={styles.rowView}>
 
-
-					<View style={{
-							width: '70%',
-							//height: '40%',
-							marginVertical: 15,
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-							margin: 10
+					<Text style={{
+						fontSize: 17, 
+						fontWeight:"bold",
+						margin: 8,
 					}}>
-						<View style={{
-							width: '70%',
-							height: '50%',
-							flexDirection: 'column',
-							justifyContent: 'flex-start',
-							alignItems: 'flex-start',
-						}}>
-							<View  style={styles.sectionTitle}>
-							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
-							</View>
-							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
-							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationStats.value}</Text>
-						</View>
-
-
-						<View style={{
-							width: '70%',
-							height: '50%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'flex-start',
-						}}>
-							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationStats.server}</Text>
-							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
-						</View>
-					</View>
-
-
-
-
-
-
-
+						Available Inventory:
+					</Text>
 
 					<View style={{
 							width: '30%',
@@ -136,12 +96,6 @@ export default function DummyScreen({ navigation }) {
 							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
 							? styles.thirtyText : styles.criticalText]}>
 							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
-						</Text>
-						<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
-							? styles.thirtyText : styles.criticalText]}>
-								Available Inventory
 						</Text>
 					</View>
 
@@ -163,7 +117,25 @@ export default function DummyScreen({ navigation }) {
 				paddingLeft: '2%'
 			}}>
 				{iconList}
-
+				<ShadowedBox width={'30%'} square margin={5}>
+					<View style={{
+						width: '100%',
+						aspectRatio: 1,
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+						<Image
+							source={require('../assets/add.png')}
+							style={{
+								width: '40%',
+								height: '40%',
+								overflow: 'hidden',
+								resizeMode: 'contain',
+								margin: 5
+							}} />
+							<Text>Add Item</Text>
+						</View>
+				</ShadowedBox>
 			</View>
 		</View>
 	);
