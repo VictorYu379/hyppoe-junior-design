@@ -1,20 +1,14 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
-import StationModal from '../components/StationModal';
-import ReturnInventoryModal from '../components/ReturnInventoryModal';
+import BottomBlueBUtton from '../components/BottomBlueButton';
 import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
 
 
 export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
 	const [inputImgSource, setInputImgSource] = useState(false);
 	const [inputDrinkName, SetInputDrinkName] = useState(false);
-
-	const onStationSave = function() {
-		setStationModalVisible(false);
-	}
 
 	const onInvModalSave = function() {
 		setInputInvUpdateModalVisible(false);
@@ -56,7 +50,7 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<StationModal visible={stationModalVisible} onSave={onStationSave} />
+			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
 			<InputUpdateInventoryModal
 				key={inputDrinkName} 
 				sourceImg={inputImgSource} 
@@ -64,29 +58,6 @@ export default function DummyScreen({ navigation }) {
 				visible={inputInvUpdateModalVisible} 
 				onSave={onInvModalSave}>
 			</InputUpdateInventoryModal>
-			<TouchableOpacity
-				style={{
-					position: 'absolute',
-					bottom: 20,
-					width: '85%',
-					height: '10%',
-					justifyContent: 'center',
-					alignItems: 'center',
-					borderRadius: 25,
-					shadowColor: "#000",
-					shadowOffset: {
-						width: 0,
-						height: 4,
-					},
-					shadowOpacity: 0.32,
-					shadowRadius: 5.46,
-					elevation: 9,
-					backgroundColor: 'blue',
-					zIndex: 1
-				}}
-				onPress={() => setStationModalVisible(true)}>
-				<Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Complete Inventory and Add Stations</Text>
-			</TouchableOpacity>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 				<View style={{
 					width: '90%',

@@ -1,16 +1,55 @@
-import { StyleSheet, View} from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import * as React from 'react';
 
 export default function ShadowedBox(props) {
-	return (
+	if (props.hidden) {
+		return (
+			<View></View>
+		);
+	}
+	return props.touchable == null ? (
 		<View style={[styles.shadowView, {
 			width: props.width,
 			height: props.height,
 			aspectRatio: props.square ? 1 : null,
-			margin: props.margin
+			margin: props.margin,
+			backgroundColor: 'white'
 		}]}>
+			{props.greyed &&
+				<View style={{
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(242, 242, 242, 0.7)',
+					zIndex: 2,
+					position: 'absolute',
+					borderRadius: 15,
+				}} />
+			}
 			{props.children}
 		</View>
+
+	) : (
+		<TouchableOpacity
+			style={[styles.shadowView, {
+				width: props.width,
+				height: props.height,
+				aspectRatio: props.square ? 1 : null,
+				margin: props.margin,
+			}]}
+			onPress={props.onPress}
+			disabled={props.disabled}>
+			{props.greyed &&
+				<View style={{
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'rgba(242, 242, 242, 0.7)',
+					zIndex: 2,
+					position: 'absolute',
+					borderRadius: 15,
+				}} />
+			}
+			{props.children}
+		</TouchableOpacity>
 	);
 }
 
