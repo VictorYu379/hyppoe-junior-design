@@ -137,6 +137,16 @@ export default class ConfirmDeliveryModal extends React.Component {
     }
 
 	render() {
+        let DenyButton = null;
+        if (this.props.ManagerMode) {
+            DenyButton = <TouchableHighlight
+                style={styles.openButton}
+                onPress={() => {
+                    this.setModalVisible(this.props.onSave());
+                }}>
+                <Text style={styles.textStyle}> Deny </Text>
+            </TouchableHighlight>
+        }
         return (
             <Modal
                 animationType="slide"
@@ -419,6 +429,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                     { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
                                 </Text>
                             </TouchableHighlight>
+                            { DenyButton }
                     </View>
                 </View>
             </Modal>
