@@ -70,6 +70,7 @@ export default class PairItemModal extends React.Component {
                                         style={{
                                             ...styles.clickButton,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Quantity", (this.state.Item.Quantity+1)) }}>
                                         <Text style={styles.textStyle}> + </Text>
                                     </TouchableHighlight>
@@ -80,6 +81,7 @@ export default class PairItemModal extends React.Component {
                                             borderColor: "#D2D2D2",
                                             borderWidth: 1,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Quantity", (this.state.Item.Quantity-1)) }}>
                                         <Text style={styles.textStyle}> - </Text>
                                     </TouchableHighlight>
@@ -109,6 +111,7 @@ export default class PairItemModal extends React.Component {
                                         style={{
                                             ...styles.clickButton,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Ounces", (this.state.Item.Ounces+1)) }}>
                                         <Text style={styles.textStyle}> + </Text>
                                     </TouchableHighlight>
@@ -119,6 +122,7 @@ export default class PairItemModal extends React.Component {
                                             borderColor: "#D2D2D2",
                                             borderWidth: 1,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Ounces", (this.state.Item.Ounces-1)) }}>
                                         <Text style={styles.textStyle}> - </Text>
                                     </TouchableHighlight>
@@ -141,10 +145,11 @@ export default class PairItemModal extends React.Component {
                                     onChangeText={text => this.updateItem("Details", text)}
                                     placeholder="Notes ..."
                                     value={this.state.Item.Details}
-                                    />
+                                />
                                 
                                 <TouchableHighlight
                                     style={styles.openButton}
+                                    underlayColor='grey'
                                     onPress={() => {this.props.onSave();}}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>

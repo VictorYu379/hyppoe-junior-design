@@ -250,8 +250,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f2f2f2',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		borderWidth: 1,
-		
 	},
 	rowView: {
         width: "100%",

@@ -5,7 +5,7 @@ import { CheckBox } from 'react-native-elements'
 import PairItemModal from './PairItemModal'
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
-export default class ConfirmDeliveryModal extends React.Component {
+export default class RequestInventoryModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
 		const { params = {} } = navigation.state
         return {
@@ -34,11 +34,12 @@ export default class ConfirmDeliveryModal extends React.Component {
                 RequestQuantity: 20,
                 TotalQuantity: 100,
                 CurrentQuantity: 50,
+                Quantity: 0,
                 Price: 10,
                 Details: "",
             }
         }
-        this.pairdItemList = this.getPairedItemList(this.props.pairdItems)
+        this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
     }
 
     getPairedItemList(itemList) {
@@ -169,17 +170,14 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 flexDirection:"column",
                                 width:100
                             }}>
-                                <TextInput
+                                <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     width: 100,
                                     fontSize: 20,
                                     lineHeight: 20,
                                 }}
-                                multiline={true}
-                                onChangeText={text => this.updateItem("Name", text)}
-                                value={this.state.Item.Name}
-                                />
+                                >{this.state.Item.Name}</Text>
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        

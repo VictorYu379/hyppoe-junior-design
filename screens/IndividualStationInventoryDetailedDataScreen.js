@@ -4,7 +4,7 @@ import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 
-export default function RunnerStationInventoryDetailedData({ navigation }) {
+export default function IndividualStationInventoryDetailedDataScreen({ navigation }) {
 
 	const station = "1"
 	const [activeSections, setSections] = useState([0]);
@@ -17,9 +17,9 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 	const items = [
         {key: 1, name: 'Bud Light', total: 8016, avail: 2004, sold: 6012, price: 12},
         {key: 2, name: 'Coors', total: 8016, avail: 4008, sold: 4008, price: 12},
-        {key: 3, name: 'Smartwater', total: 8016, avail: 7215, sold: 802, price: 12},
-        {key: 4, name: 'Terrapin', total: 8016, avail: 7616, sold: 401, price: 12},
-        {key: 5, name: 'Truly', total: 8016, avail: 7215, sold: 802, price: 12},
+        {key: 3, name: 'Smartwater', total: 8016, avail: 7215, sold: 801, price: 12},
+        {key: 4, name: 'Terrapin', total: 8016, avail: 7616, sold: 400, price: 12},
+        {key: 5, name: 'Truly', total: 8016, avail: 7215, sold: 801, price: 12},
 	]
 
 	const textColor = (text) => {
@@ -42,7 +42,10 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 	}
 
 	const percent = (a, b) => {
-		return  Math.floor(a * 100 / b);
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
 	}
 
 	const totalValue = (text) => {
@@ -56,6 +59,23 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 
 	const value = (item, text) => {
 		return item[text] * item.price;
+	}
+
+	const getTitle = (text) => {
+		if (text == 'avail') {
+			return 'Available'
+		} else {
+			return 'Sold'
+		}
+	}
+
+	const getImage = (text) => {
+		let index = sections.findIndex(item => item === text)
+		if (activeSections.findIndex(item => item === index) > -1) {
+			return images.dropUpIcon
+		} else {
+			return images.dropDownIcon
+		}
 	}
 
 	const formatNum = (num) => {
@@ -95,23 +115,6 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 		</View>
 	}
 
-	const getTitle = (text) => {
-		if (text == 'avail') {
-			return 'Available'
-		} else {
-			return 'Sold'
-		}
-	}
-
-	const getImage = (text) => {
-		let index = sections.findIndex(item => item === text)
-		if (activeSections.findIndex(item => item === index) > -1) {
-			return images.dropUpIcon
-		} else {
-			return images.dropDownIcon
-		}
-	}
-
 	const listTitle = (text) => {
 		return (
 			<View style={styles.rowView}>
@@ -132,6 +135,13 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 						}}
 						resizeMode="contain"
 					/>
+					<Text style={{
+						...styles.rowTitle, 
+						color: textColor(percent(total(text), total())), 
+						fontSize: 20,
+						textAlign: "right",
+						flex: 1
+					}}>{percent(total(text), total())}%</Text>
 				</View>
 				<View style={{
 					width: "100%",
@@ -147,7 +157,7 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'90%'} margin={10}>
+			<ShadowedBox width={'90%'} margin={10} justifyContent={'flex-start'}>
 				<View style={{
 					width: '90%',
 					marginTop: 25,
@@ -155,8 +165,6 @@ export default function RunnerStationInventoryDetailedData({ navigation }) {
                     flexDirection: "row",
                     justifyContent: "space-between",
 					alignItems: "flex-start",
-					borderBottomColor: "grey",
-					borderBottomWidth: StyleSheet.hairlineWidth
 				}}>
 					<Text style={styles.sectionTitle}>Station {station} Inventory:</Text>
 					<View style={{

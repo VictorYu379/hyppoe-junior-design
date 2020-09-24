@@ -150,17 +150,14 @@ export default class ReturnInventoryModal extends React.Component {
                                 flexDirection:"column",
                                 width:100
                             }}>
-                                <TextInput
+                                <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     width: 100,
                                     fontSize: 20,
                                     lineHeight: 20,
                                 }}
-                                multiline={true}
-                                onChangeText={text => this.updateItem("Name", text)}
-                                value={this.state.Item.Name}
-                                />
+                                >{this.props.drinkName}</Text>
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        

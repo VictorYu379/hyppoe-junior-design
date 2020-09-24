@@ -3,15 +3,13 @@ import React from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function RunnerHistoryScreen({ navigation }) {
+export default function StationRunnersScreen({ navigation }) {
 
 	const taskList = [
-		{key: 1, item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
-		{key: 2, item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
-		{key: 3, item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
+		{key: 1, runner: 'Unassigned', item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
+		{key: 2, runner: 'Runner 1', item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
+		{key: 3, runner: 'Runner 2', item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
 	]
-
-	const runner = '1'
 
 	const textColor = (text) => {
 		if (text == 'Complete') {
@@ -31,7 +29,7 @@ export default function RunnerHistoryScreen({ navigation }) {
 					flexDirection: 'column',
 					flex: 7,
 				}}>
-					<Text style={styles.rowTitle}>{task.item}</Text>
+					<Text style={styles.rowTitle}>{task.runner}: {task.item}</Text>
 					<Text style={styles.rowText}>{task.from} to {task.to}</Text>
 				</View>
 				<Text style={{
@@ -48,7 +46,7 @@ export default function RunnerHistoryScreen({ navigation }) {
 		<View style={styles.container}>
 			<ShadowedBox width={'90%'} margin={10}>
 				<View style={{width: '90%', marginTop: 25, marginBottom: 10}}>
-					<Text style={styles.sectionTitle}>Runner {runner}: Task History</Text>
+					<Text style={styles.sectionTitle}>Runners:</Text>
 				</View>
 				<View style = {{width: '90%', marginBottom: 25, maxHeight: '85%'}}>
                     <ScrollView>
