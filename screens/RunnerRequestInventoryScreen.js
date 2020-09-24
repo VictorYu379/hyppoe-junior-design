@@ -6,6 +6,7 @@ import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
 import RequestInventoryModal from '../components/RequestInventoryModal';
 
+
 export default function RunnerRequestInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
     var [scrollViewHeight, setScrollViewHeight] = React.useState(0);
@@ -68,7 +69,7 @@ export default function RunnerRequestInventoryScreen(props) {
                 pairedItems={[
                     "12 ounce cup"
                 ]}
-				visible={RequestInventoryModalVisible} 
+                visible={RequestInventoryModalVisible} 
 				onSave={() => setRequestInventoryModalVisible(false)}/>
             <InventoryTopBox inventory={"Request"} />
             <View style={styles.scrollsContainer}>

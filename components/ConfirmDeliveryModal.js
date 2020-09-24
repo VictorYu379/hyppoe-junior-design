@@ -21,7 +21,7 @@ export default class ConfirmDeliveryModal extends React.Component {
 
         var paired = new Map();
         for (item of this.props.pairedItems) {
-            paired.set(item, false);
+            paired.set(item, true);
         }
         this.state = {
             modalVisible: false,
@@ -32,13 +32,14 @@ export default class ConfirmDeliveryModal extends React.Component {
                 Pack: 2,
                 AssignedQuantity: 20,
                 ConfirmQuantity: 20,
+                Quantity: 0,
                 TotalQuantity: 100,
                 CurrentQuantity: 50,
                 Price: 10,
                 Details: "",
             }
         }
-        this.pairdItemList = this.getPairedItemList(this.props.pairdItems)
+        this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
     }
 
     getPairedItemList(itemList) {
@@ -88,6 +89,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                 ...this.state.Item, 
                 Pack: 0,
                 Unit: 0,
+                Quantity: Number(val),
                 ConfirmQuantity: Number(val),
             }
         });
@@ -101,6 +103,7 @@ export default class ConfirmDeliveryModal extends React.Component {
             Item: {
                 ...this.state.Item, 
                 Unit: Number(val),
+                Quantity: 0,
                 ConfirmQuantity: this.state.Item.Pack * Number(val),
             }
         });
@@ -114,6 +117,7 @@ export default class ConfirmDeliveryModal extends React.Component {
             Item: {
                 ...this.state.Item, 
                 Pack: Number(val),
+                Quantity: 0,
                 ConfirmQuantity: this.state.Item.Unit * Number(val),
             }
         });
@@ -121,19 +125,6 @@ export default class ConfirmDeliveryModal extends React.Component {
 
     getPercentage() {
         return  Math.round(this.state.Item.CurrentQuantity)/Math.max(this.state.Item.TotalQuantity, 1) * 100;    
-    }
-
-    updateAssignedQuantity(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                AssignedQuantity: Number(val),
-                TotalQuantity: this.state.Item.AddedQuantity + Number(val)
-            }
-        });
     }
 
 	render() {
@@ -284,7 +275,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...styles.clickButton,
                                 }}
-                                onPress={() => { this.updateAssignedQuantity(this.state.Item.AssignedQuantity + 1) }}>
+                                onPress={() => { this.updateItem("AssignedQuantity", this.state.Item.AssignedQuantity + 1) }}>
                                 <Text style={styles.textStyle}> + </Text>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -294,7 +285,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                     borderColor: "#D2D2D2",
                                     borderWidth: 1,
                                 }}
-                                onPress={() => { this.updateAssignedQuantity(this.state.Item.AssignedQuantity - 1) }}>
+                                onPress={() => { this.updateItem("AssignedQuantity", this.state.Item.AssignedQuantity - 1) }}>
                                 <Text style={styles.textStyle}> - </Text>
                             </TouchableHighlight>
                         </View>
@@ -419,18 +410,22 @@ export default class ConfirmDeliveryModal extends React.Component {
                             placeholder="Notes ..."
                             value={this.state.Item.Details}
                             />
-                            
-                            <TouchableHighlight
-                                style={styles.openButton}
-                                onPress={() => {
-                                    this.setModalVisible(this.props.onSave());
-                                }}>
-                                <Text style={styles.textStyle}>
-                                    { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
-                                </Text>
-                            </TouchableHighlight>
-                            { DenyButton }
+                            <View style={{
+                                    ...styles.rowView
+                            }}>
+                                <TouchableHighlight
+                                    style={styles.openButton}
+                                    onPress={() => {
+                                        this.setModalVisible(this.props.onSave());
+                                    }}>
+                                    <Text style={styles.textStyle}>
+                                        { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
+                                    </Text>
+                                </TouchableHighlight>
+                                { DenyButton }
+                            </View>
                     </View>
+                    
                 </View>
             </Modal>
         )

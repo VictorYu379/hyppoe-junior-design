@@ -21,11 +21,12 @@ export default class RequestInventoryModal extends React.Component {
 
         var paired = new Map();
         for (item of this.props.pairedItems) {
-            paired.set(item, false);
+            paired.set(item, true);
         }
         this.state = {
             modalVisible: false,
             pickUp: false,
+            checked: false,
             Item: {
                 Paired: paired,
                 Name: this.props.drinkName,
@@ -45,7 +46,7 @@ export default class RequestInventoryModal extends React.Component {
     getPairedItemList(itemList) {
         return itemList.map(item => {
             return (
-                <View style={styles.rowView}>
+                <View key={item} style={styles.rowView}>
                     <Text style={styles.checkBoxTextStyle}> 
                         {item}:
                     </Text>
@@ -53,7 +54,7 @@ export default class RequestInventoryModal extends React.Component {
                         checkedIcon={<Image source={require('../assets/checked.png')} />}
                         uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
                         checked={this.state.Item.Paired.get(item)}
-                        onPress={() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
+                        onPress={this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
                         />
                 </View>
             );
@@ -77,7 +78,7 @@ export default class RequestInventoryModal extends React.Component {
         }
         const p = this.state.Item.Paired;
         p.set(key, val);
-        this.setState({Item: {...this.state.Item, Paired: p}});
+        this.setState({checked: true, Item: {...this.state.Item, Paired: p}});
     }
 
     updateQuantity(val) {
@@ -89,6 +90,7 @@ export default class RequestInventoryModal extends React.Component {
                 ...this.state.Item, 
                 Pack: 0,
                 Unit: 0,
+                Quantity: Number(val),
                 RequestQuantity: Number(val),
             }
         });
@@ -102,6 +104,7 @@ export default class RequestInventoryModal extends React.Component {
             Item: {
                 ...this.state.Item, 
                 Unit: Number(val),
+                Quantity: 0,
                 RequestQuantity: this.state.Item.Pack * Number(val),
             }
         });
@@ -115,6 +118,7 @@ export default class RequestInventoryModal extends React.Component {
             Item: {
                 ...this.state.Item, 
                 Pack: Number(val),
+                Quantity: 0,
                 RequestQuantity: this.state.Item.Unit * Number(val),
             }
         });
@@ -122,19 +126,6 @@ export default class RequestInventoryModal extends React.Component {
 
     getPercentage() {
         return  Math.round(this.state.Item.CurrentQuantity)/Math.max(this.state.Item.TotalQuantity, 1) * 100;    
-    }
-
-    updateCurrentQuantity(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                AssignedQuantity: Number(val),
-                TotalQuantity: this.state.Item.AddedQuantity + Number(val)
-            }
-        });
     }
 
 	render() {
@@ -263,7 +254,7 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateCurrentQuantity(text)}
+                                onChangeText={text => this.updatePiaredItem("CurrentQuantity", text)}
                                 value={this.state.Item.CurrentQuantity.toString()}
                                 />
                         </View>
@@ -272,7 +263,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...styles.clickButton,
                                 }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity + 1) }}>
+                                onPress={() => { this.updateItem("CurrentQuantity", this.state.Item.CurrentQuantity + 1) }}>
                                 <Text style={styles.textStyle}> + </Text>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -282,7 +273,7 @@ export default class RequestInventoryModal extends React.Component {
                                     borderColor: "#D2D2D2",
                                     borderWidth: 1,
                                 }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.AssignedQuantity - 1) }}>
+                                onPress={() => { this.updateItem("CurrentQuantity", this.state.Item.CurrentQuantity - 1) }}>
                                 <Text style={styles.textStyle}> - </Text>
                             </TouchableHighlight>
                         </View>
