@@ -6,7 +6,6 @@ import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
 import RequestInventoryModal from '../components/RequestInventoryModal';
 
-
 export default function RunnerRequestInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
     var [scrollViewHeight, setScrollViewHeight] = React.useState(0);

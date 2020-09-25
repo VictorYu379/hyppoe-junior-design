@@ -7,7 +7,7 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
-				onPress={() => navigation.navigate('Total Inventory')}>
+				onPress={() => navigation.navigate('Runner Return Inventory')}>
 				<Text>Open up App.js to start working on your app!</Text>
 			</TouchableOpacity>
 			<StatusBar style="auto" />
