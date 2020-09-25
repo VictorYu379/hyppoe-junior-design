@@ -1,8 +1,7 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { CheckBox } from 'react-native-elements'
-import PairItemModal from './PairItemModal'
+import MyCheckBox from './MyCheckBox'
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
 export default class RequestInventoryModal extends React.Component {
@@ -50,11 +49,11 @@ export default class RequestInventoryModal extends React.Component {
                     <Text style={styles.checkBoxTextStyle}> 
                         {item}:
                     </Text>
-                    <CheckBox
-                        checkedIcon={<Image source={require('../assets/checked.png')} />}
-                        uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                    <MyCheckBox
+                        checkedImage={require('../assets/checked.png')}
+                        uncheckedImage={require('../assets/unchecked.png')}
                         checked={this.state.Item.Paired.get(item)}
-                        onPress={this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
+                        handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
                         />
                 </View>
             );
@@ -492,7 +491,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
-        margin: 15,
         textAlign: "auto",
         flex: 1
     }

@@ -1,8 +1,7 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { CheckBox } from 'react-native-elements'
-import PairItemModal from './PairItemModal'
+import MyCheckBox from "./MyCheckBox"
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
 export default class ConfirmDeliveryModal extends React.Component {
@@ -49,11 +48,11 @@ export default class ConfirmDeliveryModal extends React.Component {
                     <Text style={styles.checkBoxTextStyle}> 
                         {item}:
                     </Text>
-                    <CheckBox
-                        checkedIcon={<Image source={require('../assets/checked.png')} />}
-                        uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                    <MyCheckBox
+                        checkedImage={require('../assets/checked.png')}
+                        uncheckedImage={require('../assets/unchecked.png')}
                         checked={this.state.Item.Paired.get(item)}
-                        onPress={() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
+                        handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
                         />
                 </View>
             );
@@ -128,16 +127,6 @@ export default class ConfirmDeliveryModal extends React.Component {
     }
 
 	render() {
-        let DenyButton = null;
-        if (this.props.ManagerMode) {
-            DenyButton = <TouchableHighlight
-                style={styles.openButton}
-                onPress={() => {
-                    this.setModalVisible(this.props.onSave());
-                }}>
-                <Text style={styles.textStyle}> Deny </Text>
-            </TouchableHighlight>
-        }
         return (
             <Modal
                 animationType="slide"
@@ -411,7 +400,8 @@ export default class ConfirmDeliveryModal extends React.Component {
                             value={this.state.Item.Details}
                             />
                             <View style={{
-                                    ...styles.rowView
+                                flexDirection: "row",
+                                alignItems: "center"
                             }}>
                                 <TouchableHighlight
                                     style={styles.openButton}
@@ -422,7 +412,16 @@ export default class ConfirmDeliveryModal extends React.Component {
                                         { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
                                     </Text>
                                 </TouchableHighlight>
-                                { DenyButton }
+                                { (this.props.managerMode) ?
+                                    <TouchableHighlight
+                                        style={styles.openButton}
+                                        onPress={() => {
+                                            this.setModalVisible(this.props.onSave());
+                                        }}>
+                                        <Text style={styles.textStyle}> Deny </Text>
+                                    </TouchableHighlight> :
+                                    null
+                                 }
                             </View>
                     </View>
                     
@@ -511,7 +510,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
-        margin: 15,
         textAlign: "auto",
         flex: 1
     }

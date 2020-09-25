@@ -1,8 +1,8 @@
 import React from "react"
-import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
+import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity} from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
-import PairItemModal from './PairItemModal'
+import MyCheckBox from './MyCheckBox'
 
 export default class ReturnInventoryModal extends React.Component {
 
@@ -368,50 +368,56 @@ export default class ReturnInventoryModal extends React.Component {
                                 source={require('../assets/Seperator.png')}
                             />
                         </View>
-                        <View style={styles.rowView}>
+                        
+
+                        <View style={{
+                            ...styles.rowView,
+                        }}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Damaged:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Damaged}
-                                onPress={() => this.updateItem("Damaged", !this.state.Item.Damaged)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Damaged}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Damaged", !this.state.Item.Damaged)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Unhappy Customer:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Unhappy}
-                                onPress={() => this.updateItem("Unhappy", !this.state.Item.Unhappy)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Unhappy}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Unhappy", !this.state.Item.Unhappy)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Misorder:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Misorder}
-                                onPress={() => this.updateItem("Misorder", !this.state.Item.Misorder)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Misorder}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Misorder", !this.state.Item.Misorder)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Spilled:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Spilled}
-                                onPress={() => this.updateItem("Spilled", !this.state.Item.Spilled)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Spilled}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Spilled", !this.state.Item.Spilled)).bind(this)}
+                            />
                         </View>
+                        
+                        
                         <Text style={styles.sectionTitle}> Other reasons: </Text>
                         <TextInput
                             style={{
@@ -524,7 +530,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
-        margin: 15,
         textAlign: "auto",
         flex: 1
     }

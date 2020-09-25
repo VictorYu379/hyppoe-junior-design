@@ -1,8 +1,8 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { CheckBox } from 'react-native-elements'
 import PairItemModal from './PairItemModal'
+import MyCheckbox from './MyCheckBox'
 
 export default class InputUpdateInventoryModal extends React.Component {
 
@@ -390,24 +390,26 @@ export default class InputUpdateInventoryModal extends React.Component {
                             <Text style={styles.checkBoxTextStyle}> 
                                 Include in inventory count:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                            <MyCheckbox
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
                                 checked={this.state.includeInInvCount}
-                                onPress={() => this.setState({includeInInvCount: !this.state.includeInInvCount})}
-                                />
+                                handlePress={(() => this.setState({includeInInvCount: !this.state.includeInInvCount})).bind(this)}
+                            />
                         </View>
-                        <View style={styles.rowView}>
-                            <PairItemModal 
-                                visible={this.state.pairItemModalVisible} 
-                                onSave={this.onPairItemSave.bind(this)}>
-                            </PairItemModal>
+                        <View style={{
+                             alignItems: "center",
+                        }}>
                             <TouchableOpacity
                                 style={styles.openButton}
                                 onPress={() => this.setState({pairItemModalVisible: true})}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
+                                <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
                             </TouchableOpacity>
                         </View>
+                        <PairItemModal 
+                                visible={this.state.pairItemModalVisible} 
+                                onSave={this.onPairItemSave.bind(this)}>
+                            </PairItemModal>
 
                         <Text style={styles.sectionTitle}> Details: </Text>
                         <TextInput
@@ -473,6 +475,7 @@ const styles = StyleSheet.create({
     openButton: {
         backgroundColor: "#B0CCF0",
         borderRadius: 20,
+        textAlign: "center",
         width: "50%",
         padding: 5
     },
@@ -519,7 +522,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "left",
-        margin: 10,
         flex: 1
     }
   });
