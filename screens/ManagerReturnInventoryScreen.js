@@ -6,15 +6,20 @@ import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
 import ReturnInventoryModal from '../components/ReturnInventoryModal';
 
-export default function RunnerReturnInventoryScreen(props) {
+export default function ManagerReturnInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
     var [scrollViewHeight, setScrollViewHeight] = React.useState(0);
     var [elementHeight, setElementHeight] = React.useState(0);
     var [ReturnInventoryModalVisible, setReturnInventoryModalVisible] = React.useState(false);
     const stations = [{
         id: 1,
-        percentage: 100,
-        totalAvailable: '$480,960' 
+        percentage: 0,
+        totalAvailable: '$1,200' 
+    },
+    {
+        id: 2,
+        percentage: 0,
+        totalAvailable: '$0' 
     }]
     const _scrollView1 = React.createRef();
 

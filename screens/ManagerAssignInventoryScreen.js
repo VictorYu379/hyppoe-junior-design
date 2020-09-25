@@ -6,15 +6,20 @@ import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
 import ReturnInventoryModal from '../components/ReturnInventoryModal';
 
-export default function RunnerReturnInventoryScreen(props) {
+export default function ManagerServerInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
     var [scrollViewHeight, setScrollViewHeight] = React.useState(0);
     var [elementHeight, setElementHeight] = React.useState(0);
     var [ReturnInventoryModalVisible, setReturnInventoryModalVisible] = React.useState(false);
     const stations = [{
         id: 1,
-        percentage: 100,
-        totalAvailable: '$480,960' 
+        percentage: 70,
+        totalAvailable: '$336,660' 
+    },
+    {
+        id: 2,
+        percentage: 0,
+        totalAvailable: '$0' 
     }]
     const _scrollView1 = React.createRef();
 
@@ -64,7 +69,7 @@ export default function RunnerReturnInventoryScreen(props) {
 				drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
 				visible={ReturnInventoryModalVisible} 
 				onSave={() => setReturnInventoryModalVisible(false)} />
-            <InventoryTopBox inventory={"Return"} />
+            <InventoryTopBox inventory={"Assign"} />
             <View style={styles.scrollsContainer}>
                 <View
                     style={{width: '50%'}}
@@ -89,7 +94,7 @@ export default function RunnerReturnInventoryScreen(props) {
                         {stations.map((station, index) => {
                             return (
                                 <StationBox
-                                    verb={"Return from"}
+                                    verb={"Add to"}
                                     key={index}
                                     station={station}
                                     inventorySelected={inventorySelected}
