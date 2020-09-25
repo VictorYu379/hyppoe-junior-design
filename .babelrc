@@ -1,0 +1,11 @@
+{
+    "plugins": [
+      ["module-resolver", {
+        "root": ["."],
+        "alias": {
+          "components": "./components",
+          "screens": "./screens"
+        }
+      }]
+    ]
+  }

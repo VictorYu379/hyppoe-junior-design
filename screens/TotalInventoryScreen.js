@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import ShadowedBox from '../components/ShadowedBox';
-import BottomBlueBUtton from '../components/BottomBlueButton';
-import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
+import ShadowedBox from 'components/ShadowedBox';
+import BottomBlueBUtton from 'components/BottomBlueButton';
+import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import { ScrollView } from 'react-native-gesture-handler';
 
 

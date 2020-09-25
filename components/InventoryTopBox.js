@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 
 export default function InventoryTopBox(props) {
     return (

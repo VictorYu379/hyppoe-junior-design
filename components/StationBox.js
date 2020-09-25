@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function StationBox(props) {

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function StationRunnersScreen({ navigation }) {

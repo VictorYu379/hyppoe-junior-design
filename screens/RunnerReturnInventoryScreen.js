@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ShadowedBox from '../components/ShadowedBox';
-import StationBox from '../components/StationBox';
-import InventoryTopBox from '../components/InventoryTopBox';
-import ReturnInventoryModal from '../components/ReturnInventoryModal';
+import ShadowedBox from 'components/ShadowedBox';
+import StationBox from 'components/StationBox';
+import InventoryTopBox from 'components/InventoryTopBox';
+import ReturnInventoryModal from 'components/ReturnInventoryModal';
 
 export default function RunnerReturnInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
