@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal } from "react-native"
+import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, KeyboardAvoidingView } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 
 export default class PairItemModal extends React.Component {
@@ -16,6 +16,7 @@ export default class PairItemModal extends React.Component {
         }
     }
 
+
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
@@ -23,7 +24,7 @@ export default class PairItemModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: val}})
     }
 
-	  render() {
+	render() {
         return (
                 <View style={styles.centeredView}>
                     {/* Below is the modal for pop up module */} 
@@ -69,6 +70,7 @@ export default class PairItemModal extends React.Component {
                                         style={{
                                             ...styles.clickButton,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Quantity", (this.state.Item.Quantity+1)) }}>
                                         <Text style={styles.textStyle}> + </Text>
                                     </TouchableHighlight>
@@ -79,6 +81,7 @@ export default class PairItemModal extends React.Component {
                                             borderColor: "#D2D2D2",
                                             borderWidth: 1,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Quantity", (this.state.Item.Quantity-1)) }}>
                                         <Text style={styles.textStyle}> - </Text>
                                     </TouchableHighlight>
@@ -108,6 +111,7 @@ export default class PairItemModal extends React.Component {
                                         style={{
                                             ...styles.clickButton,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Ounces", (this.state.Item.Ounces+1)) }}>
                                         <Text style={styles.textStyle}> + </Text>
                                     </TouchableHighlight>
@@ -118,6 +122,7 @@ export default class PairItemModal extends React.Component {
                                             borderColor: "#D2D2D2",
                                             borderWidth: 1,
                                         }}
+                                        underlayColor='grey'
                                         onPress={() => { this.updateItem("Ounces", (this.state.Item.Ounces-1)) }}>
                                         <Text style={styles.textStyle}> - </Text>
                                     </TouchableHighlight>
@@ -140,13 +145,12 @@ export default class PairItemModal extends React.Component {
                                     onChangeText={text => this.updateItem("Details", text)}
                                     placeholder="Notes ..."
                                     value={this.state.Item.Details}
-                                    />
+                                />
                                 
                                 <TouchableHighlight
                                     style={styles.openButton}
-                                    onPress={() => {
-                                        this.setModalVisible(!this.props.onSave());
-                                    }}>
+                                    underlayColor='grey'
+                                    onPress={() => {this.props.onSave();}}>
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableHighlight>
                             </View>

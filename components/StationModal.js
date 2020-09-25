@@ -69,6 +69,7 @@ export default class StationModal extends React.Component {
                                 style={{
                                     ...styles.clickButton,
                                 }}
+                                underlayColor='grey'
                                 onPress={() => { this.updateStation("Servers", (this.state.Station.Servers+1)) }}>
                                 <Text style={styles.textStyle}> + </Text>
                             </TouchableHighlight>
@@ -79,6 +80,7 @@ export default class StationModal extends React.Component {
                                     borderColor: "#D2D2D2",
                                     borderWidth: 1,
                                 }}
+                                underlayColor='grey'
                                 onPress={() => { this.updateStation("Servers", (this.state.Station.Servers-1)) }}>
                                 <Text style={styles.textStyle}> - </Text>
                             </TouchableHighlight>
@@ -108,6 +110,7 @@ export default class StationModal extends React.Component {
                                 style={{
                                     ...styles.clickButton,
                                 }}
+                                underlayColor='grey'
                                 onPress={() => { this.updateStation("Runners", (this.state.Station.Runners+1)) }}>
                                 <Text style={styles.textStyle}> + </Text>
                             </TouchableHighlight>
@@ -118,6 +121,7 @@ export default class StationModal extends React.Component {
                                     borderColor: "#D2D2D2",
                                     borderWidth: 1,
                                 }}
+                                underlayColor='grey'
                                 onPress={() => { this.updateStation("Runners", (this.state.Station.Runners-1)) }}>
                                 <Text style={styles.textStyle}> - </Text>
                             </TouchableHighlight>
@@ -144,6 +148,7 @@ export default class StationModal extends React.Component {
                         
                         <TouchableHighlight
                             style={styles.openButton}
+                            underlayColor='grey'
                             onPress={() => this.props.onSave()}>
                             <Text style={styles.textStyle}>Save</Text>
                         </TouchableHighlight>

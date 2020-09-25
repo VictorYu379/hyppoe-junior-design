@@ -4,7 +4,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
 import PairItemModal from './PairItemModal'
 
-export default class InputUpdateInventoryModal extends React.Component {
+export default class ReturnInventoryModal extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
 		const { params = {} } = navigation.state
@@ -18,8 +18,7 @@ export default class InputUpdateInventoryModal extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            includeInInvCount: true,
-            pairItemModalVisible: false,
+            modalVisible: false,
             Item: {
                 Name: this.props.drinkName,
                 Unit: 0,
@@ -28,12 +27,19 @@ export default class InputUpdateInventoryModal extends React.Component {
                 CurrentQuantity: 0,
                 TotalQuantity: 100,
                 AddedQuantity: 0,
-                Ounces: 0,
-                Price: 0,
-                Cost: 0,
-                Details: "",
+                Price: 10,
+                Damaged: false,
+                Unhappy: false,
+                Misorder: false,
+                Spilled: false,
+                OtherReasons: "",
             }
         }
+    }
+    
+
+    setModalVisible(val) {
+        this.setState({modalVisible: val});
     }
 
     updateItem(key, val) {
@@ -144,17 +150,14 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 flexDirection:"column",
                                 width:100
                             }}>
-                                <TextInput
+                                <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     width: 100,
                                     fontSize: 20,
                                     lineHeight: 20,
                                 }}
-                                multiline={true}
-                                onChangeText={text => this.updateItem("Name", text)}
-                                value={this.state.Item.Name}
-                                />
+                                >{this.props.drinkName}</Text>
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        
@@ -196,7 +199,25 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Total Inventory
+                                Returned:
+                            </Text>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Image
+                                style={{
+                                    ...StyleSheet.absoluteFill,
+                                }}
+                                source={require('../assets/Seperator.png')}
+                            />
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text 
+                                style={{
+                                    ...styles.textStyle,
+                                    textAlign: "left",
+                                    flex: 1
+                                }}> 
+                                Station 1 - Main Tent - Tablet1
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -332,84 +353,66 @@ export default class InputUpdateInventoryModal extends React.Component {
                         <View style={styles.rowView}>
                             <Text 
                                 style={{
-                                    ...styles.textStyle1,
+                                    ...styles.textStyle,
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Ounces per Unit:
+                                Reason for Return:
                             </Text>
-                            <TextInput
-                                style={{
-                                    ...styles.inputStyle,
-                                    textAlign: "right",
-                                    flex: 1
-                                }}
-                                onChangeText={text => this.updateItem("Ounces", text)}
-                                value={this.state.Item.Ounces.toString()}
-                                />
                         </View>
                         <View style={styles.rowView}>
-                            <Text 
+                            <Image
                                 style={{
-                                    ...styles.textStyle1,
-                                    textAlign: "left",
-                                    flex: 1
-                                }}> 
-                                Price per Unit:
-                            </Text>
-                            <TextInput
-                                style={{
-                                    ...styles.inputStyle,
-                                    textAlign: "right",
-                                    flex: 1
+                                    ...StyleSheet.absoluteFill,
                                 }}
-                                onChangeText={text => this.updateItem("Price", text)}
-                                value={this.state.Item.Price.toString()}
-                                />
-                        </View>
-                        <View style={styles.rowView}>
-                            <Text 
-                                style={{
-                                    ...styles.textStyle1,
-                                    textAlign: "left",
-                                    flex: 1
-                                }}> 
-                                Cost per Pack:
-                            </Text>
-                            <TextInput
-                                style={{
-                                    ...styles.inputStyle,
-                                    textAlign: "right",
-                                    flex: 1
-                                }}
-                                onChangeText={text => this.updateItem("Cost", text)}
-                                value={this.state.Item.Cost.toString()}
-                                />
+                                source={require('../assets/Seperator.png')}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
-                                Include in inventory count:
+                                Damaged:
                             </Text>
                             <CheckBox
                                 checkedIcon={<Image source={require('../assets/checked.png')} />}
                                 uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.includeInInvCount}
-                                onPress={() => this.setState({includeInInvCount: !this.state.includeInInvCount})}
+                                checked={this.state.Item.Damaged}
+                                onPress={() => this.updateItem("Damaged", !this.state.Item.Damaged)}
                                 />
                         </View>
                         <View style={styles.rowView}>
-                            <PairItemModal 
-                                visible={this.state.pairItemModalVisible} 
-                                onSave={this.onPairItemSave.bind(this)}>
-                            </PairItemModal>
-                            <TouchableOpacity
-                                style={styles.openButton}
-                                onPress={() => this.setState({pairItemModalVisible: true})}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Pair items</Text>
-                            </TouchableOpacity>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Unhappy Customer:
+                            </Text>
+                            <CheckBox
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                                checked={this.state.Item.Unhappy}
+                                onPress={() => this.updateItem("Unhappy", !this.state.Item.Unhappy)}
+                                />
                         </View>
-
-                        <Text style={styles.sectionTitle}> Details: </Text>
+                        <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Misorder:
+                            </Text>
+                            <CheckBox
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                                checked={this.state.Item.Misorder}
+                                onPress={() => this.updateItem("Misorder", !this.state.Item.Misorder)}
+                                />
+                        </View>
+                        <View style={styles.rowView}>
+                            <Text style={styles.checkBoxTextStyle}> 
+                                Spilled:
+                            </Text>
+                            <CheckBox
+                                checkedIcon={<Image source={require('../assets/checked.png')} />}
+                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                                checked={this.state.Item.Spilled}
+                                onPress={() => this.updateItem("Spilled", !this.state.Item.Spilled)}
+                                />
+                        </View>
+                        <Text style={styles.sectionTitle}> Other reasons: </Text>
                         <TextInput
                             style={{
                                 ...styles.textStyle,
@@ -423,14 +426,16 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 fontSize: 14
                             }}
                             multiline={true}
-                            onChangeText={text => this.updateItem("Details", text)}
+                            onChangeText={text => this.updateItem("OtherReasons", text)}
                             placeholder="Notes ..."
-                            value={this.state.Item.Details}
+                            value={this.state.Item.OtherReasons}
                             />
                             
                             <TouchableHighlight
                                 style={styles.openButton}
-                                onPress={() => { this.props.onSave(); }}>
+                                onPress={() => {
+                                    this.setModalVisible(this.props.onSave());
+                                }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>
                     </View>
@@ -518,8 +523,9 @@ const styles = StyleSheet.create({
         fontFamily: "Arial-BoldMT",
         fontSize: 16,
         fontWeight: "bold",
-        textAlign: "left",
-        margin: 10,
+        textAlign: "center",
+        margin: 15,
+        textAlign: "auto",
         flex: 1
     }
   });

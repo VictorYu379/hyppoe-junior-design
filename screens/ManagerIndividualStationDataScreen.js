@@ -17,7 +17,7 @@ export default function DummyScreen({ navigation }) {
 	]
 	const iconList = imageList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'25%'}  margin={5}>
+			<ShadowedBox width={'40%'} height={'25%'} square margin={5}>
 
 				<View style={{
 					flexDirection: 'row',

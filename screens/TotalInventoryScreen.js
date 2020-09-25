@@ -1,68 +1,63 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
-import StationModal from '../components/StationModal';
+import BottomBlueBUtton from '../components/BottomBlueButton';
+import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
+
 
 export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
+	const [inputImgSource, setInputImgSource] = useState(false);
+	const [inputDrinkName, SetInputDrinkName] = useState(false);
 
-	const onSave = function() {
-		setStationModalVisible(false);
+	const onInvModalSave = function() {
+		setInputInvUpdateModalVisible(false);
 	}
 
-	const imageList = [
-		require('../assets/event-logo.png'),
-		require('../assets/coorslight.jpg'),
-		require('../assets/SweetWater.png'),
-		require('../assets/terrapin.png'),
-		require('../assets/truly.jpeg'),
-		require('../assets/smartwater.png'),
-		require('../assets/cup.jpg'),
-		require('../assets/table.jpg'),
-		require('../assets/ice.png')
+	const itemList = [
+		{image: require('../assets/event-logo.png'), drinkName: "Bud light"},
+		{image: require('../assets/coorslight.jpg'), drinkName: "Coors light"},
+		{image: require('../assets/SweetWater.png'), drinkName: "Sweet water"},
+		{image: require('../assets/terrapin.png'), drinkName: "Terrapin"},
+		{image: require('../assets/truly.jpeg'), drinkName: "Truly"},
+		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
+		{image: require('../assets/cup.jpg'), drinkName: "Cup"},
+		{image: require('../assets/table.jpg'), drinkName: "Table"},
+		{image: require('../assets/ice.png'), drinkName: "Ice"}
 	]
-	const iconList = imageList.map(img => {
+
+	const iconList = itemList.map(item => {
 		return (
-			<ShadowedBox width={'30%'} square margin={5}>
-				<Image 
-					source={img}
-					style={{
-						width: '85%',
-						height: '85%',
-						borderRadius: 15,
-						overflow: 'hidden',
-						resizeMode: 'contain'
-					}} />
-			</ShadowedBox>
+			<ShadowedBox key={item.drinkName} width={'30%'} square margin={5}>
+				<TouchableOpacity key={item.drinkName} onPress={() => {
+					setInputInvUpdateModalVisible(true);
+					setInputImgSource(item.image);
+					SetInputDrinkName(item.drinkName);
+				}}>
+					<Image 
+						source={item.image}
+						style={{
+							width: 100,
+							height: 100,
+							borderRadius: 15,
+							overflow: 'hidden',
+							resizeMode: 'contain'
+						}}/>
+				</TouchableOpacity>
+				</ShadowedBox>
 		);
 	});
 
 	return (
 		<View style={styles.container}>
-			<StationModal visible={stationModalVisible} onSave={onSave} />
-			<TouchableOpacity
-				style={{
-					position: 'absolute',
-					bottom: 20,
-					width: '85%',
-					height: '10%',
-					justifyContent: 'center',
-					alignItems: 'center',
-					borderRadius: 25,
-					shadowColor: "#000",
-					shadowOffset: {
-						width: 0,
-						height: 4,
-					},
-					shadowOpacity: 0.32,
-					shadowRadius: 5.46,
-					elevation: 9,
-					backgroundColor: 'blue',
-					zIndex: 1
-				}}
-				onPress={() => setStationModalVisible(true)}>
-				<Text style={{color: 'white', fontWeight: 'bold', fontFamily: 'Arial'}}>Complete Inventory and Add Stations</Text>
-			</TouchableOpacity>
+			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
+			<InputUpdateInventoryModal
+				key={inputDrinkName} 
+				sourceImg={inputImgSource} 
+				drinkName={inputDrinkName}
+				visible={inputInvUpdateModalVisible} 
+				onSave={onInvModalSave}>
+			</InputUpdateInventoryModal>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 				<View style={{
 					width: '90%',
