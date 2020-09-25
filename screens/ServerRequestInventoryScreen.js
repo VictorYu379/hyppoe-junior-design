@@ -4,17 +4,17 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from '../components/ShadowedBox';
 import StationBox from '../components/StationBox';
 import InventoryTopBox from '../components/InventoryTopBox';
-import ReturnInventoryModal from '../components/ReturnInventoryModal';
+import RequestInventoryModal from '../components/RequestInventoryModal';
 
-export default function RunnerReturnInventoryScreen(props) {
+export default function ServerRequestInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
     var [scrollViewHeight, setScrollViewHeight] = React.useState(0);
     var [elementHeight, setElementHeight] = React.useState(0);
-    var [ReturnInventoryModalVisible, setReturnInventoryModalVisible] = React.useState(false);
+    var [RequestInventoryModalVisible, setRequestInventoryModalVisible] = React.useState(false);
     const stations = [{
         id: 1,
-        percentage: 100,
-        totalAvailable: '$480,960' 
+        percentage: 70,
+        totalAvailable: '$336,660' 
     }]
     const _scrollView1 = React.createRef();
 
@@ -25,6 +25,9 @@ export default function RunnerReturnInventoryScreen(props) {
 		{image: require('../assets/terrapin.png'), drinkName: "Terrapin"},
 		{image: require('../assets/truly.jpeg'), drinkName: "Truly"},
 		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
+		{image: require('../assets/cup.jpg'), drinkName: "Cup"},
+		{image: require('../assets/table.jpg'), drinkName: "Table"},
+		{image: require('../assets/ice.png'), drinkName: "Ice"}
 	]
     const iconList = imageList.map((image, index) => {
         var img = image["image"];
@@ -59,12 +62,15 @@ export default function RunnerReturnInventoryScreen(props) {
             onPress={() => {
                 setInventorySelected(null);
             }}>
-            <ReturnInventoryModal
-				sourceImg={inventorySelected !== null ? imageList[inventorySelected]["image"] : imageList[0]["image"]} 
-				drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
-				visible={ReturnInventoryModalVisible} 
-				onSave={() => setReturnInventoryModalVisible(false)} />
-            <InventoryTopBox inventory={"Return"} />
+            <RequestInventoryModal
+                sourceImg={inventorySelected !== null ? imageList[inventorySelected]["image"] : imageList[0]["image"]} 
+                drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
+                pairedItems={[
+                    "12 ounce cup"
+                ]}
+				visible={RequestInventoryModalVisible} 
+				onSave={() => setRequestInventoryModalVisible(false)}/>
+            <InventoryTopBox inventory={"Request"} />
             <View style={styles.scrollsContainer}>
                 <View
                     style={{width: '50%'}}
@@ -89,12 +95,12 @@ export default function RunnerReturnInventoryScreen(props) {
                         {stations.map((station, index) => {
                             return (
                                 <StationBox
-                                    verb={"Return from"}
+                                    verb={"Add to"}
                                     key={index}
                                     station={station}
                                     inventorySelected={inventorySelected}
                                     onPressStats={() => props.navigation.navigate("Total Inventory Station Overview")}
-                                    onAdd={() => setReturnInventoryModalVisible(true)}
+                                    onAdd={() => setRequestInventoryModalVisible(true)}
                                     />
                             );
                         })}

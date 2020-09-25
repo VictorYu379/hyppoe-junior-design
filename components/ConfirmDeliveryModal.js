@@ -34,11 +34,12 @@ export default class ConfirmDeliveryModal extends React.Component {
                 ConfirmQuantity: 20,
                 TotalQuantity: 100,
                 CurrentQuantity: 50,
+                Quantity: 0,
                 Price: 10,
                 Details: "",
             }
         }
-        this.pairdItemList = this.getPairedItemList(this.props.pairdItems)
+        this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
     }
 
     getPairedItemList(itemList) {
