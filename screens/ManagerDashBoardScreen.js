@@ -25,7 +25,7 @@ export default function DummyScreen({ navigation }) {
 							margin: 10
 					}}>
 							
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:10, marginLeft:20}}>Server DashBoard</Text>
+						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:10, marginLeft:20}}>Manager DashBoard</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Station 1:Big Tent</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Server Tablet: 1</Text>
 					</View>
@@ -45,7 +45,7 @@ export default function DummyScreen({ navigation }) {
 			}}>
 
 		
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 				<View style={{
 					flexDirection: 'row',
@@ -135,7 +135,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -203,7 +203,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -298,7 +298,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -367,7 +367,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -433,7 +433,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -496,7 +496,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -551,7 +551,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',

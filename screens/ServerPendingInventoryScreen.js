@@ -42,7 +42,7 @@ export default function DummyScreen({ navigation }) {
 				paddingLeft: '2%'
 			}}>
 				
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'column',
@@ -98,7 +98,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'column',

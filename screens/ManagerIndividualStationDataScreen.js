@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from '../components/ShadowedBox';
 
 export default function DummyScreen({ navigation }) {
@@ -17,7 +18,11 @@ export default function DummyScreen({ navigation }) {
 	]
 	const iconList = imageList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'25%'} square margin={5}>
+			<ShadowedBox 
+				width={'43%'}  
+				square 
+				margin={5}
+                touchable>
 
 				<View style={{
 					flexDirection: 'row',
@@ -52,9 +57,9 @@ export default function DummyScreen({ navigation }) {
 					}}>
 						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
 						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
-						<Text style={[styles.percentageSmallboxTextSize, item.currentCapacity/item.maxCapacity == 1 
-							? styles.maxCapacityText : item.currentCapacity/item.maxCapacity >= 0.6 
-							? styles.sixtyText : item.currentCapacity/item.maxCapacity >= 0.3 
+						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
 							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
 						</View>
 						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
@@ -131,15 +136,15 @@ export default function DummyScreen({ navigation }) {
 							marginRight: 20,
 							color: 'dodgerblue'
 					}}>
-						<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
+						<Text style={[styles.percentageHeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
 							? styles.thirtyText : styles.criticalText]}>
 							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
 						</Text>
-						<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
+						<Text style={[styles.HeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
 							? styles.thirtyText : styles.criticalText]}>
 								Available Inventory
 						</Text>
@@ -155,15 +160,20 @@ export default function DummyScreen({ navigation }) {
 
 
 			<View style={{
-				flexWrap: 'wrap',
-				flexDirection: 'row',
-				justifyContent: 'center',
-				width: '100%',
-				//height: '60%',
-				paddingLeft: '2%'
+				justifyContent:'center', 
 			}}>
-				{iconList}
+				<ScrollView style={{width:'100%',maxHeight:'100%',marginLeft:20}}>
+					<View style={{
+						flexWrap: 'wrap',
+						flexDirection: 'row',
+						width: '100%',
+						//height: '60%',
+						paddingLeft: '2%',
+					}}>
+						{iconList}
 
+					</View>
+				</ScrollView>
 			</View>
 		</View>
 	);

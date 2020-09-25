@@ -4,7 +4,6 @@ import ShadowedBox from '../components/ShadowedBox';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
-
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
 	return (
@@ -71,7 +70,7 @@ export default function DummyScreen({ navigation }) {
 				paddingLeft: '2%'
 			}}>
 				
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'column',
@@ -127,7 +126,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'column',

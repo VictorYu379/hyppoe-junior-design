@@ -45,7 +45,7 @@ export default function DummyScreen({ navigation }) {
 			}}>
 
 		
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -110,7 +110,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -178,7 +178,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -253,7 +253,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -322,7 +322,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -390,7 +390,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -453,7 +453,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -519,7 +519,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',

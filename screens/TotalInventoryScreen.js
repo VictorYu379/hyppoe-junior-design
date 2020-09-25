@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 import BottomBlueBUtton from '../components/BottomBlueButton';
 import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function DummyScreen({ navigation }) {
@@ -26,9 +27,9 @@ export default function DummyScreen({ navigation }) {
 		{image: require('../assets/ice.png'), drinkName: "Ice"}
 	]
 
-	const iconList = itemList.map(item => {
+	const iconList = itemList.map((item, index) => {
 		return (
-			<ShadowedBox key={item.drinkName} width={'30%'} square margin={5}>
+			<ShadowedBox key={index} width={'30%'} square margin={5}>
 				<TouchableOpacity key={item.drinkName} onPress={() => {
 					setInputInvUpdateModalVisible(true);
 					setInputImgSource(item.image);
@@ -91,33 +92,36 @@ export default function DummyScreen({ navigation }) {
 					</View>
 				</View>
 			</ShadowedBox>
-			<View style={{
-				flexWrap: 'wrap',
-				flexDirection: 'row',
-				justifyContent: 'flex-start',
-				width: '100%',
-				paddingLeft: '2%'
-			}}>
-				{iconList}
-				<ShadowedBox width={'30%'} square margin={5}>
-					<View style={{
-						width: '100%',
-						aspectRatio: 1,
-						alignItems: 'center',
-						justifyContent: 'center'
-					}}>
-						<Image
-							source={require('../assets/add.png')}
-							style={{
-								width: '40%',
-								height: '40%',
-								overflow: 'hidden',
-								resizeMode: 'contain',
-								margin: 5
-							}} />
-							<Text>Add Item</Text>
-						</View>
-				</ShadowedBox>
+			<View style={{ height: '70%' }}>
+				<ScrollView contentContainerStyle={{
+					flexGrow: 1,
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					justifyContent: 'flex-start',
+					width: '100%',
+					paddingLeft: '2%'
+				}}>
+					{iconList}
+					<ShadowedBox width={'30%'} square margin={5}>
+						<View style={{
+							width: '100%',
+							aspectRatio: 1,
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}>
+							<Image
+								source={require('../assets/add.png')}
+								style={{
+									width: '40%',
+									height: '40%',
+									overflow: 'hidden',
+									resizeMode: 'contain',
+									margin: 5
+								}} />
+								<Text>Add Item</Text>
+							</View>
+					</ShadowedBox>
+				</ScrollView>
 			</View>
 		</View>
 	);

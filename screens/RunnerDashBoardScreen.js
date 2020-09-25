@@ -11,7 +11,11 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			<ShadowedBox 
+				width={'80%'} 
+				height={'20%'} 
+				margin={10}
+			>
 
 
 
@@ -44,7 +48,12 @@ export default function DummyScreen({ navigation }) {
 				paddingLeft: '2%'
 			}}>
 				
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5}
+					touchable
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -107,7 +116,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -182,7 +191,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -248,7 +257,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -317,7 +326,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -365,7 +374,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5}>
+				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -414,11 +423,9 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'center',
 							alignItems: 'center',
 						}}>
-							<View style = {styles.Boundingbox}>
-								<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-									1
-								</Text>
-							</View>
+							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
+								1
+							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Total
 							</Text>
