@@ -32,9 +32,9 @@ export default function DummyScreen({ navigation }) {
 		{image: require('../assets/ice.png'), drinkName: "Ice"},
 	]
 
-	const iconList = itemList.map(item => {
+	const iconList = itemList.map((item, index) => {
 		return (
-			<ShadowedBox key={item.drinkName} width={'30%'} square margin={5}>
+			<ShadowedBox key={index} width={'30%'} square margin={5}>
 				<TouchableOpacity key={item.drinkName} onPress={() => {
 					setInputInvUpdateModalVisible(true);
 					setInputImgSource(item.image);

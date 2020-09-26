@@ -95,7 +95,7 @@ export default function RunnerRequestInventoryScreen(props) {
                         {stations.map((station, index) => {
                             return (
                                 <StationBox
-                                    verb={"Add"}
+                                    verb={"Add to"}
                                     key={index}
                                     station={station}
                                     inventorySelected={inventorySelected}

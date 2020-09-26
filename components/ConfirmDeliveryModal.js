@@ -34,6 +34,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                 Quantity: 0,
                 TotalQuantity: 100,
                 CurrentQuantity: 50,
+                Quantity: 0,
                 Price: 10,
                 Details: "",
             }
