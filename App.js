@@ -11,6 +11,10 @@ import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStation
 import AssignInventoryCreateStationScreen from './screens/AssignInventoryCreateStationScreen';
 import RunnerRequestInventoryScreen from './screens/RunnerRequestInventoryScreen';
 import RunnerReturnInventoryScreen from './screens/RunnerReturnInventoryScreen';
+import RunnerHistoryScreen from './screens/RunnerHistoryScreen';
+import RunnerStationInventoryScreen from './screens/RunnerStationInventoryScreen';
+import RunnerTaskScreen from './screens/RunnerTaskScreen';
+import RunnerDashBoardScreen from './screens/RunnerDashBoardScreen';
 import HyppoeHeader from './components/HyppoeHeader';
 import ManagerReturnInventoryScreen from './screens/ManagerReturnInventoryScreen';
 import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen';
@@ -75,6 +79,22 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
+							name="Runner Dash Board Screen"
+							component={RunnerDashBoardScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner History Screen"
+							component={RunnerHistoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Runner Request Inventory"
 							component={RunnerRequestInventoryScreen}
 							options={{
@@ -85,6 +105,22 @@ export default function App() {
 						<Stack.Screen
 							name="Runner Return Inventory"
 							component={RunnerReturnInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner Station Inventory"
+							component={RunnerStationInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner Task Screen"
+							component={RunnerTaskScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
