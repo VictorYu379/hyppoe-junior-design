@@ -1,4 +1,7 @@
 class Drink {
+    icon;
+    name;
+    
     constructor(instance) {
         Object.assign(this, instance);
     }
