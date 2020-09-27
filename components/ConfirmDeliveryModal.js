@@ -153,7 +153,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 }}
                                 multiline={true}
                                 onChangeText={text => this.updateItem("Name", text)}
-                                value={this.state.Item.Name}
+                                value={this.props.drinkName}
                                 />
                                 <Text style={{
                                     fontSize: 12

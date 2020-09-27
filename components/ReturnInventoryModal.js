@@ -433,11 +433,11 @@ export default class ReturnInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    if (this.state.Item.AddedQuantity == 0) {
-                                        Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                    } else {
+                                    // if (this.state.Item.AddedQuantity == 0) {
+                                    //     Alert.alert("Please enter unit-pack pair or quantity to continue!")
+                                    // } else {
                                         this.props.onSave(); 
-                                    } 
+                                    // } 
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>

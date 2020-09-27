@@ -1,10 +1,15 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import ConfirmDeliveryModal from '../components/ConfirmDeliveryModal';
+import InputBlankInventoryModal from '../components/InputBlankInventoryModal';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+export default function ManagerAvailableInventoryScreen({ navigation }) {
+	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [imageSelected, setImageSelected] = useState(null);
+	const [drinkSelected, setDrinkSelected] = useState(null);
+	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
@@ -16,13 +21,19 @@ export default function DummyScreen({ navigation }) {
 		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
 		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
-	const iconList = imageList.map(item => {
+	const iconList = imageList.map((item, index) => {
 		return (
 			<ShadowedBox 
+				key={index}
 				width={'43%'}  
 				square 
 				margin={5}
-                touchable>
+                touchable
+				onPress={() => {
+					setImageSelected(item.img);
+					setDrinkSelected(item.name);
+					setAdditionalInventoryModal(true);
+				}}>
 
 				<View style={{
 					flexDirection: 'row',
@@ -74,7 +85,20 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
+			<InputBlankInventoryModal
+				visible={inputBlkUpdateModalVisible}
+				onSave={() => setInputBlkUpdateModalVisible(false)}
+			>
+			</InputBlankInventoryModal>
+			<ConfirmDeliveryModal
+                sourceImg={imageSelected} 
+                drinkName={drinkSelected}
+                pairedItems={[
+                    "12 ounce cup"
+                ]}
+				visible={additionalInventoryModal} 
+				onSave={() => setAdditionalInventoryModal(false)}/>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -119,7 +143,8 @@ export default function DummyScreen({ navigation }) {
 							width={'43%'} 
 							square 
 							margin={5}
-							touchable>
+							touchable
+							onPress={() => setInputBlkUpdateModalVisible(true)}>
 							<View style={{
 								width: '100%',
 								aspectRatio: 1,
