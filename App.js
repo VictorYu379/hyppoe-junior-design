@@ -129,6 +129,14 @@ export default function App() {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
+						<Stack.Screen
+							name="Server Pending Inventory History"
+							component={ServerPendingInventoryHistory}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
 					</Stack.Navigator>
 				</NavigationContainer>
 			</View>

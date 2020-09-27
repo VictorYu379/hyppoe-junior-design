@@ -9,7 +9,13 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
+			<ShadowedBox 
+				width={'80%'} 
+				height={'10%'} 
+				margin={10}
+				touchable
+				onPress={() => {navigation.navigate("Server Pending Inventory History");}}
+			>
 
 
 
