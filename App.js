@@ -21,9 +21,10 @@ import ServerDashBoardScreen from './screens/ServerDashBoardScreen';
 import ServerPendingInventoryScreen from './screens/ServerPendingInventoryScreen';
 import ServerPendingInventoryHistory from './screens/ServerPendingInventoryHistory';
 import ServerIndividualDataScreen from './screens/ServerIndividualStationDataScreen';
-import ServerStationInventoryScreen from './screens/ServerStationInventoryScreen';
+import ServerStationInventoryScreen from './screens/ServerIndividualStationDataScreen';
 import StationRunnersScreen from './screens/StationRunnersScreen';
 import StationAlertsScreen from './screens/StationAlertsScreen';
+import IndividualStationInventoryScreen from './screens/IndividualStationInventoryDetailedDataScreen';
 
 const Stack = createStackNavigator();
 
@@ -112,8 +113,22 @@ export default function App() {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
-						
-
+						<Stack.Screen
+							name="Total Inventory Station Overview"
+							component={TotalInventoryStationOverviewScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Individual Inventory Station Overview"
+							component={IndividualStationInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
 					</Stack.Navigator>
 				</NavigationContainer>
 			</View>

@@ -14,7 +14,8 @@ export default function DummyScreen({ navigation }) {
 		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
 		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
 		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
+		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'},
+		{img:require('../assets/ice.png'), maxCapacity:10000, currentCapacity:9500, name:'Ice'}
 	]
 	const iconList = imageList.map(item => {
 		return (
@@ -74,8 +75,15 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			
 
+			<ShadowedBox 
+					width={'80%'} 
+					height={'20%'}  
+					margin={10}
+					touchable
+					onPress={() => {navigation.navigate("Individual Inventory Station Overview");}}
+				>
 
 				<View style={{
 							flexDirection: 'row',
