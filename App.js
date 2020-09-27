@@ -17,6 +17,13 @@ import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen
 import ServerConfirmInventoryScreen from './screens/ServerConfirmInventoryScreen';
 import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
 import ServerReturnInventoryScreen from './screens/ServerReturnInventoryScreen';
+import ServerDashBoardScreen from './screens/ServerDashBoardScreen';
+import ServerPendingInventoryScreen from './screens/ServerPendingInventoryScreen';
+import ServerPendingInventoryHistory from './screens/ServerPendingInventoryHistory';
+import ServerIndividualDataScreen from './screens/ServerIndividualStationDataScreen';
+import ServerStationInventoryScreen from './screens/ServerStationInventoryScreen';
+import StationRunnersScreen from './screens/StationRunnersScreen';
+import StationAlertsScreen from './screens/StationAlertsScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,17 +40,48 @@ export default function App() {
 				{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 				<NavigationContainer>
 					<Stack.Navigator>
-						<Stack.Screen name="Dummy" component={DummyScreen} />
 						<Stack.Screen
-							name="Server Return Inventory"
-							component={ServerReturnInventoryScreen}
+							name="Server Dashboard Screen"
+							component={ServerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
 						<Stack.Screen
-							name="Server Request Inventory"
+							name="Server Pending Inventory Screen"
+							component={ServerPendingInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Station Inventory Screen"
+							component={ServerStationInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Station Runners Screen"
+							component={StationRunnersScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Station Alerts Screen"
+							component={StationAlertsScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Request Inventory Screen"
 							component={ServerRequestInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
@@ -51,7 +89,7 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
-							name="Server Confirm Inventory"
+							name="Server Confirm Inventory Screen"
 							component={ServerConfirmInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
@@ -59,64 +97,23 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
-							name="Manager Assign Inventory"
-							component={ManagerAssignInventoryScreen}
+							name="Server Return Inventory Screen"
+							component={ServerReturnInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
 						<Stack.Screen
-							name="Manager Return Inventory"
-							component={ManagerReturnInventoryScreen}
+							name="Server Individual Data Screen"
+							component={ServerIndividualDataScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
-						<Stack.Screen
-							name="Runner Request Inventory"
-							component={RunnerRequestInventoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
-							name="Runner Return Inventory"
-							component={RunnerReturnInventoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
-							name="Total Inventory"
-							component={TotalInventoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}
-						/>
-						<Stack.Screen
-							name="Assign Inventory Create Station"
-							component={AssignInventoryCreateStationScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}
-						/>
-						<Stack.Screen
-							name="Total Inventory Station Overview"
-							component={TotalInventoryStationOverviewScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}
-						/>
+						
+
 					</Stack.Navigator>
 				</NavigationContainer>
 			</View>

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function ServerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
@@ -110,7 +110,13 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Server Pending Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -178,7 +184,13 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Server Station Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -253,7 +265,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Server Return Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -322,7 +340,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Server Confirm Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -390,7 +414,13 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Station Runners Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -453,7 +483,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Server Request Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -519,7 +555,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Station Alerts Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
