@@ -12,6 +12,7 @@ import AssignInventoryCreateStationScreen from './screens/AssignInventoryCreateS
 import RunnerRequestInventoryScreen from './screens/RunnerRequestInventoryScreen';
 import RunnerReturnInventoryScreen from './screens/RunnerReturnInventoryScreen';
 import HyppoeHeader from './components/HyppoeHeader';
+import ManagerStationInventoryScreen from './screens/ManagerStationInventoryScreen';
 import ManagerReturnInventoryScreen from './screens/ManagerReturnInventoryScreen';
 import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen';
 import ServerConfirmInventoryScreen from './screens/ServerConfirmInventoryScreen';
