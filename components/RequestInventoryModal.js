@@ -1,8 +1,7 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { CheckBox } from 'react-native-elements'
-import PairItemModal from './PairItemModal'
+import MyCheckBox from './MyCheckBox'
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
 export default class RequestInventoryModal extends React.Component {
@@ -21,11 +20,12 @@ export default class RequestInventoryModal extends React.Component {
 
         var paired = new Map();
         for (item of this.props.pairedItems) {
-            paired.set(item, false);
+            paired.set(item, true);
         }
         this.state = {
             modalVisible: false,
             pickUp: false,
+            checked: false,
             Item: {
                 Paired: paired,
                 Name: this.props.drinkName,
@@ -45,25 +45,21 @@ export default class RequestInventoryModal extends React.Component {
     getPairedItemList(itemList) {
         return itemList.map(item => {
             return (
-                <View style={styles.rowView}>
+                <View key={item} style={styles.rowView}>
                     <Text style={styles.checkBoxTextStyle}> 
                         {item}:
                     </Text>
-                    <CheckBox
-                        checkedIcon={<Image source={require('../assets/checked.png')} />}
-                        uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
+                    <MyCheckBox
+                        checkedImage={require('../assets/checked.png')}
+                        uncheckedImage={require('../assets/unchecked.png')}
                         checked={this.state.Item.Paired.get(item)}
-                        onPress={() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))}
+                        handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
                         />
                 </View>
             );
         });
     }
-     
-    setModalVisible(val) {
-        this.setState({modalVisible: val});
-    }
-
+    
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
@@ -71,70 +67,34 @@ export default class RequestInventoryModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: Number(val)}});
     }
 
-    updatePiaredItem(key, val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        const p = this.state.Item.Paired;
-        p.set(key, val);
-        this.setState({Item: {...this.state.Item, Paired: p}});
-    }
+    updateQuantityByUnitPack(val) {
+        this.setState({
+            Item: {
+                ...this.state.Item, 
+                Quantity: 0,
+                AddedQuantity: Math.max(this.state.Item.AddedQuantity + Number(val), 0),
+            }
+        });
+    }   
 
-    updateQuantity(val) {
+    updateQuantityByQuantity(val) {
         if (Number(val) < 0) {
             val = 0;
         }
         this.setState({
+            Quantity: val,
             Item: {
-                ...this.state.Item, 
-                Pack: 0,
+                ...this.state.Item,
                 Unit: 0,
-                RequestQuantity: Number(val),
-            }
-        });
-    }
-
-    updateUnit(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        } 
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                Unit: Number(val),
-                RequestQuantity: this.state.Item.Pack * Number(val),
-            }
-        });
-    }
-    
-    updatePack(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                Pack: Number(val),
-                RequestQuantity: this.state.Item.Unit * Number(val),
+                Pack: 0,
+                Quantity: Number(val),
+                AddedQuantity: Number(val)
             }
         });
     }
 
     getPercentage() {
         return  Math.round(this.state.Item.CurrentQuantity)/Math.max(this.state.Item.TotalQuantity, 1) * 100;    
-    }
-
-    updateCurrentQuantity(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                AssignedQuantity: Number(val),
-                TotalQuantity: this.state.Item.AddedQuantity + Number(val)
-            }
-        });
     }
 
 	render() {
@@ -257,35 +217,25 @@ export default class RequestInventoryModal extends React.Component {
                                 }}> 
                                 Current Quantity:
                             </Text>
-                            <TextInput
+                            <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateCurrentQuantity(text)}
-                                value={this.state.Item.CurrentQuantity.toString()}
-                                />
+                            >
+                                {this.state.Item.CurrentQuantity.toString()}
+                            </Text>
                         </View>
                         <View style={styles.rowView}>
-                            <TouchableHighlight
+                            <Image
                                 style={{
-                                    ...styles.clickButton,
+                                    ...StyleSheet.absoluteFill,
                                 }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity + 1) }}>
-                                <Text style={styles.textStyle}> + </Text>
-                            </TouchableHighlight>
-                            <TouchableHighlight
-                                style={{
-                                    ...styles.clickButton,
-                                    backgroundColor: "white",
-                                    borderColor: "#D2D2D2",
-                                    borderWidth: 1,
-                                }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.AssignedQuantity - 1) }}>
-                                <Text style={styles.textStyle}> - </Text>
-                            </TouchableHighlight>
+                                source={require('../assets/Seperator.png')}
+                            />
                         </View>
+                        
                         <View style={styles.rowView}>
                             <Text 
                                 style={{
@@ -301,7 +251,7 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateUnit(text)}
+                                onChangeText={text => this.updateItem("Unit", text)}
                                 value={this.state.Item.Unit.toString()}
                                 />   
                         </View>
@@ -320,9 +270,38 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updatePack(text)}
+                                onChangeText={text => this.updateItem("Pack", text)}
                                 value={this.state.Item.Pack.toString()}
                                 />   
+                        </View>
+                        <View style={styles.rowView}>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                }}
+                                onPress={() => {
+                                    if (this.state.Item.Unit == 0 || this.state.Item.Pack == 0) {
+                                        Alert.alert("Please enter non-zero unit and pack!");
+                                    }
+                                    this.updateQuantityByUnitPack(this.state.Item.Unit * this.state.Item.Pack);
+                                }}>
+                                <Text style={styles.textStyle}> + </Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                    backgroundColor: "white",
+                                    borderColor: "#D2D2D2",
+                                    borderWidth: 1,
+                                }}
+                                onPress={() => {
+                                    if (this.state.Item.Unit == 0 || this.state.Item.Pack == 0) {
+                                        Alert.alert("Please enter non-zero unit and pack!");
+                                    }
+                                    this.updateQuantityByUnitPack(-this.state.Item.Unit * this.state.Item.Pack);
+                                }}>
+                                <Text style={styles.textStyle}> - </Text>
+                            </TouchableHighlight>
                         </View>
                         <View style={{
                             ...styles.rowView
@@ -348,7 +327,7 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateQuantity(text)}
+                                onChangeText={text => this.updateQuantityByQuantity(text)}
                                 value={this.state.Item.Quantity.toString()}
                                 />   
                         </View>
@@ -359,7 +338,7 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Request Quantity:
+                                Requested Quantity:
                             </Text>
                             <Text
                                 style={{
@@ -369,6 +348,14 @@ export default class RequestInventoryModal extends React.Component {
                                 }}>
                                 { this.state.Item.RequestQuantity }
                             </Text>
+                        </View>
+                        <View style={styles.rowView}>
+                            <Image
+                                style={{
+                                    ...StyleSheet.absoluteFill,
+                                }}
+                                source={require('../assets/Seperator.png')}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text 
@@ -411,7 +398,11 @@ export default class RequestInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    this.setModalVisible(this.props.onSave());
+                                    if (this.state.Item.RequestQuantity == 0) {
+                                        Alert.alert("Please enter unit-pack pair or quantity to continue!")
+                                    } else {
+                                        this.props.onSave(); 
+                                    } 
                                 }}>
                                 <Text style={styles.textStyle}> Request </Text>
                             </TouchableHighlight>
@@ -501,7 +492,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
-        margin: 15,
         textAlign: "auto",
         flex: 1
     }
