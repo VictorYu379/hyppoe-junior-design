@@ -21,6 +21,8 @@ import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen
 import ServerConfirmInventoryScreen from './screens/ServerConfirmInventoryScreen';
 import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
 import ServerReturnInventoryScreen from './screens/ServerReturnInventoryScreen';
+import StationAlertsScreen from './screens/StationAlertsScreen';
+import IndividualStationInventoryDetailedDataScreen from './screens/IndividualStationInventoryDetailedDataScreen'
 
 const Stack = createStackNavigator();
 
@@ -147,6 +149,24 @@ export default function App() {
 						<Stack.Screen
 							name="Total Inventory Station Overview"
 							component={TotalInventoryStationOverviewScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Station Alerts Screen"
+							component={StationAlertsScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Individual Station Inventory Detailed Data Screen"
+							component={IndividualStationInventoryDetailedDataScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

@@ -295,7 +295,13 @@ export default function RunnerDashBoardScreen({ navigation }) {
 					</View>
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Station Alerts Screen");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -396,7 +402,6 @@ export default function RunnerDashBoardScreen({ navigation }) {
 						</View>
 					</View>
 				</ShadowedBox>
-
 			</View>
 		</View>
 	);
