@@ -1,8 +1,8 @@
 import React from "react"
-import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
+import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity} from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
-import PairItemModal from './PairItemModal'
+import MyCheckBox from './MyCheckBox'
 
 export default class ReturnInventoryModal extends React.Component {
 
@@ -38,10 +38,6 @@ export default class ReturnInventoryModal extends React.Component {
     }
     
 
-    setModalVisible(val) {
-        this.setState({modalVisible: val});
-    }
-
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
@@ -49,72 +45,38 @@ export default class ReturnInventoryModal extends React.Component {
         this.setState({Item: {...this.state.Item, [key]: Number(val)}});
     }
 
-    updateQuantity(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                Pack: 0,
-                Unit: 0,
-                Quantity: Number(val),
-                AddedQuantity: Number(val),
-                TotalQuantity: this.state.Item.CurrentQuantity + Number(val)
-            }
-        });
-    }
-
-    updateUnit(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        } 
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                Unit: Number(val),
-                Quantity: 0,
-                AddedQuantity: this.state.Item.Pack * Number(val),
-                TotalQuantity: this.state.Item.CurrentQuantity + this.state.Item.Pack * Number(val)
-            }
-        });
-    }
-
     onPairItemSave() {
         this.setState({pairItemModalVisible: false});
     }
 
-    updatePack(val) {
+    updateQuantityByUnitPack(val) {
+        this.setState({
+            Item: {
+                ...this.state.Item, 
+                Quantity: 0,
+                AddedQuantity: Math.max(this.state.Item.AddedQuantity + Number(val), 0),
+            }
+        });
+    }   
+
+    updateQuantityByQuantity(val) {
         if (Number(val) < 0) {
             val = 0;
         }
         this.setState({
+            Quantity: val,
             Item: {
-                ...this.state.Item, 
-                Pack: Number(val),
-                Quantity: 0,
-                AddedQuantity: this.state.Item.Unit * Number(val),
-                TotalQuantity: this.state.Item.CurrentQuantity + this.state.Item.Unit * Number(val)
+                ...this.state.Item,
+                Unit: 0,
+                Pack: 0,
+                Quantity: Number(val),
+                AddedQuantity: Number(val)
             }
         });
     }
 
     getPercentage() {
-        return  Math.round((this.state.Item.CurrentQuantity
-            +this.state.Item.AddedQuantity)/Math.max(this.state.Item.TotalQuantity, 1)*100);    
-    }
-
-    updateCurrentQuantity(val) {
-        if (Number(val) < 0) {
-            val = 0;
-        }
-        this.setState({
-            Item: {
-                ...this.state.Item, 
-                CurrentQuantity: Number(val),
-                TotalQuantity: this.state.Item.AddedQuantity + Number(val)
-            }
-        });
+        return  Math.round((this.state.Item.CurrentQuantity)/Math.max(this.state.Item.TotalQuantity, 1)*100);    
     }
 
 	render() {
@@ -161,12 +123,12 @@ export default class ReturnInventoryModal extends React.Component {
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        
-                                    {this.state.Item.CurrentQuantity+this.state.Item.AddedQuantity} of {this.state.Item.TotalQuantity} Qty
+                                    {this.state.Item.CurrentQuantity} of {this.state.Item.TotalQuantity} Qty
                                 </Text>
                                 <Text tyle={{
                                     fontSize: 12
                                 }}>
-                                    ${this.state.Item.Price * this.state.Item.TotalQuantity}
+                                    ${this.state.Item.Price * this.state.Item.CurrentQuantity}
                                 </Text>
                             </View>
                             <View style={{
@@ -220,6 +182,9 @@ export default class ReturnInventoryModal extends React.Component {
                                 Station 1 - Main Tent - Tablet1
                             </Text>
                         </View>
+                        
+                        
+
                         <View style={styles.rowView}>
                             <Image
                                 style={{
@@ -237,34 +202,23 @@ export default class ReturnInventoryModal extends React.Component {
                                 }}> 
                                 Current Quantity:
                             </Text>
-                            <TextInput
+                            <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateCurrentQuantity(text)}
-                                value={this.state.Item.CurrentQuantity.toString()}
-                                />
+                            >
+                                {this.state.Item.CurrentQuantity.toString()}
+                            </Text>
                         </View>
                         <View style={styles.rowView}>
-                            <TouchableHighlight
+                            <Image
                                 style={{
-                                    ...styles.clickButton,
+                                    ...StyleSheet.absoluteFill,
                                 }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity + 1) }}>
-                                <Text style={styles.textStyle}> + </Text>
-                            </TouchableHighlight>
-                            <TouchableHighlight
-                                style={{
-                                    ...styles.clickButton,
-                                    backgroundColor: "white",
-                                    borderColor: "#D2D2D2",
-                                    borderWidth: 1,
-                                }}
-                                onPress={() => { this.updateCurrentQuantity(this.state.Item.CurrentQuantity - 1) }}>
-                                <Text style={styles.textStyle}> - </Text>
-                            </TouchableHighlight>
+                                source={require('../assets/Seperator.png')}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text 
@@ -281,7 +235,7 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateUnit(text)}
+                                onChangeText={text => this.updateItem("Unit", text)}
                                 value={this.state.Item.Unit.toString()}
                                 />   
                         </View>
@@ -300,9 +254,38 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updatePack(text)}
+                                onChangeText={text => this.updateItem("Pack", text)}
                                 value={this.state.Item.Pack.toString()}
                                 />   
+                        </View>
+                        <View style={styles.rowView}>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                }}
+                                onPress={() => {
+                                    if (this.state.Item.Unit == 0 || this.state.Item.Pack == 0) {
+                                        Alert.alert("Please enter non-zero unit and pack!");
+                                    }
+                                    this.updateQuantityByUnitPack(this.state.Item.Unit * this.state.Item.Pack);
+                                }}>
+                                <Text style={styles.textStyle}> + </Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                style={{
+                                    ...styles.clickButton,
+                                    backgroundColor: "white",
+                                    borderColor: "#D2D2D2",
+                                    borderWidth: 1,
+                                }}
+                                onPress={() => {
+                                    if (this.state.Item.Unit == 0 || this.state.Item.Pack == 0) {
+                                        Alert.alert("Please enter non-zero unit and pack!");
+                                    }
+                                    this.updateQuantityByUnitPack(-this.state.Item.Unit * this.state.Item.Pack);
+                                }}>
+                                <Text style={styles.textStyle}> - </Text>
+                            </TouchableHighlight>
                         </View>
                         <View style={{
                             ...styles.rowView
@@ -328,7 +311,7 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}
-                                onChangeText={text => this.updateQuantity(text)}
+                                onChangeText={text => this.updateQuantityByQuantity(text)}
                                 value={this.state.Item.Quantity.toString()}
                                 />   
                         </View>
@@ -347,9 +330,19 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "right",
                                     flex: 1
                                 }}>
-                                { this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity }
+                                { this.state.Item.AddedQuantity }
                             </Text>
                         </View>
+                        <View style={styles.rowView}>
+                            <Image
+                                style={{
+                                    ...StyleSheet.absoluteFill,
+                                }}
+                                source={require('../assets/Seperator.png')}
+                            />
+                        </View>
+
+
                         <View style={styles.rowView}>
                             <Text 
                                 style={{
@@ -368,50 +361,56 @@ export default class ReturnInventoryModal extends React.Component {
                                 source={require('../assets/Seperator.png')}
                             />
                         </View>
-                        <View style={styles.rowView}>
+                        
+
+                        <View style={{
+                            ...styles.rowView,
+                        }}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Damaged:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Damaged}
-                                onPress={() => this.updateItem("Damaged", !this.state.Item.Damaged)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Damaged}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Damaged", !this.state.Item.Damaged)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Unhappy Customer:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Unhappy}
-                                onPress={() => this.updateItem("Unhappy", !this.state.Item.Unhappy)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Unhappy}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Unhappy", !this.state.Item.Unhappy)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Misorder:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Misorder}
-                                onPress={() => this.updateItem("Misorder", !this.state.Item.Misorder)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Misorder}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Misorder", !this.state.Item.Misorder)).bind(this)}
+                            />
                         </View>
                         <View style={styles.rowView}>
                             <Text style={styles.checkBoxTextStyle}> 
                                 Spilled:
                             </Text>
-                            <CheckBox
-                                checkedIcon={<Image source={require('../assets/checked.png')} />}
-                                uncheckedIcon={<Image source={require('../assets/unchecked.png')} />}
-                                checked={this.state.Item.Spilled}
-                                onPress={() => this.updateItem("Spilled", !this.state.Item.Spilled)}
-                                />
+                            <MyCheckBox
+                                checked = {this.state.Item.Spilled}
+                                checkedImage={require('../assets/checked.png')}
+                                uncheckedImage={require('../assets/unchecked.png')}
+                                handlePress={(() => this.updateItem("Spilled", !this.state.Item.Spilled)).bind(this)}
+                            />
                         </View>
+                        
+                        
                         <Text style={styles.sectionTitle}> Other reasons: </Text>
                         <TextInput
                             style={{
@@ -434,7 +433,11 @@ export default class ReturnInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    this.setModalVisible(this.props.onSave());
+                                    // if (this.state.Item.AddedQuantity == 0) {
+                                    //     Alert.alert("Please enter unit-pack pair or quantity to continue!")
+                                    // } else {
+                                        this.props.onSave(); 
+                                    // } 
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>
@@ -524,7 +527,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
-        margin: 15,
         textAlign: "auto",
         flex: 1
     }

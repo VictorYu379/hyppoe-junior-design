@@ -1,22 +1,32 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import ShadowedBox from 'components/ShadowedBox';
+=======
+import { ScrollView } from 'react-native-gesture-handler';
+import ShadowedBox from '../components/ShadowedBox';
+>>>>>>> master
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
-	
+	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:8016, name:'BudLight'},
-		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:8016, name:'Coorslight'},
-		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:8016, name:'Terrapin'},
-		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:8016, name:'Truly'},
+		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
+		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
+		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
+		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
 		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:10000, name:'Cups'}
+		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
 	const iconList = imageList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'25%'}  margin={5}>
+			<ShadowedBox 
+				width={'43%'}  
+				square 
+				margin={5}
+                touchable>
 
 				<View style={{
 					flexDirection: 'row',
@@ -51,7 +61,10 @@ export default function DummyScreen({ navigation }) {
 					}}>
 						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
 						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
-						<Text style={{fontSize: 16, color: 'dodgerblue'}}>{item.currentCapacity*100/item.maxCapacity}%</Text>
+						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
+							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
 						</View>
 						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
@@ -94,8 +107,8 @@ export default function DummyScreen({ navigation }) {
 							<View  style={styles.sectionTitle}>
 							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
 							</View>
-							<Text style={{fontSize: 10, color: 'gray'}}>40,080 of 40,080</Text>
-							<Text style={{fontSize: 10, color: 'gray'}}>Qty $480,960</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationStats.value}</Text>
 						</View>
 
 
@@ -106,8 +119,8 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'center',
 							alignItems: 'flex-start',
 						}}>
-							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      4</Text>
-							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      2</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationStats.server}</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
 						</View>
 					</View>
 
@@ -124,12 +137,19 @@ export default function DummyScreen({ navigation }) {
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'center',
-							marginRight: 20
+							marginRight: 20,
+							color: 'dodgerblue'
 					}}>
-						<Text style={{fontSize: 24, color: 'dodgerblue', fontWeight: 'bold', fontFamily: 'Arial'}}>
-								100%
+						<Text style={[styles.percentageHeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
+							? styles.thirtyText : styles.criticalText]}>
+							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
 						</Text>
-						<Text style={{fontSize: 13, color: 'dodgerblue', fontFamily: 'Arial'}}>
+						<Text style={[styles.HeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
+							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
+							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
+							? styles.thirtyText : styles.criticalText]}>
 								Available Inventory
 						</Text>
 					</View>
@@ -144,15 +164,20 @@ export default function DummyScreen({ navigation }) {
 
 
 			<View style={{
-				flexWrap: 'wrap',
-				flexDirection: 'row',
-				justifyContent: 'center',
-				width: '100%',
-				//height: '60%',
-				paddingLeft: '2%'
+				justifyContent:'center', 
 			}}>
-				{iconList}
+				<ScrollView style={{width:'100%',maxHeight:'100%',marginLeft:20}}>
+					<View style={{
+						flexWrap: 'wrap',
+						flexDirection: 'row',
+						width: '100%',
+						//height: '60%',
+						paddingLeft: '2%',
+					}}>
+						{iconList}
 
+					</View>
+				</ScrollView>
 			</View>
 		</View>
 	);
@@ -185,5 +210,28 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 2
 	},
-	
+	percentageSmallboxTextSize: {
+		fontSize: 16, 
+    },
+
+	maxCapacityText: {
+        color: 'dodgerblue'
+    },
+    sixtyText: {
+        color: 'limegreen'
+    },
+    thirtyText: {
+        color: 'darkkhaki'
+	},
+	criticalText: {
+        color: 'red'
+	},
+	percentageHeaderBoxTextSize: {
+		fontSize: 24,  
+		fontWeight: 'bold', 
+		fontFamily: 'Arial'
+	},
+	HeaderBoxTextSize: {
+		fontSize: 13,  
+	}
 });

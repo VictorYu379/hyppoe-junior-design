@@ -76,7 +76,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 }}>
                 <BottomBlueButton
                     text={"Finish Stations"}
-                    onPress={() => console.log("haha")}
+                    onPress={() => this.props.navigation.navigate("Manager Dashboard")}
                     disable={this.state.inventorySelected !== null} />
                 <InventoryTopBox inventory={"Assign"} />
                 <StationModal

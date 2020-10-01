@@ -1,10 +1,15 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import ConfirmDeliveryModal from '../components/ConfirmDeliveryModal';
+import InputBlankInventoryModal from '../components/InputBlankInventoryModal';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+export default function ManagerAvailableInventoryScreen({ navigation }) {
+	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [imageSelected, setImageSelected] = useState(null);
+	const [drinkSelected, setDrinkSelected] = useState(null);
+	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
@@ -16,13 +21,19 @@ export default function DummyScreen({ navigation }) {
 		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
 		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
-	const iconList = imageList.map(item => {
+	const iconList = imageList.map((item, index) => {
 		return (
 			<ShadowedBox 
+				key={index}
 				width={'43%'}  
 				square 
 				margin={5}
-                touchable>
+                touchable
+				onPress={() => {
+					setImageSelected(item.img);
+					setDrinkSelected(item.name);
+					setAdditionalInventoryModal(true);
+				}}>
 
 				<View style={{
 					flexDirection: 'row',
@@ -74,58 +85,29 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			<InputBlankInventoryModal
+				visible={inputBlkUpdateModalVisible}
+				onSave={() => setInputBlkUpdateModalVisible(false)}
+			>
+			</InputBlankInventoryModal>
+			<ConfirmDeliveryModal
+                sourceImg={imageSelected} 
+                drinkName={drinkSelected}
+                pairedItems={[
+                    "12 ounce cup"
+                ]}
+				visible={additionalInventoryModal} 
+				onSave={() => setAdditionalInventoryModal(false)}/>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+				<View style={styles.rowView}>
 
-
-				<View style={{
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
-				}}>
-
-
-					<View style={{
-							width: '70%',
-							//height: '40%',
-							marginVertical: 15,
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-							margin: 10
+					<Text style={{
+						fontSize: 17, 
+						fontWeight:"bold",
+						margin: 8,
 					}}>
-						<View style={{
-							width: '70%',
-							height: '50%',
-							flexDirection: 'column',
-							justifyContent: 'flex-start',
-							alignItems: 'flex-start',
-						}}>
-							<View  style={styles.sectionTitle}>
-							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
-							</View>
-							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
-							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationStats.value}</Text>
-						</View>
-
-
-						<View style={{
-							width: '70%',
-							height: '50%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'flex-start',
-						}}>
-							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationStats.server}</Text>
-							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
-						</View>
-					</View>
-
-
-
-
-
-
-
+						Available Inventory:
+					</Text>
 
 					<View style={{
 							width: '30%',
@@ -138,27 +120,13 @@ export default function DummyScreen({ navigation }) {
 					}}>
 						<Text style={[styles.percentageHeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
 							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
+							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.25 
 							? styles.thirtyText : styles.criticalText]}>
 							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
 						</Text>
-						<Text style={[styles.HeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
-							? styles.thirtyText : styles.criticalText]}>
-								Available Inventory
-						</Text>
 					</View>
-
-		
-
 				</View>
-
-
-
 			</ShadowedBox>
-
-
 			<View style={{
 				justifyContent:'center', 
 			}}>
@@ -171,7 +139,30 @@ export default function DummyScreen({ navigation }) {
 						paddingLeft: '2%',
 					}}>
 						{iconList}
-
+						<ShadowedBox 
+							width={'43%'} 
+							square 
+							margin={5}
+							touchable
+							onPress={() => setInputBlkUpdateModalVisible(true)}>
+							<View style={{
+								width: '100%',
+								aspectRatio: 1,
+								alignItems: 'center',
+								justifyContent: 'center'
+							}}>
+								<Image
+									source={require('../assets/add.png')}
+									style={{
+										width: '40%',
+										height: '40%',
+										overflow: 'hidden',
+										resizeMode: 'contain',
+										margin: 5
+									}} />
+									<Text>Add Item</Text>
+								</View>
+						</ShadowedBox>
 					</View>
 				</ScrollView>
 			</View>

@@ -69,7 +69,7 @@ export default function ManagerReturnInventoryScreen(props) {
 				drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
 				visible={ReturnInventoryModalVisible} 
 				onSave={() => setReturnInventoryModalVisible(false)} />
-            <InventoryTopBox inventory={"Return"} />
+            <InventoryTopBox inventory={"Return"} touchable onPress={() => props.navigation.navigate("Return Inventory Detailed Data")}/>
             <View style={styles.scrollsContainer}>
                 <View
                     style={{width: '50%'}}

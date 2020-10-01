@@ -1,18 +1,30 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import { ScrollView } from 'react-native-gesture-handler';
+=======
+import ShadowedBox from '../components/ShadowedBox';
+import BottomBlueBUtton from '../components/BottomBlueButton';
+import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
+import InputBlankInventoryModal from '../components/InputBlankInventoryModal';
+>>>>>>> master
 
 
 export default function DummyScreen({ navigation }) {
 	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
+	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
 	const [inputImgSource, setInputImgSource] = useState(false);
 	const [inputDrinkName, SetInputDrinkName] = useState(false);
 
 	const onInvModalSave = function() {
 		setInputInvUpdateModalVisible(false);
+	}
+
+	const onBlkModalSave = function() {
+		setInputBlkUpdateModalVisible(false);
 	}
 
 	const itemList = [
@@ -24,7 +36,7 @@ export default function DummyScreen({ navigation }) {
 		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
 		{image: require('../assets/cup.jpg'), drinkName: "Cup"},
 		{image: require('../assets/table.jpg'), drinkName: "Table"},
-		{image: require('../assets/ice.png'), drinkName: "Ice"}
+		{image: require('../assets/ice.png'), drinkName: "Ice"},
 	]
 
 	const iconList = itemList.map((item, index) => {
@@ -59,6 +71,11 @@ export default function DummyScreen({ navigation }) {
 				visible={inputInvUpdateModalVisible} 
 				onSave={onInvModalSave}>
 			</InputUpdateInventoryModal>
+			<InputBlankInventoryModal
+				visible={inputBlkUpdateModalVisible}
+				onSave={onBlkModalSave}
+			>
+			</InputBlankInventoryModal>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 				<View style={{
 					width: '90%',
@@ -92,36 +109,38 @@ export default function DummyScreen({ navigation }) {
 					</View>
 				</View>
 			</ShadowedBox>
-			<View style={{ height: '70%' }}>
-				<ScrollView contentContainerStyle={{
-					flexGrow: 1,
-					flexWrap: 'wrap',
-					flexDirection: 'row',
-					justifyContent: 'flex-start',
-					width: '100%',
-					paddingLeft: '2%'
-				}}>
-					{iconList}
-					<ShadowedBox width={'30%'} square margin={5}>
-						<View style={{
-							width: '100%',
-							aspectRatio: 1,
-							alignItems: 'center',
-							justifyContent: 'center'
+			<View style={{
+				flexWrap: 'wrap',
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				width: '100%',
+				paddingLeft: '2%'
+			}}>
+				{iconList}
+				<ShadowedBox width={'30%'} square margin={5}>
+					<View style={{
+						width: '100%',
+						aspectRatio: 1,
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+						<TouchableOpacity onPress={() => {
+							setInputBlkUpdateModalVisible(true);
 						}}>
 							<Image
 								source={require('../assets/add.png')}
 								style={{
-									width: '40%',
-									height: '40%',
+									width: 40,
+									height: 40,
 									overflow: 'hidden',
 									resizeMode: 'contain',
-									margin: 5
-								}} />
-								<Text>Add Item</Text>
-							</View>
-					</ShadowedBox>
-				</ScrollView>
+									margin: 15
+								}} 
+							/>
+							<Text> Add Item </Text>
+						</TouchableOpacity>
+					</View>
+				</ShadowedBox>
 			</View>
 		</View>
 	);
