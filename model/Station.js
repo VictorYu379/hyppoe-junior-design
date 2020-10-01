@@ -1,9 +1,12 @@
 class Station {
     id;
-    stabletNum;
+    name;
+    tabletNum;
     runnersNum;
     name;
     details;
+    quantity;
+
 
     constructor(id, name, stabletNum, runnersNum, details) {
         this.id = id;

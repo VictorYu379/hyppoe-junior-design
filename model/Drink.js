@@ -1,6 +1,16 @@
 class Drink {
+    id;
     icon;
     name;
+    quantity;
+    unit;
+    ouncePerUnit;
+    pricePerUnit;
+    pack;
+    costPerPack;
+    pairItems;
+    details;
+    includeInInventoryCount;
     
     constructor(instance) {
         Object.assign(this, instance);
