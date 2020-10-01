@@ -1,0 +1,3 @@
+class TabletSold {
+    drinks; //[Drink,]
+}

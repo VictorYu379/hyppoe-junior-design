@@ -169,7 +169,7 @@ export default class ReturnInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -190,7 +190,7 @@ export default class ReturnInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -217,7 +217,7 @@ export default class ReturnInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -338,7 +338,7 @@ export default class ReturnInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
 
@@ -358,7 +358,7 @@ export default class ReturnInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -371,8 +371,8 @@ export default class ReturnInventoryModal extends React.Component {
                             </Text>
                             <MyCheckBox
                                 checked = {this.state.Item.Damaged}
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 handlePress={(() => this.updateItem("Damaged", !this.state.Item.Damaged)).bind(this)}
                             />
                         </View>
@@ -382,8 +382,8 @@ export default class ReturnInventoryModal extends React.Component {
                             </Text>
                             <MyCheckBox
                                 checked = {this.state.Item.Unhappy}
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 handlePress={(() => this.updateItem("Unhappy", !this.state.Item.Unhappy)).bind(this)}
                             />
                         </View>
@@ -393,8 +393,8 @@ export default class ReturnInventoryModal extends React.Component {
                             </Text>
                             <MyCheckBox
                                 checked = {this.state.Item.Misorder}
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 handlePress={(() => this.updateItem("Misorder", !this.state.Item.Misorder)).bind(this)}
                             />
                         </View>
@@ -404,8 +404,8 @@ export default class ReturnInventoryModal extends React.Component {
                             </Text>
                             <MyCheckBox
                                 checked = {this.state.Item.Spilled}
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 handlePress={(() => this.updateItem("Spilled", !this.state.Item.Spilled)).bind(this)}
                             />
                         </View>

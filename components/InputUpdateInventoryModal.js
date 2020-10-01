@@ -172,7 +172,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -199,7 +199,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -321,7 +321,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
 
@@ -389,8 +389,8 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 Include in inventory count:
                             </Text>
                             <MyCheckbox
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 checked={this.state.includeInInvCount}
                                 handlePress={(() => this.setState({includeInInvCount: !this.state.includeInInvCount})).bind(this)}
                             />

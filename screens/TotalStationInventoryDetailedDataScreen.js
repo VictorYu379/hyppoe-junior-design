@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useState } from 'react';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 
@@ -9,8 +9,8 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 	const [activeSections, setSections] = useState([0]);
 	const sections = ['avail', 'sold'];
 	const images = {
-		dropDownIcon: require('../assets/drop-down-arrow.png'),
-		dropUpIcon: require('../assets/drop-up-arrow.png')
+		dropDownIcon: require('assets/drop-down-arrow.png'),
+		dropUpIcon: require('assets/drop-up-arrow.png')
 	}
 
 	const items = [

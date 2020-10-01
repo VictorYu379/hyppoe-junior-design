@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import ShadowedBox from '../components/ShadowedBox';
-import BottomBlueBUtton from '../components/BottomBlueButton';
-import InputUpdateInventoryModal from '../components/InputUpdateInventoryModal';
-import InputBlankInventoryModal from '../components/InputBlankInventoryModal';
+import ShadowedBox from 'components/ShadowedBox';
+import BottomBlueBUtton from 'components/BottomBlueButton';
+import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
+import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 
 
 export default function DummyScreen({ navigation }) {
@@ -21,15 +21,15 @@ export default function DummyScreen({ navigation }) {
 	}
 
 	const itemList = [
-		{image: require('../assets/event-logo.png'), drinkName: "Bud light"},
-		{image: require('../assets/coorslight.jpg'), drinkName: "Coors light"},
-		{image: require('../assets/SweetWater.png'), drinkName: "Sweet water"},
-		{image: require('../assets/terrapin.png'), drinkName: "Terrapin"},
-		{image: require('../assets/truly.jpeg'), drinkName: "Truly"},
-		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
-		{image: require('../assets/cup.jpg'), drinkName: "Cup"},
-		{image: require('../assets/table.jpg'), drinkName: "Table"},
-		{image: require('../assets/ice.png'), drinkName: "Ice"},
+		{image: require('assets/event-logo.png'), drinkName: "Bud light"},
+		{image: require('assets/coorslight.jpg'), drinkName: "Coors light"},
+		{image: require('assets/SweetWater.png'), drinkName: "Sweet water"},
+		{image: require('assets/terrapin.png'), drinkName: "Terrapin"},
+		{image: require('assets/truly.jpeg'), drinkName: "Truly"},
+		{image: require('assets/smartwater.png'), drinkName: "Smartwater"},
+		{image: require('assets/cup.jpg'), drinkName: "Cup"},
+		{image: require('assets/table.jpg'), drinkName: "Table"},
+		{image: require('assets/ice.png'), drinkName: "Ice"},
 	]
 
 	const iconList = itemList.map((item, index) => {
@@ -121,7 +121,7 @@ export default function DummyScreen({ navigation }) {
 							setInputBlkUpdateModalVisible(true);
 						}}>
 							<Image
-								source={require('../assets/add.png')}
+								source={require('assets/add.png')}
 								style={{
 									width: 40,
 									height: 40,
