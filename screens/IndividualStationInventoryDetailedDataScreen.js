@@ -10,8 +10,8 @@ export default function IndividualStationInventoryDetailedDataScreen({ navigatio
 	const [activeSections, setSections] = useState([0]);
 	const sections = ['avail', 'sold'];
 	const images = {
-		dropDownIcon: require('../assets/drop-down-arrow.png'),
-		dropUpIcon: require('../assets/drop-up-arrow.png')
+		dropDownIcon: require('assets/drop-down-arrow.png'),
+		dropUpIcon: require('assets/drop-up-arrow.png')
 	}
 
 	const items = [

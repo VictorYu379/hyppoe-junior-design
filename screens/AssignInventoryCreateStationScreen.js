@@ -32,15 +32,15 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
 
     render() {
         const imageList = [
-            require('../assets/event-logo.png'),
-            require('../assets/coorslight.jpg'),
-            require('../assets/SweetWater.png'),
-            require('../assets/terrapin.png'),
-            require('../assets/truly.jpeg'),
-            require('../assets/smartwater.png'),
-            require('../assets/cup.jpg'),
-            require('../assets/table.jpg'),
-            require('../assets/ice.png')
+            require('assets/event-logo.png'),
+            require('assets/coorslight.jpg'),
+            require('assets/SweetWater.png'),
+            require('assets/terrapin.png'),
+            require('assets/truly.jpeg'),
+            require('assets/smartwater.png'),
+            require('assets/cup.jpg'),
+            require('assets/table.jpg'),
+            require('assets/ice.png')
         ]
         const iconList = imageList.map((img, index) => {
             return (
@@ -161,7 +161,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                     justifyContent: 'center',
                                 }}>
                                     <Image
-                                        source={require('../assets/add.png')}
+                                        source={require('assets/add.png')}
                                         style={{
                                             width: '60%',
                                             height: '60%',

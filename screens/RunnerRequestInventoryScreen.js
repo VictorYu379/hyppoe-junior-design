@@ -19,15 +19,15 @@ export default function RunnerRequestInventoryScreen(props) {
     const _scrollView1 = React.createRef();
 
     const imageList = [
-		{image: require('../assets/event-logo.png'), drinkName: "Bud light"},
-		{image: require('../assets/coorslight.jpg'), drinkName: "Coors light"},
-		{image: require('../assets/SweetWater.png'), drinkName: "Sweet water"},
-		{image: require('../assets/terrapin.png'), drinkName: "Terrapin"},
-		{image: require('../assets/truly.jpeg'), drinkName: "Truly"},
-		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
-		{image: require('../assets/cup.jpg'), drinkName: "Cup"},
-		{image: require('../assets/table.jpg'), drinkName: "Table"},
-		{image: require('../assets/ice.png'), drinkName: "Ice"}
+		{image: require('assets/event-logo.png'), drinkName: "Bud light"},
+		{image: require('assets/coorslight.jpg'), drinkName: "Coors light"},
+		{image: require('assets/SweetWater.png'), drinkName: "Sweet water"},
+		{image: require('assets/terrapin.png'), drinkName: "Terrapin"},
+		{image: require('assets/truly.jpeg'), drinkName: "Truly"},
+		{image: require('assets/smartwater.png'), drinkName: "Smartwater"},
+		{image: require('assets/cup.jpg'), drinkName: "Cup"},
+		{image: require('assets/table.jpg'), drinkName: "Table"},
+		{image: require('assets/ice.png'), drinkName: "Ice"}
 	]
     const iconList = imageList.map((image, index) => {
         var img = image["image"];

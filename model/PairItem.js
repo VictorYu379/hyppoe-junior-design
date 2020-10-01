@@ -1,6 +1,5 @@
 class PairItem {
-    id;
-    name;
+    pairItemType; //PairItemType
     quantity;
     ounces;
     details;

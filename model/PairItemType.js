@@ -1,0 +1,4 @@
+class PairItemType {
+    id;
+    name;
+}

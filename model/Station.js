@@ -1,12 +1,10 @@
 class Station {
     id;
     name;
-    tabletNum;
-    runnersNum;
-    name;
+    tablets;  // Tablets
+    runners;  // Runners
     details;
-    quantity;
-
+    inventory;  // StationInventory
 
     constructor(id, name, stabletNum, runnersNum, details) {
         this.id = id;

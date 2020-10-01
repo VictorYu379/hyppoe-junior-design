@@ -4,7 +4,9 @@
         "root": ["."],
         "alias": {
           "components": "./components",
-          "screens": "./screens"
+          "screens": "./screens",
+          "assets": "./assets",
+          "model": "./model"
         }
       }]
     ]

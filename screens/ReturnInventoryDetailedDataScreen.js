@@ -12,8 +12,8 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	const stations = ['1', '2']
 	
 	const images = {
-		dropDownIcon: require('../assets/drop-down-arrow.png'),
-		dropUpIcon: require('../assets/drop-up-arrow.png')
+		dropDownIcon: require('assets/drop-down-arrow.png'),
+		dropUpIcon: require('assets/drop-up-arrow.png')
 	}
 
 	const returnList = [

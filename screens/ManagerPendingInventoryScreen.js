@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import ShadowedBox from '../components/ShadowedBox';
-import ConfirmDeliveryModal from '../components/ConfirmDeliveryModal';
+import ShadowedBox from 'components/ShadowedBox';
+import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
 
 export default function DummyScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
@@ -9,7 +9,7 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<ConfirmDeliveryModal
-				sourceImg={require('../assets/event-logo.png')} 
+				sourceImg={require('assets/event-logo.png')} 
 				drinkName={'BudLight'}
 				pairedItems={[
 					"12 ounce cup"
