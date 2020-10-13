@@ -1,3 +1,0 @@
-class TabletSold {
-    drinks; //[Drink,]
-}

@@ -1,4 +1,6 @@
 class PairItemType {
-    id;
-    name;
+    id;     // String
+    name;   // String
+    iconId; // String
+    alert;  // boolean
 }

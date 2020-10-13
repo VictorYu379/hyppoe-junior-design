@@ -1,9 +1,9 @@
 class DrinkType {
-    id;
-    icon;
-    name;
-    unitPerPack;
-    ouncePerUnit;
-    pricePerUnit;
-    costPerPack;
+    id;             // String
+    iconId;         // String
+    name;           // String
+    unitPerPack;    // int
+    ouncePerUnit;   // float
+    pricePerUnit;   // float
+    alert;          // boolean
 }
