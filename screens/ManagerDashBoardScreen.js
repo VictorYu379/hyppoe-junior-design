@@ -1,20 +1,25 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
+import { dbManager } from 'model/DBManager';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
-
+	useEffect(() => {
+		async function getData() {
+			var d = await dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA");
+			console.log(d.data());
+		}
+		getData();
+	});
 
 	return (
 		<View style={styles.container}>
 			<ShadowedBox width={'80%'} height={'19%'} margin={10}>
-
-
 
 				<View style={{
 					marginVertical: 20,

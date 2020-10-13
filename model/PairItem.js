@@ -1,6 +1,6 @@
 class PairItem {
-    pairItemType; //PairItemType
-    quantity;
-    ounces;
-    details;
+    pairItemType;   // PairItemType
+    quantity;       // int
+    ounces;         // float
+    details;        // String
 }
