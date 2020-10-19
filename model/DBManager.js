@@ -19,8 +19,12 @@ class DBManager {
         this.dbh = firebase.firestore();
     }
 
-    async getRunnerWithId(runnerId) {
-        return await this.dbh.collection("Runner").doc(runnerId).get();
+    async getRunners() {
+        return await this.dbh.collection("Runner").get();
+    }
+
+    getRunnerWithId(runnerId) {
+        return this.dbh.collection("Runner").doc(runnerId);
     }
 }
 
