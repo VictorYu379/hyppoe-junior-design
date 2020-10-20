@@ -9,13 +9,12 @@ export default function DummyScreen({ navigation }) {
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
+	// testing Async Storage
+	const [eventId, setEventId] = useState("");
 	useEffect(() => {
-		async function getData() {
-			var d = await dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA");
-			console.log(d.data());
-		}
-		getData();
-	});
+		dbManager.getStorage('@eventId').then((value) => setEventId(value));
+		console.log(eventId);
+	})
 
 	return (
 		<View style={styles.container}>

@@ -1,5 +1,6 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
 var firebaseConfig = {
     apiKey: "AIzaSyCl2oC7L8StE__HClrXmSJYyR1FPs_2GIc",
@@ -19,12 +20,25 @@ class DBManager {
         this.dbh = firebase.firestore();
     }
 
-    async getRunners() {
-        return await this.dbh.collection("Runner").get();
+    getRunners() {
+        return this.dbh.collection("Runner").get();
     }
 
     getRunnerWithId(runnerId) {
         return this.dbh.collection("Runner").doc(runnerId);
+    }
+
+    async setStorage(key, value) {
+        try {
+            await AsyncStorage.setItem(key, value);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    // returns the promise for customized then operations in usage
+    getStorage(key) {
+        return AsyncStorage.getItem(key);
     }
 }
 

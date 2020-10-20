@@ -1,14 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, A } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { dbManager } from 'model/DBManager';
 
+
 export default function DummyScreen({ navigation }) {
 
 	const [name, setName] = useState("");
 
-	const ref = dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA")
+	dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA")
 		.onSnapshot(docSnapshot => {setName(docSnapshot.data()["name"]);});
 
 	useEffect(() => {
@@ -19,6 +20,9 @@ export default function DummyScreen({ navigation }) {
 			})
 		})
 	})
+	
+	// testing Async Storage
+	dbManager.setStorage('@eventId', "8PcZqNLJ34eS2iO6ojRf");
 
 	return (
 		<View style={styles.container}>
