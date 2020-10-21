@@ -7,10 +7,8 @@ import { dbManager } from 'model/DBManager';
 
 export default function DummyScreen({ navigation }) {
 
-	const [name, setName] = useState("");
-
 	dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA")
-		.onSnapshot(docSnapshot => {setName(docSnapshot.data()["name"]);});
+		.onSnapshot(docSnapshot => {console.log(docSnapshot.data()["name"]);});
 
 	useEffect(() => {
 		dbManager.getRunners().then(querySnapshot => {
@@ -21,7 +19,7 @@ export default function DummyScreen({ navigation }) {
 		})
 	})
 	
-	// testing Async Storage
+	// Now a literal string, eventId should be passed in by page before landing at user dashboard
 	dbManager.setStorage('@eventId', "8PcZqNLJ34eS2iO6ojRf");
 
 	return (
@@ -30,9 +28,6 @@ export default function DummyScreen({ navigation }) {
 				onPress={() => navigation.navigate('Total Inventory')}>
 				<Text>Open up App.js to start working on your app!</Text>
 			</TouchableOpacity>
-			<Text>
-				name: {name}
-			</Text>
 			<StatusBar style="auto" />
 		</View>
 	);

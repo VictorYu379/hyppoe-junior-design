@@ -9,7 +9,7 @@ export default function DummyScreen({ navigation }) {
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
-	// testing Async Storage
+	// Reading eventId from global storage
 	const [eventId, setEventId] = useState("");
 	useEffect(() => {
 		dbManager.getStorage('@eventId').then((value) => setEventId(value));
