@@ -7,6 +7,7 @@ import InventoryTopBox from 'components/InventoryTopBox';
 import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
 import update from 'immutability-helper';
+import Inventory from 'model/Inventory';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
     state = {
@@ -26,46 +27,45 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 totalAvailable: '$0'
             },
         },
+        drinks: [],
         stationId: 3
     };
     _scrollView1 = React.createRef();
 
+    componentDidMount() {
+		async function queryDrinks(self) {
+			var inventories = await Inventory.getInventoryInfo();
+			var totalInventory = inventories[0];
+			await totalInventory.getData();
+			self.setState({drinks: totalInventory.drinks});
+		}
+		queryDrinks(this);
+    }
+
     render() {
-        const imageList = [
-            require('assets/event-logo.png'),
-            require('assets/coorslight.jpg'),
-            require('assets/SweetWater.png'),
-            require('assets/terrapin.png'),
-            require('assets/truly.jpeg'),
-            require('assets/smartwater.png'),
-            require('assets/cup.jpg'),
-            require('assets/table.jpg'),
-            require('assets/ice.png')
-        ]
-        const iconList = imageList.map((img, index) => {
+        var drinkList = this.state.drinks.map((img, index) => {
             return (
                 <ShadowedBox
-                    key={index}
-                    width={'80%'}
-                    square
-                    margin={5}
-                    touchable
-                    onPress={() => {
-                        this.setState(update(this.state, {inventorySelected: {$set: index}}));
-                        this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
-                    }}
-                    greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
+                        key={index}
+                        width={'80%'}
+                        square
+                        margin={5}
+                        touchable
+                        onPress={() => {
+                            this.setState({inventorySelected: index});
+                            this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
+                        }}
+                        greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
                     <View
                         style={styles.iconBox}
                         onLayout={(event) => {
                             this.setState({elementHeight: event.nativeEvent.layout.height});
                         }}>
-                        <Image source={img} style={styles.icon} />
+                        <Image source={{uri: img.drinkType.icon}} style={styles.icon} />
                     </View>
                 </ShadowedBox>
             );
-        });
-
+        })
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -107,7 +107,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 alignItems: 'center'
                             }}
                             ref={this._scrollView1}>
-                            {iconList}
+                            {drinkList}
                         </ScrollView>
                     </View>
                     <View style={{width: '50%'}}>
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     scrollsContainer: {
-        height: '80%',
+        height: '68%',
         width: '90%',
         flexDirection: 'row',
         justifyContent: 'center'
