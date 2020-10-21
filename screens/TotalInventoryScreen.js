@@ -1,44 +1,59 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
+import { dbManager } from 'model/DBManager';
 
+export default class TotalInventory extends React.Component {
+	state = {
+        inputInvUpdateModalVisible: false,
+        inputBlkUpdateModalVisible: false,
+        inputImgSource: false,
+        inputDrinkName: false,
+        drinks: []
+    };
 
-export default function DummyScreen({ navigation }) {
-	const [inputInvUpdateModalVisible, setInputInvUpdateModalVisible] = useState(false);
-	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
-	const [inputImgSource, setInputImgSource] = useState(false);
-	const [inputDrinkName, SetInputDrinkName] = useState(false);
-
-	const onInvModalSave = function() {
-		setInputInvUpdateModalVisible(false);
+	onInvModalSave() {
+		this.setState({inputInvUpdateModalVisible: false});
 	}
 
-	const onBlkModalSave = function() {
-		setInputBlkUpdateModalVisible(false);
+	onBlkModalSave() {
+		this.setState({inputBlkUpdateModalVisible: false});
 	}
 
-	const itemList = [
-		{image: require('assets/event-logo.png'), drinkName: "Bud light"},
-		{image: require('assets/coorslight.jpg'), drinkName: "Coors light"},
-		{image: require('assets/SweetWater.png'), drinkName: "Sweet water"},
-		{image: require('assets/terrapin.png'), drinkName: "Terrapin"},
-		{image: require('assets/truly.jpeg'), drinkName: "Truly"},
-		{image: require('assets/smartwater.png'), drinkName: "Smartwater"},
-		{image: require('assets/cup.jpg'), drinkName: "Cup"},
-		{image: require('assets/table.jpg'), drinkName: "Table"},
-		{image: require('assets/ice.png'), drinkName: "Ice"},
-	]
+	componentDidMount() {
+		async function queryDrinks(self) {
+			var totalInventory = await dbManager.getTotalInventory();
+			var drinkTypes = totalInventory.docs.map(doc => {
+				var data = doc.data();
+				return dbManager.getDrinkType(data.drinkType);
+			});
+			var types = await Promise.all(drinkTypes);
+			var elements = types.map(function(type) {
+				var drinkTypeData = type.data();
+				return self.toElement({
+					image: {
+						uri: drinkTypeData.icon
+					},
+					drinkName: drinkTypeData.name
+				});
+			});
+			self.setState({drinks: elements});
+		}
+		queryDrinks(this);
+	}
 
-	const iconList = itemList.map((item, index) => {
+	toElement(item) {
 		return (
-			<ShadowedBox key={index} width={'30%'} square margin={5}>
+			<ShadowedBox width={'30%'} square margin={5}>
 				<TouchableOpacity key={item.drinkName} onPress={() => {
-					setInputInvUpdateModalVisible(true);
-					setInputImgSource(item.image);
-					SetInputDrinkName(item.drinkName);
+					this.setState({
+						inputInvUpdateModalVisible: true,
+						inputImgSource: item.image,
+						inputDrinkName: item.drinkName
+					});
 				}}>
 					<Image 
 						source={item.image}
@@ -50,93 +65,95 @@ export default function DummyScreen({ navigation }) {
 							resizeMode: 'contain'
 						}}/>
 				</TouchableOpacity>
-				</ShadowedBox>
-		);
-	});
-
-	return (
-		<View style={styles.container}>
-			<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
-			<InputUpdateInventoryModal
-				key={inputDrinkName} 
-				sourceImg={inputImgSource} 
-				drinkName={inputDrinkName}
-				visible={inputInvUpdateModalVisible} 
-				onSave={onInvModalSave}>
-			</InputUpdateInventoryModal>
-			<InputBlankInventoryModal
-				visible={inputBlkUpdateModalVisible}
-				onSave={onBlkModalSave}
-			>
-			</InputBlankInventoryModal>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
-				<View style={{
-					width: '90%',
-					height: '40%',
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-				}}>
-					<Text style={{fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'}}>
-						Total Inventory:
-					</Text>
-					<Text style={{fontSize: 30, color: 'red'}}>0%</Text>
-				</View>
-				<View style={{
-					width: '90%',
-					height: '40%',
-				}}>
-					<View style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-					}}>
-						<Text style={styles.normalText}>Total Inventory Value:</Text>
-						<Text style={styles.normalText}>$0.00</Text>
-					</View>
-					<View style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-					}}>
-						<Text style={styles.normalText}>Total Units:</Text>
-						<Text style={styles.normalText}>0 of 0</Text>
-					</View>
-				</View>
 			</ShadowedBox>
-			<View style={{
-				flexWrap: 'wrap',
-				flexDirection: 'row',
-				justifyContent: 'flex-start',
-				width: '100%',
-				paddingLeft: '2%'
-			}}>
-				{iconList}
-				<ShadowedBox width={'30%'} square margin={5}>
+		);
+	};
+
+	render() {
+		return (
+			<View style={styles.container}>
+				<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
+				<InputUpdateInventoryModal
+					key={this.state.inputDrinkName} 
+					sourceImg={this.state.inputImgSource} 
+					drinkName={this.state.inputDrinkName}
+					visible={this.state.inputInvUpdateModalVisible} 
+					onSave={this.onInvModalSave.bind(this)}>
+				</InputUpdateInventoryModal>
+				<InputBlankInventoryModal
+					visible={this.state.inputBlkUpdateModalVisible}
+					onSave={this.onBlkModalSave.bind(this)}
+				>
+				</InputBlankInventoryModal>
+				<ShadowedBox width={'80%'} height={'20%'} margin={10}>
 					<View style={{
-						width: '100%',
-						aspectRatio: 1,
+						width: '90%',
+						height: '40%',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
 						alignItems: 'center',
-						justifyContent: 'center'
 					}}>
-						<TouchableOpacity onPress={() => {
-							setInputBlkUpdateModalVisible(true);
+						<Text style={{fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'}}>
+							Total Inventory:
+						</Text>
+						<Text style={{fontSize: 30, color: 'red'}}>0%</Text>
+					</View>
+					<View style={{
+						width: '90%',
+						height: '40%',
+					}}>
+						<View style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
 						}}>
-							<Image
-								source={require('assets/add.png')}
-								style={{
-									width: 40,
-									height: 40,
-									overflow: 'hidden',
-									resizeMode: 'contain',
-									margin: 15
-								}} 
-							/>
-							<Text> Add Item </Text>
-						</TouchableOpacity>
+							<Text style={styles.normalText}>Total Inventory Value:</Text>
+							<Text style={styles.normalText}>$0.00</Text>
+						</View>
+						<View style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+						}}>
+							<Text style={styles.normalText}>Total Units:</Text>
+							<Text style={styles.normalText}>0 of 0</Text>
+						</View>
 					</View>
 				</ShadowedBox>
+				<View style={{
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					justifyContent: 'flex-start',
+					width: '100%',
+					paddingLeft: '2%'
+				}}>
+					{this.state.drinks}
+					<ShadowedBox width={'30%'} square margin={5}>
+						<View style={{
+							width: '100%',
+							aspectRatio: 1,
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}>
+							<TouchableOpacity onPress={() => {
+								this.setState({inputBlkUpdateModalVisible: true});
+							}}>
+								<Image
+									source={require('assets/add.png')}
+									style={{
+										width: 40,
+										height: 40,
+										overflow: 'hidden',
+										resizeMode: 'contain',
+										margin: 15
+									}} 
+								/>
+								<Text> Add Item </Text>
+							</TouchableOpacity>
+						</View>
+					</ShadowedBox>
+				</View>
 			</View>
-		</View>
-	);
+		);
+	}
 }
 
 const styles = StyleSheet.create({
