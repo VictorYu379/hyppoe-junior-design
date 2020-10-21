@@ -23,13 +23,12 @@ class DBManager {
         return await this.dbh.collection("Runner").doc(runnerId).get();
     }
 
-    getTotalInventory() {
-        return this.dbh.collection("Inventory")
-            .where("name", "==", "Total Inventory")
-            .get()
-            .then(drks => {
-                return drks.docs[0].ref.collection("drinks").get()
-            })
+    getAllInventories() {
+        return this.dbh.collection("Inventory").get();
+    }
+
+    getInventoryHandle(id) {
+        return this.dbh.collection("Inventory").doc(id);
     }
 
     getDrinkType(drinkName) {

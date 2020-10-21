@@ -4,7 +4,7 @@ import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
-import { dbManager } from 'model/DBManager';
+import Inventory from 'model/Inventory';
 
 export default class TotalInventory extends React.Component {
 	state = {
@@ -25,54 +25,42 @@ export default class TotalInventory extends React.Component {
 
 	componentDidMount() {
 		async function queryDrinks(self) {
-			var totalInventory = await dbManager.getTotalInventory();
-			var drinkTypes = totalInventory.docs.map(doc => {
-				var data = doc.data();
-				return dbManager.getDrinkType(data.drinkType);
-			});
-			var types = await Promise.all(drinkTypes);
-			var elements = types.map(function(type) {
-				var drinkTypeData = type.data();
-				return self.toElement({
-					image: {
-						uri: drinkTypeData.icon
-					},
-					drinkName: drinkTypeData.name
-				});
-			});
-			self.setState({drinks: elements});
+			var inventories = await Inventory.getInventoryInfo();
+			var totalInventory = inventories[0];
+			await totalInventory.getData();
+			self.setState({drinks: totalInventory.drinks});
 		}
 		queryDrinks(this);
 	}
 
-	toElement(item) {
-		return (
-			<ShadowedBox width={'30%'} square margin={5}>
-				<TouchableOpacity key={item.drinkName} onPress={() => {
-					this.setState({
-						inputInvUpdateModalVisible: true,
-						inputImgSource: item.image,
-						inputDrinkName: item.drinkName
-					});
-				}}>
-					<Image 
-						source={item.image}
-						style={{
-							width: 100,
-							height: 100,
-							borderRadius: 15,
-							overflow: 'hidden',
-							resizeMode: 'contain'
-						}}/>
-				</TouchableOpacity>
-			</ShadowedBox>
-		);
-	};
-
 	render() {
+		var drinkList = this.state.drinks.map((item, index) => {
+			return (
+				<ShadowedBox key={index} width={'30%'} square margin={5}>
+					<TouchableOpacity key={item.drinkType.name} onPress={() => {
+						this.setState({
+							inputInvUpdateModalVisible: true,
+							inputImgSource: item.drinkType.icon,
+							inputDrinkName: item.drinkType.name
+						});
+					}}>
+						<Image 
+							source={{uri: item.drinkType.icon}}
+							style={{
+								width: 100,
+								height: 100,
+								borderRadius: 15,
+								overflow: 'hidden',
+								resizeMode: 'contain'
+							}}/>
+					</TouchableOpacity>
+				</ShadowedBox>
+			);
+		});
 		return (
 			<View style={styles.container}>
-				<BottomBlueBUtton text={"Complete Inventory and Add Stations"} onPress={() => navigation.navigate('Assign Inventory Create Station')} />
+				<BottomBlueBUtton text={"Complete Inventory and Add Stations"}
+					onPress={() => this.props.navigation.navigate('Assign Inventory Create Station')} />
 				<InputUpdateInventoryModal
 					key={this.state.inputDrinkName} 
 					sourceImg={this.state.inputImgSource} 
@@ -125,7 +113,7 @@ export default class TotalInventory extends React.Component {
 					width: '100%',
 					paddingLeft: '2%'
 				}}>
-					{this.state.drinks}
+					{drinkList}
 					<ShadowedBox width={'30%'} square margin={5}>
 						<View style={{
 							width: '100%',
