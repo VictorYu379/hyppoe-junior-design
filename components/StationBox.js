@@ -18,8 +18,13 @@ export default function StationBox(props) {
             margin={5}>
             {props.inventorySelected !== null &&
                 <TouchableOpacity style={styles.addToStationBox} onPress={props.onAdd}>
-                    <Text style={{fontSize: 20}}>{props.verb}</Text>
-                    <Text style={{fontSize: 20}}>Stations {props.station.id}</Text>
+                    <Text style={{ fontSize: 20 }}>{props.verb}</Text>
+                    <Text
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        style={{ fontSize: 20 }}>
+                        {props.station.name}
+                    </Text>
                 </TouchableOpacity>
             }
             {props.inventorySelected === null &&
@@ -34,7 +39,7 @@ export default function StationBox(props) {
                                 top: '-5%',
                             }}
                             onPress={props.onDelete}>
-                            <Ionicons name="md-close-circle-outline" size={20} color="black"/>
+                            <Ionicons name="md-close-circle-outline" size={20} color="black" />
                         </TouchableOpacity>
                     }
                     <View style={{
@@ -42,10 +47,13 @@ export default function StationBox(props) {
                         alignItems: 'center',
                         justifyContent: 'flex-end'
                     }}>
-                        <Text style={{
-                            fontSize: 20,
-                            fontWeight: '600'
-                        }}>Station {props.station.id}</Text>
+                        <Text
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                            style={{
+                                fontSize: 20,
+                                fontWeight: '600'
+                            }}>{props.station.name}</Text>
                     </View>
                     <View style={{
                         height: '35%',

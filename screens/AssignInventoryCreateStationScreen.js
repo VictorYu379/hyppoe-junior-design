@@ -8,6 +8,8 @@ import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
 import update from 'immutability-helper';
 import Inventory from 'model/Inventory';
+import Event from 'model/Event';
+import Station from '../model/Station';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
     state = {
@@ -19,7 +21,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
             1: {
                 id: 1,
                 percentage: 100,
-                totalAvailable: '$480,960' 
+                totalAvailable: '$480,960'
             },
             2: {
                 id: 2,
@@ -33,35 +35,45 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-		async function queryDrinks(self) {
-			var inventories = await Inventory.getInventoryInfo();
-			var totalInventory = inventories[0];
-			await totalInventory.getData();
-			self.setState({drinks: totalInventory.drinks});
-		}
-		queryDrinks(this);
+        new Event("8PcZqNLJ34eS2iO6ojRf").init()
+            .then(event => {
+                var promises = [];
+                var totalInventory = new Inventory(event.inventory);
+                promises.push(totalInventory.getData());
+                promises.push(Station.getStations(event.stations));
+                return Promise.all(promises);
+            })
+            .then(([totalInventory, stations]) => {
+                this.setState({ drinks: totalInventory.drinks });
+                var newStations = {}
+                stations.map(station => {
+                    newStations[station.id] = station;
+                });
+                this.setState({ stations: newStations });
+                console.log(newStations);
+            });
     }
 
     render() {
-        var drinkList = this.state.drinks.map((img, index) => {
+        var drinkList = this.state.drinks.map((drink, index) => {
             return (
                 <ShadowedBox
-                        key={index}
-                        width={'80%'}
-                        square
-                        margin={5}
-                        touchable
-                        onPress={() => {
-                            this.setState({inventorySelected: index});
-                            this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
-                        }}
-                        greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
+                    key={index}
+                    width={'80%'}
+                    square
+                    margin={5}
+                    touchable
+                    onPress={() => {
+                        this.setState({ inventorySelected: index });
+                        this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
+                    }}
+                    greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
                     <View
                         style={styles.iconBox}
                         onLayout={(event) => {
-                            this.setState({elementHeight: event.nativeEvent.layout.height});
+                            this.setState({ elementHeight: event.nativeEvent.layout.height });
                         }}>
-                        <Image source={{uri: img.drinkType.icon}} style={styles.icon} />
+                        <Image source={{ uri: drink.icon }} style={styles.icon} />
                     </View>
                 </ShadowedBox>
             );
@@ -72,7 +84,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 style={styles.container}
                 touchable
                 onPress={() => {
-                    this.setState({inventorySelected: null});
+                    this.setState({ inventorySelected: null });
                 }}>
                 <BottomBlueButton
                     text={"Finish Stations"}
@@ -91,15 +103,17 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             stations: {
                                 $merge: {
                                     [this.state.stationId]: newStation
-                                }}}));
-                        this.setState({stationId: this.state.stationId + 1});
-                        this.setState({stationModalVisible: false});
+                                }
+                            }
+                        }));
+                        this.setState({ stationId: this.state.stationId + 1 });
+                        this.setState({ stationModalVisible: false });
                     }} />
                 <View style={styles.scrollsContainer}>
                     <View
-                        style={{width: '50%'}}
+                        style={{ width: '50%' }}
                         onLayout={(event) => {
-                            this.setState({scrollViewHeight: event.nativeEvent.layout.height});
+                            this.setState({ scrollViewHeight: event.nativeEvent.layout.height });
                         }}>
                         <ScrollView
                             showsVerticalScrollIndicator={false}
@@ -110,7 +124,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             {drinkList}
                         </ScrollView>
                     </View>
-                    <View style={{width: '50%'}}>
+                    <View style={{ width: '50%' }}>
                         <ScrollView
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={{
@@ -142,7 +156,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                                 }
                                             ));
                                         }}
-                                        />
+                                    />
                                 );
                             })}
                             <ShadowedBox
@@ -151,7 +165,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 margin={5}
                                 touchable
                                 onPress={() => {
-                                    this.setState({stationModalVisible: true});
+                                    this.setState({ stationModalVisible: true });
                                 }}
                                 disabled={this.state.inventorySelected !== null}
                                 greyed={this.state.inventorySelected !== null}>

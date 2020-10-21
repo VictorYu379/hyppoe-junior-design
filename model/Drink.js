@@ -18,4 +18,12 @@ export default class Drink {
         var drinkType = await dbManager.getDrinkType(this.drinkType);
         this.drinkType = new DrinkType(drinkType.data(), this.drinkType);
     }
+
+    get icon() {
+        return this.drinkType.icon;
+    }
+
+    get name() {
+        return this.drinkType.name;
+    }
 }
