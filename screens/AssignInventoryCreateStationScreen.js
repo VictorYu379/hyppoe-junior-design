@@ -35,7 +35,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-        new Event("8PcZqNLJ34eS2iO6ojRf").init()
+        Event.getInstance()
             .then(event => {
                 var promises = [];
                 var totalInventory = new Inventory(event.inventory);

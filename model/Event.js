@@ -1,5 +1,7 @@
 import { dbManager } from 'model/DBManager';
 
+const EVENT_KEY = "@event"
+
 export default class Event {
     id;             // String
     name;           // String
@@ -16,5 +18,15 @@ export default class Event {
         var data = await dbManager.getEvent(this.id);
         Object.assign(this, data.data());
         return this;
+    }
+
+    static async setInstance(id) {
+        dbManager.setStorage(EVENT_KEY, id);
+    }
+
+    static async getInstance() {
+        var eventID = await dbManager.getStorage(EVENT_KEY);
+        var event = new Event(eventID);
+        return await event.init();
     }
 }

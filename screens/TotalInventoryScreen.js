@@ -26,10 +26,7 @@ export default class TotalInventory extends React.Component {
 
 	componentDidMount() {
 		async function queryDrinks(self) {
-			//// will come from global store later
-			var event = new Event("8PcZqNLJ34eS2iO6ojRf");
-			await event.init();
-			////
+			var event = await Event.getInstance();
 			var totalInventory = new Inventory(event.inventory);
 			await totalInventory.getData();
 			self.setState({drinks: totalInventory.drinks});
