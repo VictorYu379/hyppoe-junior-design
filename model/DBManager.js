@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -39,6 +39,18 @@ class DBManager {
     // returns the promise for customized then operations in usage
     getStorage(key) {
         return AsyncStorage.getItem(key);
+    }
+
+    getAllInventories() {
+        return this.dbh.collection("Inventory").get();
+    }
+
+    getInventoryHandle(id) {
+        return this.dbh.collection("Inventory").doc(id);
+    }
+
+    getDrinkType(drinkName) {
+        return this.dbh.collection("DrinkType").doc(drinkName).get()
     }
 }
 
