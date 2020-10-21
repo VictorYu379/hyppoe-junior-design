@@ -15,15 +15,21 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+
+// For the types in this 
 class DBManager {
     constructor() {
         this.dbh = firebase.firestore();
     }
 
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getRunners() {
         return this.dbh.collection("Runner").get();
     }
 
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
     getRunnerWithId(runnerId) {
         return this.dbh.collection("Runner").doc(runnerId);
     }
@@ -41,26 +47,38 @@ class DBManager {
         return AsyncStorage.getItem(key);
     }
 
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
     getInventoryHandle(id) {
         return this.dbh.collection("Inventory").doc(id);
     }
 
+    // return: Promise<DocumentSnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
     getDrinkType(drinkName) {
         return this.dbh.collection("DrinkType").doc(drinkName).get();
     }
 
+    // return: Promise<DocumentSnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
     getStation(id) {
         return this.dbh.collection("Station").doc(id).get();
     }
 
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getDrinksInStation(id) {
         return this.dbh.collection("Station").doc(id).collection("drinks").get();
     }
 
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getPairItemsInStation(id) {
         return this.dbh.collection("Station").doc(id).collection("pairItems").get();
     }
 
+    // return: Promise<DocumentSnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
     getEvent(id) {
         return this.dbh.collection("Event").doc(id).get();
     }
