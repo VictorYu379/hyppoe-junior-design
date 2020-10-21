@@ -22,6 +22,19 @@ class DBManager {
     async getRunnerWithId(runnerId) {
         return await this.dbh.collection("Runner").doc(runnerId).get();
     }
+
+    getTotalInventory() {
+        return this.dbh.collection("Inventory")
+            .where("name", "==", "Total Inventory")
+            .get()
+            .then(drks => {
+                return drks.docs[0].ref.collection("drinks").get()
+            })
+    }
+
+    getDrinkType(drinkName) {
+        return this.dbh.collection("DrinkType").doc(drinkName).get()
+    }
 }
 
 export var dbManager = new DBManager();
