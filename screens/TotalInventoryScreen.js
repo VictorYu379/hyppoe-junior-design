@@ -5,6 +5,7 @@ import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import Inventory from 'model/Inventory';
+import Event from 'model/Event';
 
 export default class TotalInventory extends React.Component {
 	state = {
@@ -25,8 +26,11 @@ export default class TotalInventory extends React.Component {
 
 	componentDidMount() {
 		async function queryDrinks(self) {
-			var inventories = await Inventory.getInventoryInfo();
-			var totalInventory = inventories[0];
+			//// will come from global store later
+			var event = new Event("8PcZqNLJ34eS2iO6ojRf");
+			await event.init();
+			////
+			var totalInventory = new Inventory(event.inventory);
 			await totalInventory.getData();
 			self.setState({drinks: totalInventory.drinks});
 		}
@@ -37,15 +41,15 @@ export default class TotalInventory extends React.Component {
 		var drinkList = this.state.drinks.map((item, index) => {
 			return (
 				<ShadowedBox key={index} width={'30%'} square margin={5}>
-					<TouchableOpacity key={item.drinkType.name} onPress={() => {
+					<TouchableOpacity key={item.name} onPress={() => {
 						this.setState({
 							inputInvUpdateModalVisible: true,
-							inputImgSource: item.drinkType.icon,
-							inputDrinkName: item.drinkType.name
+							inputImgSource: item.icon,
+							inputDrinkName: item.name
 						});
 					}}>
 						<Image 
-							source={{uri: item.drinkType.icon}}
+							source={{uri: item.icon}}
 							style={{
 								width: 100,
 								height: 100,

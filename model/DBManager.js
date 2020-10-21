@@ -23,16 +23,28 @@ class DBManager {
         return await this.dbh.collection("Runner").doc(runnerId).get();
     }
 
-    getAllInventories() {
-        return this.dbh.collection("Inventory").get();
-    }
-
     getInventoryHandle(id) {
         return this.dbh.collection("Inventory").doc(id);
     }
 
     getDrinkType(drinkName) {
-        return this.dbh.collection("DrinkType").doc(drinkName).get()
+        return this.dbh.collection("DrinkType").doc(drinkName).get();
+    }
+
+    getStation(id) {
+        return this.dbh.collection("Station").doc(id).get();
+    }
+
+    getDrinksInStation(id) {
+        return this.dbh.collection("Station").doc(id).collection("drinks").get();
+    }
+
+    getPairItemsInStation(id) {
+        return this.dbh.collection("Station").doc(id).collection("pairItems").get();
+    }
+
+    getEvent(id) {
+        return this.dbh.collection("Event").doc(id).get();
     }
 }
 
