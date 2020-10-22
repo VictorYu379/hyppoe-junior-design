@@ -454,7 +454,6 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     if (this.state.Item.AddedQuantity == 0) {
                                         Alert.alert("Please enter unit-pack pair or quantity to continue!")
                                     } else {
-                                        console.log("100");
                                         var newDrink = new Drink({
                                             ...this.state.drink,
                                             drinkType: {
