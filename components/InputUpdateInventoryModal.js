@@ -39,7 +39,6 @@ export default class InputUpdateInventoryModal extends React.Component {
     }
 
     inputDrink(drink) {
-        console.log(drink);
         this.setState({
             drink,
             Item: {
