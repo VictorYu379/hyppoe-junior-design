@@ -17,18 +17,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
         scrollViewHeight: 0,
         elementHeight: 0,
         stationModalVisible: false,
-        stations: {
-            1: {
-                id: 1,
-                percentage: 100,
-                totalAvailable: '$480,960'
-            },
-            2: {
-                id: 2,
-                percentage: 0,
-                totalAvailable: '$0'
-            },
-        },
+        stations: {},
         drinks: [],
         stationId: 3
     };

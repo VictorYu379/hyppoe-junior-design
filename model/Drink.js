@@ -10,7 +10,15 @@ export default class Drink {
     iconURL;    // String
 
     constructor(drink) {
-        Object.assign(this, drink);
+        if (drink === undefined) {
+            this.drinkType = new DrinkType();
+            this.quantity = 0;
+            this.pack = 0;
+            this.details = "";
+            this.iconURL = "";
+        } else {
+            Object.assign(this, drink);
+        }
     }
 
     async init() {
@@ -25,5 +33,17 @@ export default class Drink {
 
     get name() {
         return this.drinkType.name;
+    }
+
+    get unit() {
+        return this.drinkType.unitPerPack;
+    }
+
+    get ouncePerUnit() {
+        return this.drinkType.ouncePerUnit;
+    }
+
+    get pricePerUnit() {
+        return this.drinkType.pricePerUnit;
     }
 }

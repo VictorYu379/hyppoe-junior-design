@@ -10,14 +10,19 @@ import Event from 'model/Event';
 export default class TotalInventory extends React.Component {
 	state = {
         inputInvUpdateModalVisible: false,
-        inputBlkUpdateModalVisible: false,
-        inputImgSource: false,
-        inputDrinkName: false,
+		inputBlkUpdateModalVisible: false,
+		selectedDrink: 0,
         drinks: []
     };
 
-	onInvModalSave() {
-		this.setState({inputInvUpdateModalVisible: false});
+	onInvModalSave(drink) {
+		console.log(drink);
+		var newDrinks = this.state.drinks;
+		newDrinks[this.state.selectedDrink] = drink;
+		this.setState({
+			inputInvUpdateModalVisible: false,
+			drinks: newDrinks
+		});
 	}
 
 	onBlkModalSave() {
@@ -41,9 +46,9 @@ export default class TotalInventory extends React.Component {
 					<TouchableOpacity key={item.name} onPress={() => {
 						this.setState({
 							inputInvUpdateModalVisible: true,
-							inputImgSource: item.icon,
-							inputDrinkName: item.name
+							selectedDrink: index
 						});
+						this.inputUpdateInventoryModal.inputDrink(this.state.drinks[index]);					
 					}}>
 						<Image 
 							source={{uri: item.icon}}
@@ -63,9 +68,8 @@ export default class TotalInventory extends React.Component {
 				<BottomBlueBUtton text={"Complete Inventory and Add Stations"}
 					onPress={() => this.props.navigation.navigate('Assign Inventory Create Station')} />
 				<InputUpdateInventoryModal
-					key={this.state.inputDrinkName} 
-					sourceImg={this.state.inputImgSource} 
-					drinkName={this.state.inputDrinkName}
+					key={this.state.inputDrinkName}
+					ref={m => {this.inputUpdateInventoryModal = m}}
 					visible={this.state.inputInvUpdateModalVisible} 
 					onSave={this.onInvModalSave.bind(this)}>
 				</InputUpdateInventoryModal>
