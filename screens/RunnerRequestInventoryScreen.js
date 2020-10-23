@@ -68,7 +68,7 @@ export default function RunnerRequestInventoryScreen(props) {
                 pairedItems={[
                     "12 ounce cup"
                 ]}
-				visible={RequestInventoryModalVisible} 
+                visible={RequestInventoryModalVisible} 
 				onSave={() => setRequestInventoryModalVisible(false)}/>
             <InventoryTopBox inventory={"Request"} />
             <View style={styles.scrollsContainer}>
