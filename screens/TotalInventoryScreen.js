@@ -6,23 +6,45 @@ import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import Inventory from 'model/Inventory';
 import Event from 'model/Event';
+import { dbManager } from 'model/DBManager';
+import { event } from 'react-native-reanimated';
+
 
 export default class TotalInventory extends React.Component {
 	state = {
         inputInvUpdateModalVisible: false,
 		inputBlkUpdateModalVisible: false,
 		selectedDrink: 0,
+		inventoryId: null,
         drinks: []
-    };
+	};
+	
+	parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drinks.details,
+            drinkType: drink.drinkType.id,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
+    }
+
 
 	onInvModalSave(drink) {
-		console.log(drink);
+		console.log(drink.drinkType);
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
 		this.setState({
 			inputInvUpdateModalVisible: false,
 			drinks: newDrinks
 		});
+		const drinkObj = this.parseDrink(drink);
+		console.log("INV ID: ", this.state.inventoryId);
+		dbManager.updateDrinkTypeInfo(drink.drinkType)
+					.catch(e => {console.log(e)});
+		dbManager.updateDrinkInventoryByType(this.state.inventoryId, 
+			drinkObj
+		);
 	}
 
 	onBlkModalSave() {
@@ -33,7 +55,9 @@ export default class TotalInventory extends React.Component {
 		async function queryDrinks(self) {
 			var event = await Event.getInstance();
 			var totalInventory = new Inventory(event.inventory);
+			console.log("id: ", totalInventory.id);
 			await totalInventory.getData();
+			self.setState({inventoryId: totalInventory.id});
 			self.setState({drinks: totalInventory.drinks});
 		}
 		queryDrinks(this);

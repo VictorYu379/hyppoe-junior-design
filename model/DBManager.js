@@ -82,6 +82,51 @@ class DBManager {
     getEvent(id) {
         return this.dbh.collection("Event").doc(id).get();
     }
+
+    // return Promise<void>
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkTypeInfo(data) {
+        const typeId = data.id;
+        obj = {
+            icon : data.icon,
+            name : data.name,
+            unitPerPack : data.unitPerPack,
+            ouncePerUnit : data.ouncePerUnit,
+            pricePerUnit : data.pricePerUnit,
+            alert : data.alert,
+            costPerUnit : data.costPerUnit
+        };
+        return this.dbh.collection("DrinkType").doc(typeId).update(obj);
+    }
+
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkInventoryByType(inventoryId, data) {
+        this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").get()
+        .then(snapshot => {
+		    console.log("Drinks: ", snapshot.size);
+		    snapshot.forEach(snap => {
+                console.log(data);
+                if (snap.data().drinkType == data.drinkType) {
+                    console.log("FOUND:", data.drinkType);
+                    this.dbh.collection("Inventory")
+                    .doc(inventoryId)
+                    .collection("drinks")
+                    .doc(snap.id).update(data)
+                    .then(d => {console.log(d)})
+                    .catch(e => {console.log(e)});
+                }
+		       	console.log("Runner ID: ", snap.id, snap.data());
+		    })
+        })
+        .catch(e => {console.log(e)});
+    }
+
+    // return Promise<void>
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkInventoryById(drinkId, obj) {
+        console.log(drinkId, obj);
+        return this.dbh.collection("Inventory").doc("h6Q9BwsaW51bnTv9zUe8").collection("drinks").doc(drinkId).update(obj);
+    }
 }
 
 export var dbManager = new DBManager();

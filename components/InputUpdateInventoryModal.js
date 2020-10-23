@@ -49,9 +49,9 @@ export default class InputUpdateInventoryModal extends React.Component {
                 CurrentQuantity: drink.quantity,
                 TotalQuantity: drink.quantity,
                 AddedQuantity: 0,
-                Ounces: drink.ouncePerUnit,
-                Price: drink.pricePerUnit,
-                Cost: 0,
+                Ounces: drink.drinkType.ouncePerUnit,
+                Price: drink.drinkType.pricePerUnit,
+                Cost: drink.drinkType.costPerUnit,
             }
         });
     }
@@ -458,6 +458,9 @@ export default class InputUpdateInventoryModal extends React.Component {
                                             drinkType: {
                                                 ...this.state.drink.drinkType,
                                                 name: this.state.Item.Name,
+                                                costPerUnit: this.state.Item.Cost,
+                                                ouncePerUnit: this.state.Item.Ounces,
+                                                pricePerUnit: this.state.Item.Price,
                                             },
                                             quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
                                             pack: this.state.Item.Pack,
