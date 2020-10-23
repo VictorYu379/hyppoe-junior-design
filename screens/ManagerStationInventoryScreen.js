@@ -1,8 +1,14 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import ShadowedBox from '../components/ShadowedBox';
 
 export default function DummyScreen({ navigation }) {
+=======
+import ShadowedBox from 'components/ShadowedBox';
+
+export default function ManagerStationInventoryScreen({ navigation }) {
+>>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {number: 1, name: "Big Tent", stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
@@ -12,7 +18,11 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
+<<<<<<< HEAD
 			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
+=======
+			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate("Manager Total Station Inventory Detailed Data")}>
+>>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 				<View style={{...styles.rowView}}>
 
 					<Text style={{
@@ -60,7 +70,11 @@ export default function DummyScreen({ navigation }) {
 			}}>
 
 		
+<<<<<<< HEAD
 				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable>
+=======
+				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory")}>
+>>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 
 				<View style={{
 					flexDirection: 'row',
@@ -151,7 +165,11 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 				
+<<<<<<< HEAD
 				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable>
+=======
+				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory")}>
+>>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 
 					<View style={{
 						flexDirection: 'row',

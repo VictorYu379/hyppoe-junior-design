@@ -15,7 +15,7 @@ export default function HyppoeHeader(props) {
 					position: 'absolute',
 					top: 0
 				}}
-				source={require('../assets/top-image-8.png')}
+				source={require('assets/top-image-8.png')}
 			/>
 			<View 
 				style={{
@@ -26,7 +26,7 @@ export default function HyppoeHeader(props) {
 					paddingHorizontal: 30,
 				}}>
 				<TouchableOpacity onPress={props.navigation.goBack}>
-					<Image source={require('../assets/back-button.png')} />
+					<Image source={require('assets/back-button.png')} />
 				</TouchableOpacity>
 				<View
 					style={{
@@ -37,13 +37,13 @@ export default function HyppoeHeader(props) {
 					}}>
 					<TouchableOpacity>
 						<Image
-							source={require('../assets/menu-button.png')}
+							source={require('assets/menu-button.png')}
 							style={{height: 30, resizeMode: 'contain', margin: 10}}/>
 					</TouchableOpacity>
 					{props.mode === "full" &&
 						<TouchableOpacity>
 							<Image
-								source={require('../assets/pocket.png')}
+								source={require('assets/pocket.png')}
 								style={{height: 30, resizeMode: 'contain', marginLeft: 10}}/>
 						</TouchableOpacity>
 					}

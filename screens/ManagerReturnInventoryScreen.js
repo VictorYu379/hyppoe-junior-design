@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ShadowedBox from '../components/ShadowedBox';
-import StationBox from '../components/StationBox';
-import InventoryTopBox from '../components/InventoryTopBox';
-import ReturnInventoryModal from '../components/ReturnInventoryModal';
+import ShadowedBox from 'components/ShadowedBox';
+import StationBox from 'components/StationBox';
+import InventoryTopBox from 'components/InventoryTopBox';
+import ReturnInventoryModal from 'components/ReturnInventoryModal';
 
 export default function ManagerReturnInventoryScreen(props) {
     var [inventorySelected, setInventorySelected] = React.useState(null);
@@ -24,12 +24,12 @@ export default function ManagerReturnInventoryScreen(props) {
     const _scrollView1 = React.createRef();
 
     const imageList = [
-		{image: require('../assets/event-logo.png'), drinkName: "Bud light"},
-		{image: require('../assets/coorslight.jpg'), drinkName: "Coors light"},
-		{image: require('../assets/SweetWater.png'), drinkName: "Sweet water"},
-		{image: require('../assets/terrapin.png'), drinkName: "Terrapin"},
-		{image: require('../assets/truly.jpeg'), drinkName: "Truly"},
-		{image: require('../assets/smartwater.png'), drinkName: "Smartwater"},
+		{image: require('assets/event-logo.png'), drinkName: "Bud light"},
+		{image: require('assets/coorslight.jpg'), drinkName: "Coors light"},
+		{image: require('assets/SweetWater.png'), drinkName: "Sweet water"},
+		{image: require('assets/terrapin.png'), drinkName: "Terrapin"},
+		{image: require('assets/truly.jpeg'), drinkName: "Truly"},
+		{image: require('assets/smartwater.png'), drinkName: "Smartwater"},
 	]
     const iconList = imageList.map((image, index) => {
         var img = image["image"];
@@ -69,7 +69,7 @@ export default function ManagerReturnInventoryScreen(props) {
 				drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
 				visible={ReturnInventoryModalVisible} 
 				onSave={() => setReturnInventoryModalVisible(false)} />
-            <InventoryTopBox inventory={"Return"} />
+            <InventoryTopBox inventory={"Return"} touchable onPress={() => props.navigation.navigate("Return Inventory Detailed Data")}/>
             <View style={styles.scrollsContainer}>
                 <View
                     style={{width: '50%'}}

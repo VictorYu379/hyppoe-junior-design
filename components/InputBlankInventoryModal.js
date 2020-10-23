@@ -23,7 +23,7 @@ export default class InputBlankInventoryModal extends React.Component {
             pairItemModalVisible: false,
             Item: {
                 Name: "Enter in Item Name...",
-                Image: require("../assets/add-photo.png"),
+                Image: require("assets/add-photo.png"),
                 Unit: 0,
                 Pack: 0,
                 Quantity: 0,
@@ -194,7 +194,7 @@ export default class InputBlankInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -221,7 +221,7 @@ export default class InputBlankInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -344,7 +344,7 @@ export default class InputBlankInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
 
@@ -411,8 +411,8 @@ export default class InputBlankInventoryModal extends React.Component {
                                 Include in inventory count:
                             </Text>
                             <MyCheckbox
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 checked={this.state.includeInInvCount}
                                 handlePress={(() => this.setState({includeInInvCount: !this.state.includeInInvCount})).bind(this)}
                             />

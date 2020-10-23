@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, Toucha
 import { TextInput } from "react-native-gesture-handler"
 import PairItemModal from './PairItemModal'
 import MyCheckbox from './MyCheckBox'
+import Drink from "../model/Drink"
 
 export default class InputUpdateInventoryModal extends React.Component {
 
@@ -14,26 +15,45 @@ export default class InputUpdateInventoryModal extends React.Component {
             headerRight: () => null
         }
     }
-    
-    constructor(props) {
-        super(props)
-        this.state = {
-            includeInInvCount: true,
-            pairItemModalVisible: false,
-            Item: {
-                Name: this.props.drinkName,
-                Unit: 0,
-                Pack: 0,
-                Quantity: 0,
-                CurrentQuantity: 40,
-                TotalQuantity: 100,
-                AddedQuantity: 0,
-                Ounces: 0,
-                Price: 0,
-                Cost: 0,
-                Details: "",
-            }
+
+    state = {
+        includeInInvCount: true,
+        pairItemModalVisible: false,
+        drink: new Drink(),
+        quantity: 0,
+        AddedQuantity: 0,
+        cost: 0,
+        Item: {
+            Name: "",
+            Unit: 0,
+            Pack: 0,
+            Quantity: 0,
+            CurrentQuantity: 0,
+            TotalQuantity: 0,
+            AddedQuantity: 0,
+            Ounces: 0,
+            Price: 0,
+            Cost: 0,
+            Details: ""
         }
+    }
+
+    inputDrink(drink) {
+        this.setState({
+            drink,
+            Item: {
+                Name: drink.name,
+                Unit: drink.unit,
+                Pack: drink.pack,
+                Quantity: 0,
+                CurrentQuantity: drink.quantity,
+                TotalQuantity: drink.quantity,
+                AddedQuantity: 0,
+                Ounces: drink.ouncePerUnit,
+                Price: drink.pricePerUnit,
+                Cost: 0,
+            }
+        });
     }
 
     updateItem(key, val) {
@@ -61,7 +81,6 @@ export default class InputUpdateInventoryModal extends React.Component {
             Quantity: val,
             Item: {
                 ...this.state.Item,
-                Unit: 0,
                 Pack: 0,
                 Quantity: Number(val),
                 AddedQuantity: Number(val)
@@ -103,7 +122,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                         overflow: 'hidden',
                                         resizeMode: 'contain'
                                     }}
-                                    source={this.props.sourceImg}
+                                    source={{ uri: this.state.drink.icon }}
                                 />
                             </View>
                             <View style={{
@@ -172,7 +191,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -199,7 +218,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -321,7 +340,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
 
@@ -389,8 +408,8 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 Include in inventory count:
                             </Text>
                             <MyCheckbox
-                                checkedImage={require('../assets/checked.png')}
-                                uncheckedImage={require('../assets/unchecked.png')}
+                                checkedImage={require('assets/checked.png')}
+                                uncheckedImage={require('assets/unchecked.png')}
                                 checked={this.state.includeInInvCount}
                                 handlePress={(() => this.setState({includeInInvCount: !this.state.includeInInvCount})).bind(this)}
                             />
@@ -434,7 +453,17 @@ export default class InputUpdateInventoryModal extends React.Component {
                                     if (this.state.Item.AddedQuantity == 0) {
                                         Alert.alert("Please enter unit-pack pair or quantity to continue!")
                                     } else {
-                                        this.props.onSave(); 
+                                        var newDrink = new Drink({
+                                            ...this.state.drink,
+                                            drinkType: {
+                                                ...this.state.drink.drinkType,
+                                                name: this.state.Item.Name,
+                                            },
+                                            quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
+                                            pack: this.state.Item.Pack,
+                                            details: this.state.Item.Details
+                                        })
+                                        this.props.onSave(newDrink); 
                                     }   
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 
 export default function InventoryTopBox(props) {
     return (
-        <ShadowedBox width={'80%'} height={'15%'} margin={10}>
+        <ShadowedBox width={'80%'} height={'15%'} margin={10} touchable={props.touchable} onPress={props.onPress}>
             <View style={{
                 height: '60%',
             }}>

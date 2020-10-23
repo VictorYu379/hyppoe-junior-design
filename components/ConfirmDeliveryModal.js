@@ -50,8 +50,8 @@ export default class ConfirmDeliveryModal extends React.Component {
                         {item}:
                     </Text>
                     <MyCheckBox
-                        checkedImage={require('../assets/checked.png')}
-                        uncheckedImage={require('../assets/unchecked.png')}
+                        checkedImage={require('assets/checked.png')}
+                        uncheckedImage={require('assets/unchecked.png')}
                         checked={this.state.Item.Paired.get(item)}
                         handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
                         />
@@ -153,7 +153,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 }}
                                 multiline={true}
                                 onChangeText={text => this.updateItem("Name", text)}
-                                value={this.state.Item.Name}
+                                value={this.props.drinkName}
                                 />
                                 <Text style={{
                                     fontSize: 12
@@ -204,7 +204,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -222,7 +222,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -249,7 +249,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -371,7 +371,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
 
@@ -391,7 +391,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         { this.pairdItemList }
