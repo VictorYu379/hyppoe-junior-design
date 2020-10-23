@@ -3,8 +3,141 @@ import React, { useState } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
 
-export default function DummyScreen({ navigation }) {
+export default function ManagerPendingInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+
+	const runnerTaskList = [
+		{runnerId: 1, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Pending", dropoff:"Pending"},
+		{runnerId: 2, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
+	]
+	const stationTaskList = [
+		{status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
+	]
+
+
+
+
+	const runnerList = runnerTaskList.map(item => {
+		return (
+			<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+
+				<View style={{
+					flexDirection: 'column',
+					margin: 3,
+					height: '90%',
+					width: '90%',
+					alignItems: 'flex-start',
+					//borderWidth: 1,
+				}}>
+
+					<View style={styles.sectionTitle}>
+						<View style={{...styles.rowView, width:'90%'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								Runner {item.runnerId}:
+							</Text>
+							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+								{item.drinkName}
+							</Text>
+						</View>
+					</View>
+						
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Pick Up:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Inventory
+						</Text>
+						<Text style={[item.pickup == "Pending"? styles.pendingText : styles.completedText]}>
+								{item.pickup}
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Drop off:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Station {item.stationId}
+						</Text>
+						<Text style={[item.dropoff == "Pending"? styles.pendingText : styles.completedText]}>
+								{item.dropoff}
+						</Text>
+					</View>
+				</View>
+
+
+			</ShadowedBox>
+		);
+	});
+
+	const stationList = stationTaskList.map(item => {
+		return (
+			<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+
+				<View style={{
+					flexDirection: 'column',
+					margin: 3,
+					height: '90%',
+					width: '90%',
+					alignItems: 'flex-start',
+					//borderWidth: 1,
+				}}>
+
+					<View style={styles.sectionTitle}>
+						<View style={{...styles.rowView, width:'90%'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								Station {item.stationId}:
+							</Text>
+							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+								{item.drinkName}
+							</Text>
+						</View>
+					</View>
+						
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Pick Up:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Inventory
+						</Text>
+						<Text style={[item.pickup == "Pending"? styles.pendingText : styles.completedText]}>
+								{item.pickup}
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Drop off:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Station {item.stationId}
+						</Text>
+						<Text style={[item.dropoff == "Pending"? styles.pendingText : styles.completedText]}>
+								{item.dropoff}
+						</Text>
+					</View>
+				</View>
+
+
+			</ShadowedBox>
+		);
+	});
+
+
 
 	return (
 		<View style={styles.container}>
@@ -49,173 +182,10 @@ export default function DummyScreen({ navigation }) {
 				paddingLeft: '2%',
 				marginLeft:50,
 			}}>
+				{runnerList}
+				{stationList}
 				
-				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
-
-					<View style={{
-						flexDirection: 'column',
-						margin: 3,
-						height: '90%',
-						width: '90%',
-						alignItems: 'flex-start',
-						//borderWidth: 1,
-					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Runner 1:
-								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
-								</Text>
-							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-					</View>
-
-
-				</ShadowedBox>
-
-				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
-
-					<View style={{
-						flexDirection: 'column',
-						margin: 3,
-						height: '90%',
-						width: '90%',
-						alignItems: 'flex-start',
-						//borderWidth: 1,
-					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Runner 2:
-								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
-								</Text>
-							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'green'}}>
-									Completed
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-					</View>
-
-
-				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'30%'} margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
-
-					<View style={{
-						flexDirection: 'column',
-						margin: 3,
-						height: '90%',
-						width: '90%',
-						alignItems: 'flex-start',
-						//borderWidth: 1,
-					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Station 1:
-								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
-								</Text>
-							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'green'}}>
-									Completed
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-					</View>
-
-
-				</ShadowedBox>
+				
 			</View>
 		</View>
 	);

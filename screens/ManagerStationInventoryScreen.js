@@ -1,28 +1,126 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import ShadowedBox from '../components/ShadowedBox';
-
-export default function DummyScreen({ navigation }) {
-=======
+import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 
 export default function ManagerStationInventoryScreen({ navigation }) {
->>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
-	const stationStats = {number: 1, name: "Big Tent", stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
-	const stationStats2 = {number: 2, name: "Main Stg", stationCapacity:40080, currentValue:0, value:0, server:4, runners:2}
+	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+
+	const stationStatsList = [
+		{StationId: 1, name: "Big Tent", stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2},
+		{StationId: 2, name: "Main Stg", stationCapacity:40080, currentValue:0, value:0, server:4, runners:2},
+		{StationId: 2, name: "Main Stg", stationCapacity:40080, currentValue:0, value:0, server:4, runners:2}
+	]
+
+
+
+
+	const stationList = stationStatsList.map(item => {
+		return (
+			<ShadowedBox width={'40%'} height = {100}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory")}>
+
+				<View style={{
+					flexDirection: 'row',
+					margin: 3,
+					height: '40%',
+					alignItems: 'center',
+					// borderWidth: 1,
+				}}>
+
+
+					<View style={{
+						width: '60%',
+						height: '100%',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+									Station {item.StationId}:
+								</Text>
+								<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+									{item.name}
+								</Text>
+							</View>
+						<View style={{
+							width: '60%',
+							height: '100%',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<Text style={[styles.percentageHeaderBoxTextSize, item.currentValue/item.stationCapacity == 1 
+							? styles.maxCapacityText : item.currentValue/item.stationCapacity >= 0.6 
+							? styles.sixtyText : item.currentValue/item.stationCapacity >= 0.3 
+							? styles.thirtyText : styles.criticalText]}>
+								{(item.currentValue*100/item.stationCapacity).toFixed(0)}%
+							</Text>
+							<Text style={[styles.HeaderBoxTextSize, item.currentValue/item.stationCapacity == 1 
+							? styles.maxCapacityText : item.currentValue/item.stationCapacity >= 0.6 
+							? styles.sixtyText : item.currentValue/item.stationCapacity >= 0.3 
+							? styles.thirtyText : styles.criticalText]}>
+								Total Available
+							</Text>
+						</View>
+
+					</View>
+
+				
+					
+
+				</View>
+
+				<View style={{
+					flexDirection: 'row',
+					margin: 3,
+					height: '40%',
+					alignItems: 'center',
+					// borderWidth: 1,
+				}}>
+					<View style={{
+						width: '50%',
+						marginLeft: 10,
+					}}>
+						<Text style={{fontSize: 12, color: 'gray'}}> 
+							{item.currentValue} of
+						</Text>
+						<Text style={{fontSize: 12, color: 'gray'}}> 
+							{item.stationCapacity} Qty
+						</Text>
+					</View>
+
+					<View style={{...styles.sectionTitle,
+						width: '40%',
+					}}>
+						<Text style={{fontSize: 12, color: 'gray'}}> 
+						 {"  "}{item.value}$
+						</Text>
+					</View>
+					
+				</View>
+
+
+			</ShadowedBox>
+		);
+	});
+
+
+
+
 
 
 
 	return (
 		<View style={styles.container}>
-<<<<<<< HEAD
-			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
-=======
 			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate("Manager Total Station Inventory Detailed Data")}>
->>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
 				<View style={{...styles.rowView}}>
 
 					<Text style={{
@@ -59,213 +157,18 @@ export default function ManagerStationInventoryScreen({ navigation }) {
 				</View>
 			</ShadowedBox>
 
-
-			<View style={{
-				flexWrap: 'wrap',
-				flexDirection: 'row',
-				justifyContent: 'center',
-				width: '100%',
-				//height: '60%',
-				paddingLeft: '2%'
-			}}>
-
-		
-<<<<<<< HEAD
-				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable>
-=======
-				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory")}>
->>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
-
+			<ScrollView style={{width:'100%',maxHeight:'100%',marginLeft:20}}>			
 				<View style={{
+					flexWrap: 'wrap',
 					flexDirection: 'row',
-					margin: 3,
-					height: '40%',
-					alignItems: 'center',
-					// borderWidth: 1,
+					justifyContent: 'flex-start',
+					width: '100%',
+					//height: '60%',
+					paddingLeft: '5%',
 				}}>
-
-
-					<View style={{
-						width: '60%',
-						height: '100%',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-							<View style={{
-								width: '100%',
-								height: '50%',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Station {stationStats.number}:
-								</Text>
-								<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									{stationStats.name}
-								</Text>
-							</View>
-						<View style={{
-							width: '60%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-							<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
-							? styles.thirtyText : styles.criticalText]}>
-								{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
-							</Text>
-							<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
-							? styles.thirtyText : styles.criticalText]}>
-								Total Available
-							</Text>
-						</View>
-
-					</View>
-
-				
-					
-
+					{stationList}
 				</View>
-
-				<View style={{
-					flexDirection: 'row',
-					margin: 3,
-					height: '40%',
-					alignItems: 'center',
-					// borderWidth: 1,
-				}}>
-					<View style={{
-						width: '50%',
-						marginLeft: 10,
-					}}>
-						<Text style={{fontSize: 12, color: 'gray'}}> 
-							{stationStats.currentValue} of
-						</Text>
-						<Text style={{fontSize: 12, color: 'gray'}}> 
-							{stationStats.stationCapacity} Qty
-						</Text>
-					</View>
-
-					<View style={{...styles.sectionTitle,
-						width: '40%',
-					}}>
-						<Text style={{fontSize: 12, color: 'gray'}}> 
-						 {"  "}{stationStats.value}$
-						</Text>
-					</View>
-					
-				</View>
-
-
-				</ShadowedBox>
-				
-<<<<<<< HEAD
-				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable>
-=======
-				<ShadowedBox width={'40%'} height={'45%'}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory")}>
->>>>>>> dec800b12543e571d5e1b13f536d2b992b37b9c7
-
-					<View style={{
-						flexDirection: 'row',
-						margin: 3,
-						height: '40%',
-						alignItems: 'center',
-						// borderWidth: 1,
-					}}>
-
-
-						<View style={{
-							width: '60%',
-							height: '100%',
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-								<View style={{
-									width: '100%',
-									height: '50%',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}>
-									<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-										Station {stationStats2.number}:
-									</Text>
-									<Text style={{fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-										{stationStats2.name}
-									</Text>
-								</View>
-							<View style={{
-								width: '60%',
-								height: '100%',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats2.currentValue/stationStats2.stationCapacity == 1 
-								? styles.maxCapacityText : stationStats2.currentValue/stationStats2.stationCapacity >= 0.6 
-								? styles.sixtyText : stationStats2.currentValue/stationStats2.stationCapacity >= 0.3 
-								? styles.thirtyText : styles.criticalText]}>
-									{(stationStats2.currentValue*100/stationStats2.stationCapacity).toFixed(0)}%
-								</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats2.currentValue/stationStats2.stationCapacity == 1 
-								? styles.maxCapacityText : stationStats2.currentValue/stationStats2.stationCapacity >= 0.6 
-								? styles.sixtyText : stationStats2.currentValue/stationStats2.stationCapacity >= 0.3 
-								? styles.thirtyText : styles.criticalText]}>
-									Total Available
-								</Text>
-							</View>
-
-						</View>
-
-
-					
-
-					</View>
-
-					<View style={{
-						flexDirection: 'row',
-						margin: 3,
-						height: '40%',
-						alignItems: 'center',
-						// borderWidth: 1,
-					}}>
-						<View style={{
-							width: '50%',
-							marginLeft: 10,
-						}}>
-							<Text style={{fontSize: 12, color: 'gray'}}> 
-								{stationStats.currentValue} of
-							</Text>
-							<Text style={{fontSize: 12, color: 'gray'}}> 
-								{stationStats.stationCapacity} Qty
-							</Text>
-						</View>
-
-						<View style={{...styles.sectionTitle,
-							width: '40%',
-							alignItems: 'center',
-						}}>
-							<Text style={{fontSize: 12, color: 'gray'}}> 
-								{stationStats2.value}$
-							</Text>
-							
-						</View>
-						
-					</View>
-
-
-				</ShadowedBox>
-
-				
-				
-
-			</View>
+			</ScrollView>	
 		</View>
 	);
 }

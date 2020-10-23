@@ -18,21 +18,19 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'19%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 				<View style={{
 					marginVertical: 20,
 					width: '100%',
 					height: '100%',
 					flexDirection: 'column',
-					justifyContent: 'flex-start',
+					justifyContent: 'center',
 					alignItems: 'flex-start',
 					margin: 10
 				}}>
 
 					<Text style={{ fontSize: 16, fontWeight: "bold", margin: 10, marginTop: 10, marginLeft: 20 }}>Manager DashBoard</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Station 1:Big Tent</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Server Tablet: 1</Text>
 				</View>
 
 
@@ -141,21 +139,21 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Manager Pending Inventory")}>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate('Manager Pending Inventory')}>
 
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
-						height: '100%',
+						height: '40%',
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
 
 
 						<View style={{
-							width: '50%',
+							width: '60%',
 							height: '100%',
-							flexDirection: 'column',
+							flexDirection: 'row',
 							justifyContent: 'center',
 							alignItems: 'center',
 						}}>
@@ -165,45 +163,60 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
 									Pending
 								</Text>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
 									Inventory
 								</Text>
 							</View>
-
 							<View style={{
-								width: '100%',
-								height: '50%',
+								width: '60%',
+								height: '100%',
+								flexDirection: 'column',
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									2400 Qty
+								<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
+									2
 								</Text>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									86400$
+								<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
+									Total Pending
 								</Text>
 							</View>
+
 						</View>
 
 
+
+
+					</View>
+
+					<View style={{
+						flexDirection: 'row',
+						margin: 3,
+						height: '40%',
+						alignItems: 'center',
+						// borderWidth: 1,
+					}}>
 						<View style={{
 							width: '50%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
+							marginLeft: 10,
 						}}>
-							<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
-								2
-							</Text>
-							<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
-								Total Pending
+							
+							<Text style={{ fontSize: 12, color: 'gray' }}>
+								{stationStats.stationCapacity} Qty
 							</Text>
 						</View>
 
+						<View style={{
+							...styles.sectionTitle,
+							width: '40%',
+						}}>
+							<Text style={{ fontSize: 12, color: 'gray' }}>
+								{"  "}{stationStats.value}$
+						</Text>
+						</View>
 
 					</View>
 
