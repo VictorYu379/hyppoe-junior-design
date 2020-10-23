@@ -1,28 +1,39 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import ShadowedBox from '../components/ShadowedBox';
+import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
+import ShadowedBox from 'components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+export default function ManagerAvailableInventoryScreen({ navigation }) {
+	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [imageSelected, setImageSelected] = useState(null);
+	const [drinkSelected, setDrinkSelected] = useState(null);
+	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
-		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
-		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
+		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
+		{img:require('assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
+		{img:require('assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
+		{img:require('assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
+		{img:require('assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
+		{img:require('assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
-	const iconList = imageList.map(item => {
+	const iconList = imageList.map((item, index) => {
 		return (
 			<ShadowedBox 
+				key={index}
 				width={'43%'}  
 				square 
 				margin={5}
-                touchable>
+                touchable
+				onPress={() => {
+					setImageSelected(item.img);
+					setDrinkSelected(item.name);
+					setAdditionalInventoryModal(true);
+				}}>
 
 				<View style={{
 					flexDirection: 'row',
@@ -74,7 +85,20 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
+			<InputBlankInventoryModal
+				visible={inputBlkUpdateModalVisible}
+				onSave={() => setInputBlkUpdateModalVisible(false)}
+			>
+			</InputBlankInventoryModal>
+			<ConfirmDeliveryModal
+                sourceImg={imageSelected} 
+                drinkName={drinkSelected}
+                pairedItems={[
+                    "12 ounce cup"
+                ]}
+				visible={additionalInventoryModal} 
+				onSave={() => setAdditionalInventoryModal(false)}/>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -119,7 +143,8 @@ export default function DummyScreen({ navigation }) {
 							width={'43%'} 
 							square 
 							margin={5}
-							touchable>
+							touchable
+							onPress={() => setInputBlkUpdateModalVisible(true)}>
 							<View style={{
 								width: '100%',
 								aspectRatio: 1,
@@ -127,7 +152,7 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center'
 							}}>
 								<Image
-									source={require('../assets/add.png')}
+									source={require('assets/add.png')}
 									style={{
 										width: '40%',
 										height: '40%',

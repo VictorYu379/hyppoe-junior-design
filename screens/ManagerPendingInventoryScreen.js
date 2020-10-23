@@ -1,14 +1,21 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import ShadowedBox from '../components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
+import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
 
 export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
-
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
 
 	return (
 		<View style={styles.container}>
+			<ConfirmDeliveryModal
+				sourceImg={require('assets/event-logo.png')} 
+				drinkName={'BudLight'}
+				pairedItems={[
+					"12 ounce cup"
+				]}
+				visible={additionalInventoryModal} 
+				onSave={() => setAdditionalInventoryModal(false)}/>
 			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 
@@ -43,7 +50,7 @@ export default function DummyScreen({ navigation }) {
 				marginLeft:50,
 			}}>
 				
-				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable>
+				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
 					<View style={{
 						flexDirection: 'column',
@@ -99,7 +106,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable>
+				<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
 					<View style={{
 						flexDirection: 'column',
@@ -154,7 +161,7 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'30%'} margin={5} touchable>
+				<ShadowedBox width={'40%'} height={'30%'} margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
 					<View style={{
 						flexDirection: 'column',

@@ -50,8 +50,8 @@ export default class RequestInventoryModal extends React.Component {
                         {item}:
                     </Text>
                     <MyCheckBox
-                        checkedImage={require('../assets/checked.png')}
-                        uncheckedImage={require('../assets/unchecked.png')}
+                        checkedImage={require('assets/checked.png')}
+                        uncheckedImage={require('assets/unchecked.png')}
                         checked={this.state.Item.Paired.get(item)}
                         handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
                         />
@@ -196,7 +196,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -214,7 +214,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -241,7 +241,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         
@@ -363,7 +363,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         <View style={styles.rowView}>
@@ -381,7 +381,7 @@ export default class RequestInventoryModal extends React.Component {
                                 style={{
                                     ...StyleSheet.absoluteFill,
                                 }}
-                                source={require('../assets/Seperator.png')}
+                                source={require('assets/Seperator.png')}
                             />
                         </View>
                         { this.pairdItemList }
