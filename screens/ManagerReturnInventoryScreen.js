@@ -1,113 +1,113 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ShadowedBox from 'components/ShadowedBox';
 import StationBox from 'components/StationBox';
+import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import ReturnInventoryModal from 'components/ReturnInventoryModal';
+import Inventory from 'model/Inventory';
+import Event from 'model/Event';
+import Station from '../model/Station';
 
-export default function ManagerReturnInventoryScreen(props) {
-    var [inventorySelected, setInventorySelected] = React.useState(null);
-    var [scrollViewHeight, setScrollViewHeight] = React.useState(0);
-    var [elementHeight, setElementHeight] = React.useState(0);
-    var [ReturnInventoryModalVisible, setReturnInventoryModalVisible] = React.useState(false);
-    const stations = [{
-        id: 1,
-        percentage: 0,
-        totalAvailable: '$1,200' 
-    },
-    {
-        id: 2,
-        percentage: 0,
-        totalAvailable: '$0' 
-    }]
-    const _scrollView1 = React.createRef();
+export default class ManagerReturnInventoryScreen extends React.Component {
+    state = {
+        inventorySelected: null,
+        scrollViewHeight: 0,
+        elementHeight: 0,
+        returnInventoryModalVisible: false,
+        stations: [],
+        drinks: [],
+        stationId: 3
+    };
 
-    const imageList = [
-		{image: require('assets/event-logo.png'), drinkName: "Bud light"},
-		{image: require('assets/coorslight.jpg'), drinkName: "Coors light"},
-		{image: require('assets/SweetWater.png'), drinkName: "Sweet water"},
-		{image: require('assets/terrapin.png'), drinkName: "Terrapin"},
-		{image: require('assets/truly.jpeg'), drinkName: "Truly"},
-		{image: require('assets/smartwater.png'), drinkName: "Smartwater"},
-	]
-    const iconList = imageList.map((image, index) => {
-        var img = image["image"];
+     _scrollView1 = React.createRef();
+
+    componentDidMount() {
+        Event.getInstance()
+            .then(event => {
+                var promises = [];
+                var totalInventory = new Inventory(event.inventory);
+                promises.push(totalInventory.getData());
+                promises.push(Station.getStations(event.stations));
+                return Promise.all(promises);
+            })
+            .then(([totalInventory, stations]) => {
+                this.setState({ drinks: totalInventory.drinks });
+                this.setState({ stations });
+                console.log(newStations);
+            });
+    }
+
+    onDrinkBoxLayout(event) {
+        this.setState({elementHeight: event.nativeEvent.layout.height});
+    }
+
+    onDrinkBoxPressed(index) {
+        this.setState({inventorySelected: index});
+        this._scrollView1.current.scrollTo({
+            y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight
+        });
+    }
+
+    render() {
         return (
-            <ShadowedBox
-                key={index}
-                width={'80%'}
-                square
-                margin={5}
+            <TouchableOpacity
+                activeOpacity={1}
+                style={styles.container}
                 touchable
-                onPress={() => {
-                    setInventorySelected(index);
-                    _scrollView1.current.scrollTo({ y: (elementHeight * 1.1) * index - 0.3 * scrollViewHeight });
-                }}
-                greyed={inventorySelected !== null && inventorySelected !== index}>
-                <View
-                    style={styles.iconBox}
-                    onLayout={(event) => {
-                        setElementHeight(event.nativeEvent.layout.height);
-                    }}>
-                    <Image source={img} style={styles.icon} />
+                onPress={() => this.setState({inventorySelected: null})}>
+                <ReturnInventoryModal
+                    sourceImg={null} 
+                    drinkName={null}
+                    visible={this.state.returnInventoryModalVisible} 
+                    onSave={() => this.setState({returnInventoryModalVisible: false})} />
+                <InventoryTopBox inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
+                <View style={styles.scrollsContainer}>
+                    <View
+                        style={{width: '50%'}}
+                        onLayout={(event) => this.setState({scrollViewHeight: event.nativeEvent.layout.height})}>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                                alignItems: 'center'
+                            }}
+                            ref={this._scrollView1}>
+                            {this.state.drinks.map((drink, index) => {
+                                return (
+                                    <DrinkBox
+                                        key={index}
+                                        onPress={this.onDrinkBoxPressed.bind(this, index)}
+                                        drink={drink}
+                                        greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}
+                                        onLayout={this.onDrinkBoxLayout.bind(this)}/>
+                                );
+                            })}
+                        </ScrollView>
+                    </View>
+                    <View style={{width: '50%'}}>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                                alignItems: 'center'
+                            }}>
+                            {this.state.stations.map((station, index) => {
+                                return (
+                                    <StationBox
+                                        verb={"Return to"}
+                                        key={index}
+                                        station={station}
+                                        inventorySelected={this.state.inventorySelected}
+                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
+                                        onAdd={() => this.setState({returnInventoryModalVisible: true})}
+                                        />
+                                );
+                            })}
+                        </ScrollView>
+                    </View>
                 </View>
-            </ShadowedBox>
+            </TouchableOpacity>
         );
-    });
-
-    return (
-        <TouchableOpacity
-            activeOpacity={1}
-            style={styles.container}
-            touchable
-            onPress={() => {
-                setInventorySelected(null);
-            }}>
-            <ReturnInventoryModal
-				sourceImg={inventorySelected !== null ? imageList[inventorySelected]["image"] : imageList[0]["image"]} 
-				drinkName={inventorySelected !== null ? imageList[inventorySelected]["drinkName"] : imageList[0]["drinkName"]}
-				visible={ReturnInventoryModalVisible} 
-				onSave={() => setReturnInventoryModalVisible(false)} />
-            <InventoryTopBox inventory={"Return"} touchable onPress={() => props.navigation.navigate("Return Inventory Detailed Data")}/>
-            <View style={styles.scrollsContainer}>
-                <View
-                    style={{width: '50%'}}
-                    onLayout={(event) => {
-                        setScrollViewHeight(event.nativeEvent.layout.height);
-                    }}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{
-                            alignItems: 'center'
-                        }}
-                        ref={_scrollView1}>
-                        {iconList}
-                    </ScrollView>
-                </View>
-                <View style={{width: '50%'}}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{
-                            alignItems: 'center'
-                        }}>
-                        {stations.map((station, index) => {
-                            return (
-                                <StationBox
-                                    verb={"Return from"}
-                                    key={index}
-                                    station={station}
-                                    inventorySelected={inventorySelected}
-                                    onPressStats={() => props.navigation.navigate("Total Inventory Station Overview")}
-                                    onAdd={() => setReturnInventoryModalVisible(true)}
-                                    />
-                            );
-                        })}
-                    </ScrollView>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
+    }
 };
 
 const styles = StyleSheet.create({
