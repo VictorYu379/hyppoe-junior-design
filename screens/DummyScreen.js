@@ -3,26 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Event from 'model/Event';
-import { dbManager } from 'model/DBManager';
+import Manager from 'model/Manager';
+import Server from 'model/Server';
+import Runner from 'model/Runner';
 
 
 export default function DummyScreen({ navigation }) {
 
-	dbManager.getRunnerWithId("GsvETNQP29tOOH9iwBRA")
-		.onSnapshot(docSnapshot => {console.log(docSnapshot.data()["name"]);});
-
 	useEffect(() => {
 		Event.setInstance("8PcZqNLJ34eS2iO6ojRf");
-		// dbManager.getRunners().then(querySnapshot => {
-		// 	console.log("Total runners: ", querySnapshot.size);
-		// 	querySnapshot.forEach(docSnapshot => {
-		// 		console.log("Runner ID: ", docSnapshot.id, docSnapshot.data());
-		// 	})
-		// })
+		Manager.setInstance("zkFgVQFflujVuC9kJt9d");
+		Runner.setInstance("GsvETNQP29tOOH9iwBRA");
+		Server.setInstance("g3RRJbReQ5C4ReFV2duM");
 	})
-	
-	// Now a literal string, eventId should be passed in by page before landing at user dashboard
-	// dbManager.setStorage('@eventId', "8PcZqNLJ34eS2iO6ojRf");
 
 	return (
 		<View style={styles.container}>
