@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ShadowedBox from 'components/ShadowedBox';
 import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
@@ -51,32 +50,6 @@ export default class ManagerAssignInventoryScreen extends React.Component {
     }
 
     render() {
-        var iconList = this.state.drinks.map((drink, index) => {
-            return (
-                <ShadowedBox
-                    key={index}
-                    width={'80%'}
-                    square
-                    margin={5}
-                    touchable
-                    onPress={() => {
-                        this.setState({inventorySelected: index});
-                        this._scrollView1.current.scrollTo({
-                            y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight
-                        });
-                    }}
-                    greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
-                    <View
-                        style={styles.iconBox}
-                        onLayout={(event) => {
-                            this.setState({elementHeight: event.nativeEvent.layout.height});
-                        }}>
-                        <Image source={{uri: drink.icon}} style={styles.icon} />
-                    </View>
-                </ShadowedBox>
-            );
-        });
-
         return (
             <TouchableOpacity
                 activeOpacity={1}
