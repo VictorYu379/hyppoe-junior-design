@@ -30,8 +30,20 @@ class DBManager {
 
     // return: DocumentReference
     // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
-    getRunnerWithId(runnerId) {
-        return this.dbh.collection("Runner").doc(runnerId);
+    getRunner(id) {
+        return this.dbh.collection("Runner").doc(id).get();
+    }
+
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
+    getServer(id) {
+        return this.dbh.collection("Server").doc(id).get();
+    }
+
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
+    getManager(id) {
+        return this.dbh.collection("Manager").doc(id).get();
     }
 
     async setStorage(key, value) {
@@ -75,6 +87,18 @@ class DBManager {
     // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getPairItemsInStation(id) {
         return this.dbh.collection("Station").doc(id).collection("pairItems").get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getDrinksInServer(id) {
+        return this.dbh.collection("Server").doc(id).collection("soldDrinks").get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getPairItemsInServer(id) {
+        return this.dbh.collection("Server").doc(id).collection("usedPairItems").get();
     }
 
     // return: Promise<DocumentSnapshot>
