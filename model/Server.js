@@ -1,4 +1,6 @@
 import { dbManager } from 'model/DBManager';
+import Drink from 'model/Drink';
+import PairItem from 'model/PairItem';
 
 const SERVER_KEY = "@server"
 
@@ -21,8 +23,10 @@ export default class Server {
             dbManager.getDrinksInServer(this.id),
             dbManager.getPairItemsInServer(this.id)
         ]);
-        this.soldDrinks = drinks.docs.map(drink => drink.data());
-        this.usedPairItems = pairItems.docs.map(pairItem => pairItem.data());
+        this.soldDrinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.usedPairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(this.soldDrinks.map(drink => drink.init()));
+        await Promise.all(this.usedPairItems.map(pairItem => pairItem.init()));
         return this;
     }
 

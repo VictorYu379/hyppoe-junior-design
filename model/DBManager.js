@@ -67,8 +67,14 @@ class DBManager {
 
     // return: Promise<DocumentSnapshot>
     // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
-    getDrinkType(drinkName) {
-        return this.dbh.collection("DrinkType").doc(drinkName).get();
+    getDrinkType(id) {
+        return this.dbh.collection("DrinkType").doc(id).get();
+    }
+
+    // return: Promise<DocumentSnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
+    getPairItemType(id) {
+        return this.dbh.collection("PairItemType").doc(id).get();
     }
 
     // return: Promise<DocumentSnapshot>
