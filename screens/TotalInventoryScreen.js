@@ -16,7 +16,6 @@ export default class TotalInventory extends React.Component {
     };
 
 	onInvModalSave(drink) {
-		console.log(drink);
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
 		this.setState({
@@ -25,8 +24,13 @@ export default class TotalInventory extends React.Component {
 		});
 	}
 
-	onBlkModalSave() {
-		this.setState({inputBlkUpdateModalVisible: false});
+	onBlkModalSave(drink) {
+		var newDrinks = this.state.drinks;
+		newDrinks.push(drink);
+		this.setState({
+			inputBlkUpdateModalVisible: false,
+			drinks: newDrinks
+		});
 	}
 
 	componentDidMount() {

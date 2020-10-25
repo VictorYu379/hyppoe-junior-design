@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import ShadowedBox from 'components/ShadowedBox';
 import { Ionicons } from '@expo/vector-icons';

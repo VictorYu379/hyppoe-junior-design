@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 import StationBox from 'components/StationBox';
+import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
@@ -43,30 +44,18 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
             });
     }
 
+    onDrinkBoxLayout(event) {
+        this.setState({elementHeight: event.nativeEvent.layout.height});
+    }
+
+    onDrinkBoxPressed(index) {
+        this.setState({inventorySelected: index});
+        this._scrollView1.current.scrollTo({
+            y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight
+        });
+    }
+
     render() {
-        var drinkList = this.state.drinks.map((drink, index) => {
-            return (
-                <ShadowedBox
-                    key={index}
-                    width={'80%'}
-                    square
-                    margin={5}
-                    touchable
-                    onPress={() => {
-                        this.setState({ inventorySelected: index });
-                        this._scrollView1.current.scrollTo({ y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight });
-                    }}
-                    greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}>
-                    <View
-                        style={styles.iconBox}
-                        onLayout={(event) => {
-                            this.setState({ elementHeight: event.nativeEvent.layout.height });
-                        }}>
-                        <Image source={{ uri: drink.icon }} style={styles.icon} />
-                    </View>
-                </ShadowedBox>
-            );
-        })
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -110,7 +99,16 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 alignItems: 'center'
                             }}
                             ref={this._scrollView1}>
-                            {drinkList}
+                            {this.state.drinks.map((drink, index) => {
+                                return (
+                                    <DrinkBox
+                                        key={index}
+                                        onPress={this.onDrinkBoxPressed.bind(this, index)}
+                                        drink={drink}
+                                        greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}
+                                        onLayout={this.onDrinkBoxLayout.bind(this)}/>
+                                );
+                            })}
                         </ScrollView>
                     </View>
                     <View style={{ width: '50%' }}>
