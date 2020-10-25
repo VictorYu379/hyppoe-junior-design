@@ -1,4 +1,8 @@
 import { dbManager } from 'model/DBManager';
+import Drink from 'model/Drink';
+import PairItem from 'model/PairItem';
+
+const STATION_KEY = "@station"
 
 export default class Station {
     id;         // String
@@ -21,8 +25,10 @@ export default class Station {
             dbManager.getDrinksInStation(this.id),
             dbManager.getPairItemsInStation(this.id)
         ]);
-        this.drinks = drinks.docs.map(drink => drink.data());
-        this.pairItems = pairItems.docs.map(pairItem => pairItem.data());
+        this.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(this.drinks.map(drink => drink.init()));
+        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
         return this;
     }
 
@@ -32,5 +38,15 @@ export default class Station {
             return station.init();
         });
         return Promise.all(promises);
+    }
+
+    static async setInstance(id) {
+        dbManager.setStorage(STATION_KEY, id);
+    }
+
+    static async getInstance() {
+        var stationID = await dbManager.getStorage(STATION_KEY);
+        var station = new Station(stationID);
+        return await station.init();
     }
 }
