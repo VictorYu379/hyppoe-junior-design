@@ -1,38 +1,39 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
+import Event from 'model/Event';
+import Job from 'model/Job';
 
 export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 
 	const [activeSections, setSections] = useState([0]);
-	const [activeStations, setStations] = useState([]);
+	const [activeStations, setActiveStations] = useState([]);
+	const [stations, setStations] = useState([]);
+	const [returnList, setReturnList] = useState([]);
+	const [returnListTotal, setReturnListTotal] = useState([]);
 	const sections = ['item', 'station'];
-	const stations = ['1', '2']
 	
 	const images = {
 		dropDownIcon: require('assets/drop-down-arrow.png'),
 		dropUpIcon: require('assets/drop-up-arrow.png')
 	}
 
-	const returnList = [
-		{key: 1, name: '1', items: [
-			{key: 1, name: 'Bud Light', count: 25, price: 12},
-			{key: 2, name: 'Coors', count: 15, price: 12},
-			{key: 3, name: 'Smartwater', count: 30, price: 12},
-		]},
-		{key: 2, name: '2', items: [
-			{key: 1, name: 'Coors', count: 10,  price: 12},
-			{key: 2, name: 'Smartwater', count: 20, price: 12},
-		]},
-	]
-
-	const returnListTotal = [
-		{key: 1, name: 'Bud Light', count: 25, price: 12},
-		{key: 2, name: 'Coors', count: 25, price: 12},
-		{key: 3, name: 'Smartwater', count: 50, price: 12},
-	]
+	useEffect(() => {
+		Event.getInstance()
+			.then(event => Job.getJobs(event.jobs))
+			.then(jobs => {
+				var [returnListTotal, returnList] = Job.getReturnJobsDetailedData(jobs);
+				setReturnList(returnList);
+				setReturnListTotal(returnListTotal);
+				var stationKeys = [];
+				returnList.map(station => {
+					stationKeys.push(station.name);
+				});
+				setStations(stationKeys);
+			})
+	}, [])
 
 	const total = (text) => {
 		if (text == 'item' || text == 'station') {
@@ -153,7 +154,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 					sections={stations}
 					renderHeader={listTitle}
 					renderContent={stationItemList}
-					onChange={setStations}
+					onChange={setActiveStations}
 					underlayColor='#f2f2f2'
 					expandMultiple={true}
 				/>
@@ -174,43 +175,75 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	}
 
 	const listTitle = (text) => {
-		return (
-			<View style={styles.rowView}>
-				<View style={{
-					width: "100%",
-					height: 20,
-					flexDirection: "row",
-					justifyContent: "space-between",
-					alignItems: "center"
-				}}>
-					<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
-					<Image 
-						source={getImage(text)}
-						style={{
-							width: "5%",
-							marginHorizontal: 10,
-							tintColor: "grey"
-						}}
-						resizeMode="contain"
-					/>
-					<Text style={{
-						...styles.rowTitle, 
-						color: '#0070F7', 
-						fontSize: 20,
-						textAlign: "right",
-						flex: 1
-					}}>{percent(total(text), total('item'))}%</Text>
+		if (text == 'item' || text == 'station') {
+			return (
+				<View style={styles.rowView}>
+					<View style={{
+						width: "100%",
+						height: 20,
+						flexDirection: "row",
+						alignItems: "center"
+					}}>
+						<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
+						<Image 
+							source={getImage(text)}
+							style={{
+								width: "5%",
+								marginHorizontal: 10,
+								tintColor: "grey"
+							}}
+							resizeMode="contain"
+						/>
+					</View>
+					<View style={{
+						width: "100%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}>
+						<Text style={styles.rowText}> Qty: {formatNum(total(text))}</Text>
+						<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
+					</View>
 				</View>
-				<View style={{
-					width: "100%",
-					flexDirection: "row",
-					justifyContent: "space-between",
-				}}>
-					<Text style={styles.rowText}> Qty: {formatNum(total(text))}</Text>
-					<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
+			);
+		} else {
+			return (
+				<View style={styles.rowView}>
+					<View style={{
+						width: "100%",
+						height: 20,
+						flexDirection: "row",
+						justifyContent: "space-between",
+						alignItems: "center"
+					}}>
+						<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
+						<Image 
+							source={getImage(text)}
+							style={{
+								width: "5%",
+								marginHorizontal: 10,
+								tintColor: "grey"
+							}}
+							resizeMode="contain"
+						/>
+						<Text style={{
+							...styles.rowTitle, 
+							color: '#0070F7', 
+							fontSize: 20,
+							textAlign: "right",
+							flex: 1
+						}}>{percent(total(text), total('item'))}%</Text>
+					</View>
+					<View style={{
+						width: "100%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}>
+						<Text style={styles.rowText}> Qty: {formatNum(total(text))}</Text>
+						<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
+					</View>
 				</View>
-			</View>
-		);
+			);
+		}
 	}
 
 	return (

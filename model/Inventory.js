@@ -26,4 +26,36 @@ export default class Inventory {
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
         return this;
     }
+
+    static getDetailedData(inventory, stations) {
+        var avail = [];
+        var total = [];
+        inventory.drinks.map(drink => {
+            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+            total[item.key] = drink.quantity;
+            avail[avail.length] = item;
+        });
+        var assign = [];
+        stations.map(station => {
+            var items = [];
+            station.drinks.map(drink => {
+                var index = avail.findIndex(item => item.name == drink.name);
+                total[index] += drink.quantity;
+                if (items[index] == undefined) {
+                    items[index] = {key: index, name: drink.name, assign: drink.quantity, price: drink.pricePerUnit};
+                } else {
+                    items[index].assign += drink.quantity;
+                }
+            });
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    var index = avail.findIndex(item => item.name == drink.name);
+                    total[index] += drink.quantity;
+                    items[index].assign += drink.quantity;
+                })
+            })
+            assign[assign.length] = {stationKey: station.key, assign: items};
+        });
+        return [avail, assign, total];
+    }
 }
