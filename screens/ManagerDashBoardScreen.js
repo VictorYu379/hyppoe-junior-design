@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
-import Event from 'model/Event';
+import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 
 export default function DummyScreen({ navigation }) {
@@ -11,12 +11,13 @@ export default function DummyScreen({ navigation }) {
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
 	// Reading event and manager from global storage
-	const [event, setEvent] = useState();
-	const [manager, setManager] = useState();
+	// const [event, setEvent] = useState();
+	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Event.getInstance().then(event => { setEvent(event); });
-		Manager.getInstance().then(manager => { setManager(manager); });
+		// Event.getInstance().then(event => { setEvent(event); });
+		// Manager.getInstance().then(manager => { setManager(manager); });
+		console.log(globalEvent);
 	}, [])
 	// console.log(event);
 	// console.log(manager);
