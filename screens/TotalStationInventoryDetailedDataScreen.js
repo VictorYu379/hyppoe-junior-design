@@ -1,25 +1,40 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
+import Station from 'model/Station';
+import Event from 'model/Event';
 
 export default function TotalStationInventoryDetailedDataScreen({ navigation }) {
 
 	const [activeSections, setSections] = useState([0]);
+	const [activeStations, setActiveStations] = useState([0]);
+	const [stations, setStations] = useState([]);
+	const [availItems, setAvail] = useState([]);
+	const [soldItems, setSold] = useState([]);
+	const [totalItems, setTotal] = useState([]);
 	const sections = ['avail', 'sold'];
 	const images = {
 		dropDownIcon: require('assets/drop-down-arrow.png'),
 		dropUpIcon: require('assets/drop-up-arrow.png')
 	}
 
-	const items = [
-        {key: 1, name: 'Bud Light', total: 16032, avail: 2004, sold: 14028, price: 12},
-        {key: 2, name: 'Coors', total: 16032, avail: 4008, sold: 12024, price: 12},
-        {key: 3, name: 'Smartwater', total: 8016, avail: 7215, sold: 801, price: 12},
-        {key: 4, name: 'Terrapin', total: 16032, avail: 15632, sold: 400, price: 12},
-        {key: 5, name: 'Truly', total: 16032, avail: 14430, sold: 1602, price: 12},
-	]
+	useEffect(() => {
+		Event.getInstance()
+			.then(event => Station.getStations(event.stations))
+			.then(stas => {
+				var [avail, sold, total] = Station.getTotalDetailedData(stas);
+				setAvail(avail);
+				setSold(sold);
+				setTotal(total);
+				var stationKeys = [];
+				sold.map(station => {
+					stationKeys.push(station.stationKey);
+				});
+				setStations(stationKeys);
+			})
+	}, [])
 
 	const textColor = (text) => {
 		let rate = Number(text);
@@ -32,11 +47,22 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 	}
 
 	const total = (text) => {
-		if (text == null) {
-			text = 'total'
-		}
 		let res = 0;
-		items.map((item) => res += item[text]);
+		if (text == 'total') {
+			totalItems.map(num => res += num);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold);
+				}
+			});
+		}
 		return res;
 	}
 
@@ -48,16 +74,23 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 	}
 
 	const totalValue = (text) => {
-		if (text == null) {
-			text = 'total'
-		}
 		let res = 0;
-		items.map((item) => res += value(item, text));
+		if (text == 'total') {
+			availItems.map(item => res += total[item.key] * item.price);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail * item.price);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold * item.price);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold * item.price);
+				}
+			});
+		}
 		return res;
-	}
-
-	const value = (item, text) => {
-		return item[text] * item.price;
 	}
 
 	const getTitle = (text) => {
@@ -69,21 +102,34 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 	}
 
 	const getImage = (text) => {
-		let index = sections.findIndex(item => item === text)
-		if (activeSections.findIndex(item => item === index) > -1) {
-			return images.dropUpIcon
+		if (text == 'avail' || text == 'sold') {
+			let index = sections.findIndex(item => item === text)
+			if (activeSections.findIndex(item => item === index) > -1) {
+				return images.dropUpIcon
+			} else {
+				return images.dropDownIcon
+			}
 		} else {
-			return images.dropDownIcon
+			let index = stations.findIndex(item => item === text)
+			if (activeStations.findIndex(item => item === index) > -1) {
+				return images.dropUpIcon
+			} else {
+				return images.dropDownIcon
+			}
 		}
+		
 	}
 
 	const formatNum = (num) => {
-		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
 	}
 
-	const itemList = (text) => {
+	const stationItemList = (text) => {
+		let station = soldItems.find(item => item.stationKey == text);
 		return <View style={{marginLeft: 30}}>
-			{items.map(item => {
+			{station.sold.map(item => {
 				return (
 					<View style={styles.rowView}>
 						<View style={{
@@ -94,19 +140,19 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 							<Text style={styles.rowTitle}>{item.name}</Text>
 							<Text style={{
 								...styles.rowTitle, 
-								color: textColor(percent(item[text], item.total)), 
+								color: textColor(percent(item.sold, totalItems[item.key])), 
 								fontSize: 20,
 								textAlign: "right",
 								flex: 1
-							}}>{percent(item[text], item.total)}%</Text>
+							}}>{percent(item.sold, totalItems[item.key])}%</Text>
 						</View>
 						<View style={{
 							width: "100%",
 							flexDirection: "row",
 							justifyContent: "space-between",
 						}}>
-							<Text style={styles.rowText}> Qty: {formatNum(item[text])} of {formatNum(item.total)}</Text>
-							<Text style={styles.rowText}>$ {formatNum(value(item, text))} </Text>
+							<Text style={styles.rowText}> Qty: {formatNum(item.sold)} of {formatNum(totalItems[item.key])}</Text>
+							<Text style={styles.rowText}>$ {formatNum(item.sold * item.price)} </Text>
 						</View>
 					</View>
 				);
@@ -114,44 +160,123 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 		</View>
 	}
 
-	const listTitle = (text) => {
-		return (
-			<View style={styles.rowView}>
-				<View style={{
-					width: "100%",
-					height: 20,
-					flexDirection: "row",
-					justifyContent: "space-between",
-					alignItems: "center"
-				}}>
-					<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
-					<Image 
-						source={getImage(text)}
-						style={{
-							width: "5%",
-							marginHorizontal: 10,
-							tintColor: "grey"
-						}}
-						resizeMode="contain"
-					/>
-					<Text style={{
-						...styles.rowTitle, 
-						color: textColor(percent(total(text), total())), 
-						fontSize: 20,
-						textAlign: "right",
-						flex: 1
-					}}>{percent(total(text), total())}%</Text>
-				</View>
-				<View style={{
-					width: "100%",
-					flexDirection: "row",
-					justifyContent: "space-between",
-				}}>
-					<Text style={styles.rowText}> Qty: {formatNum(total(text))} of {formatNum(total())}</Text>
-					<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
-				</View>
+	const itemList = (text) => {
+		if (text == 'avail') {
+			return <View style={{marginLeft: 30}}>
+				{availItems.map(item => {
+					return (
+						<View style={styles.rowView}>
+							<View style={{
+								width: "100%",
+								flexDirection: "row",
+								justifyContent: "space-between",
+							}}>
+								<Text style={styles.rowTitle}>{item.name}</Text>
+								<Text style={{
+									...styles.rowTitle, 
+									color: textColor(percent(item.avail, totalItems[item.key])), 
+									fontSize: 20,
+									textAlign: "right",
+									flex: 1
+								}}>{percent(item.avail, totalItems[item.key])}%</Text>
+							</View>
+							<View style={{
+								width: "100%",
+								flexDirection: "row",
+								justifyContent: "space-between",
+							}}>
+								<Text style={styles.rowText}> Qty: {formatNum(item.avail)} of {formatNum(totalItems[item.key])}</Text>
+								<Text style={styles.rowText}>$ {formatNum(item.avail * item.price)} </Text>
+							</View>
+						</View>
+					);
+				})}
 			</View>
-		);
+		} else {
+			return <View style={{marginLeft: 30}}>
+				<Accordion
+					activeSections={activeStations}
+					sections={stations}
+					renderHeader={listTitle}
+					renderContent={stationItemList}
+					onChange={setActiveStations}
+					underlayColor='#f2f2f2'
+					expandMultiple={true}
+				/>
+			</View>
+		}
+	}
+
+	const listTitle = (text) => {
+		if (text == 'avail' || text == 'sold') {
+			return (
+				<View style={styles.rowView}>
+					<View style={{
+						width: "100%",
+						height: 20,
+						flexDirection: "row",
+						alignItems: "center"
+					}}>
+						<Text style={styles.rowTitle}>{getTitle(text)}:</Text>
+						<Image 
+							source={getImage(text)}
+							style={{
+								width: "5%",
+								marginHorizontal: 10,
+								tintColor: "grey"
+							}}
+							resizeMode="contain"
+						/>
+					</View>
+					<View style={{
+						width: "100%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}>
+						<Text style={styles.rowText}> Qty: {formatNum(total(text))} of {formatNum(total('total'))}</Text>
+						<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
+					</View>
+				</View>
+			);
+		} else {
+			return (
+				<View style={styles.rowView}>
+					<View style={{
+						width: "100%",
+						height: 20,
+						flexDirection: "row",
+						justifyContent: "space-between",
+						alignItems: "center"
+					}}>
+						<Text style={styles.rowTitle}>Station {text}:</Text>
+						<Image 
+							source={getImage(text)}
+							style={{
+								width: "5%",
+								marginHorizontal: 10,
+								tintColor: "grey"
+							}}
+							resizeMode="contain"
+						/>
+						<Text style={{
+							...styles.rowTitle, 
+							color: textColor(percent(total(text), total('sold'))), 
+							fontSize: 20,
+							textAlign: "right",
+							flex: 1
+						}}>{percent(total(text), total('sold'))}%</Text>
+					</View>
+					<View style={{
+						width: "100%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}>
+						<Text style={styles.rowText}> Qty: {formatNum(total(text))} of {formatNum(total('sold'))}</Text>
+						<Text style={styles.rowText}>$ {formatNum(totalValue(text))} </Text>
+					</View>
+				</View>
+			);
+		}		
 	}
 
 	return (
@@ -165,7 +290,7 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
                     justifyContent: "space-between",
 					alignItems: "flex-start",
 				}}>
-					<Text style={styles.sectionTitle}>Stations Inventory:</Text>
+					<Text style={styles.sectionTitle}>Station Inventory:</Text>
 					<View style={{
 						flexDirection: "column",
 						justifyContent: "flex-end",

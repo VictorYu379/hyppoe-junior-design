@@ -34,7 +34,6 @@ export default class ManagerReturnInventoryScreen extends React.Component {
             .then(([totalInventory, stations]) => {
                 this.setState({ drinks: totalInventory.drinks });
                 this.setState({ stations });
-                console.log(newStations);
             });
     }
 

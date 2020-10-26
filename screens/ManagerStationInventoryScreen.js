@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
+import Station from 'model/Station';
 
 export default function ManagerStationInventoryScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
@@ -8,7 +9,9 @@ export default function ManagerStationInventoryScreen({ navigation }) {
 	const stationStats = {number: 1, name: "Big Tent", stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 	const stationStats2 = {number: 2, name: "Main Stg", stationCapacity:40080, currentValue:0, value:0, server:4, runners:2}
 
-
+	// TODO: When clicking on the box and navigate to Individual Station Inventory, 
+	// the stationID of the directed station need to be set as below.
+	Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
 
 	return (
 		<View style={styles.container}>

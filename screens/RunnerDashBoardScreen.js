@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import Runner from 'model/Runner';
+import Station from 'model/Station';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
@@ -12,7 +13,11 @@ export default function DummyScreen({ navigation }) {
 	const [runner, setRunner] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Runner.getInstance().then(runner => { setRunner(runner); });
+		Runner.getInstance().then(runner => { 
+			setRunner(runner);
+			Station.setInstance(runner.stationId);
+		});
+		// Station.getInstance().then(station => console.log(station.name));
 	}, [])
 	// console.log(runner);
 

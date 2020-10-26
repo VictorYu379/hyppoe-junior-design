@@ -83,6 +83,21 @@ class DBManager {
         return this.dbh.collection("Station").doc(id).get();
     }
 
+    // return: Promise<DocumentSnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
+    getJob(id) {
+        return this.dbh.collection("Jobs").doc(id).get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getReturnJobs(eventId) {
+        return this.dbh.collection("Jobs")
+            .where('eventId', '==', eventId)
+            .where('type', '==', 'Return')
+            .get();
+    }
+
     // return: Promise<QuerySnapshot>
     // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getDrinksInStation(id) {
@@ -103,8 +118,20 @@ class DBManager {
 
     // return: Promise<QuerySnapshot>
     // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getPairItemsInJob(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("usedPairItems").get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getDrinksInJob(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("drinks").get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
     getPairItemsInServer(id) {
-        return this.dbh.collection("Server").doc(id).collection("usedPairItems").get();
+        return this.dbh.collection("Server").doc(id).collection("pairItems").get();
     }
 
     // return: Promise<DocumentSnapshot>
