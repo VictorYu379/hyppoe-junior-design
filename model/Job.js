@@ -30,6 +30,7 @@ export default class Job {
         return this;
     }
 
+    // Can be deprecated as now we have direct access to globalJobs of an Event
     static getJobs(ids) {
         var promises = ids.map(id => {
             var job = new Job(id);
@@ -38,13 +39,18 @@ export default class Job {
         return Promise.all(promises);
     }
 
-    static getReturnJobsDetailedData(jobs) {
-        console.log("reached");
+    static setJobs(ids) {
+        ids.map(id => {
+            dbManager.getJobHandle(id).onSnapshot(update);
+        })
+    }
+
+    static getReturnJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];
+        var jobs = getGlobalJobs();
         jobs.map(job => {
             if (job.type == 'Return' && job.status == 'Complete') {
-                console.log(job);
                 job.drinks.map(drink => {
                     var index = returnListTotal.findIndex(item => item.name == drink.name);
                     if (index == -1) {
@@ -72,3 +78,27 @@ export default class Job {
         return [returnListTotal, returnList];
     }
 }
+
+async function update(data) {
+    var job = new Job(data.id);
+    Object.assign(job, data.data());
+    var [drinks, pairItems] = await Promise.all([
+        dbManager.getDrinksInJob(job.id),
+        dbManager.getPairItemsInJob(job.id)
+    ]);
+    job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+    job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+    await Promise.all(job.drinks.map(drink => drink.init()));
+    await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
+    globalJobs[job.id] = job;
+}
+
+export function getGlobalJobs() {
+    var res = [];
+    for (var id in globalJobs) {
+        res.push(globalJobs[id]);
+    }
+    return res;
+}
+
+export var globalJobs = {};

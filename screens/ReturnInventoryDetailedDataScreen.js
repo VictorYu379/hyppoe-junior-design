@@ -4,7 +4,7 @@ import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import Event from 'model/Event';
-import Job from 'model/Job';
+import Job, { getGlobalJobs } from 'model/Job';
 
 export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 
@@ -21,18 +21,14 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	}
 
 	useEffect(() => {
-		Event.getInstance()
-			.then(event => Job.getJobs(event.jobs))
-			.then(jobs => {
-				var [returnListTotal, returnList] = Job.getReturnJobsDetailedData(jobs);
-				setReturnList(returnList);
-				setReturnListTotal(returnListTotal);
-				var stationKeys = [];
-				returnList.map(station => {
-					stationKeys.push(station.name);
-				});
-				setStations(stationKeys);
-			})
+		var [returnListTotal, returnList] = Job.getReturnJobsDetailedData();
+		setReturnList(returnList);
+		setReturnListTotal(returnListTotal);
+		var stationKeys = [];
+		returnList.map(station => {
+			stationKeys.push(station.name);
+		});
+		setStations(stationKeys);
 	}, [])
 
 	const total = (text) => {
