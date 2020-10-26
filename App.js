@@ -64,7 +64,7 @@ export default function App() {
 					<Stack.Navigator>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={ManagerDashBoardScreen}
+							component={ReturnInventoryDetailedDataScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
@@ -89,6 +89,22 @@ export default function App() {
 						<Stack.Screen
 							name="Manager Pending Inventory"
 							component={ManagerPendingInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Manager Assign Inventory"
+							component={ManagerAssignInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Manager Return Inventory"
+							component={ManagerReturnInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
