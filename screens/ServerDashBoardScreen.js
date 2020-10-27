@@ -1,13 +1,25 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
+import Server from 'model/Server';
+import Station from 'model/Station';
 
 export default function ServerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
-
+	// Reading server from global storage
+	const [server, setServer] = useState();
+	// The second argument [] is to make useEffect run only once (like componentDidMount)
+	useEffect(() => {
+		Server.getInstance().then(server => { 
+			setServer(server);
+			Station.setInstance(server.stationId);
+		});
+		// Station.getInstance().then(station => console.log(station.name));
+	}, [])
+	// console.log(server);
 
 	return (
 		<View style={styles.container}>

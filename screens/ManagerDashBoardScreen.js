@@ -2,19 +2,109 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
-import { dbManager } from 'model/DBManager';
+import Accordion from 'react-native-collapsible/Accordion';
+import Station from 'model/Station';
+import Event from 'model/Event';
+import Manager from 'model/Manager';
 
-export default function DummyScreen({ navigation }) {
+export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
+	const [activeSections, setSections] = useState([0]);
+	const [activeStations, setActiveStations] = useState([0]);
+	const [stations, setStations] = useState([]);
+	const [availItems, setAvail] = useState([]);
+	const [soldItems, setSold] = useState([]);
+	const [totalItems, setTotal] = useState([]);
+	const sections = ['avail', 'sold'];
 
-	// Reading eventId from global storage
-	const [eventId, setEventId] = useState("");
+	// Reading event and manager from global storage
+	const [event, setEvent] = useState();
+	const [manager, setManager] = useState();
+	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		dbManager.getStorage('@eventId').then((value) => setEventId(value));
-		console.log(eventId);
-	})
+		Event.getInstance()
+			.then(event => Station.getStations(event.stations))
+			.then(stas => {
+				var [avail, sold, total] = Station.getTotalDetailedData(stas);
+				setAvail(avail);
+				setSold(sold);
+				setTotal(total);
+				var stationKeys = [];
+				sold.map(station => {
+					stationKeys.push(station.stationKey);
+				});
+				setStations(stationKeys);
+			})
+		Manager.getInstance().then(manager => { setManager(manager); });
+	}, [])
+	// console.log(event);
+	// console.log(manager);
+
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const total = (text) => {
+		let res = 0;
+		if (text == 'total') {
+			totalItems.map(num => res += num);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold);
+				}
+			});
+		}
+		return res;
+	}
+
+	const totalValue = (text) => {
+		let res = 0;
+		if (text == 'total') {
+			availItems.map(item => res += total[item.key] * item.price);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail * item.price);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold * item.price);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold * item.price);
+				}
+			});
+		}
+		return res;
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const formatNum = (num) => {
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	}
 
 	return (
 		<View style={styles.container}>
@@ -86,18 +176,18 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
-							</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
+									{percent(total('avail'), total('total'))}%
+								</Text>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+									}}>
 									Total Available
-							</Text>
+								</Text>
 							</View>
 
 						</View>
@@ -119,10 +209,10 @@ export default function DummyScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{total('avail')} of
 						</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{total('total')} Qty
 						</Text>
 						</View>
 
@@ -131,7 +221,7 @@ export default function DummyScreen({ navigation }) {
 							width: '40%',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{"  "}{stationStats.value}$
+								{"  "}{formatNum(totalValue('total'))}$
 						</Text>
 						</View>
 

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
+import Station from 'model/Station';
 
 export default function ManagerStationInventoryScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
@@ -14,6 +15,9 @@ export default function ManagerStationInventoryScreen({ navigation }) {
 		{StationId: 2, name: "Main Stg", stationCapacity:40080, currentValue:0, value:0, server:4, runners:2}
 	]
 
+	// TODO: When clicking on the box and navigate to Individual Station Inventory, 
+	// the stationID of the directed station need to be set as below.
+	Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
 
 
 

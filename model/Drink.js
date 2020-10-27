@@ -7,7 +7,6 @@ export default class Drink {
     quantity;   // int
     pack;       // int
     details;    // String
-    iconURL;    // String
 
     constructor(drink) {
         if (drink === undefined) {
@@ -15,7 +14,6 @@ export default class Drink {
             this.quantity = 0;
             this.pack = 0;
             this.details = "";
-            this.iconURL = "";
         } else {
             Object.assign(this, drink);
         }

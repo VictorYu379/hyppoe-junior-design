@@ -64,7 +64,7 @@ export default function App() {
 					<Stack.Navigator>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={ReturnInventoryDetailedDataScreen}
+							component={ManagerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
