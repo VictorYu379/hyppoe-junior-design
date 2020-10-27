@@ -49,16 +49,17 @@ export default class TotalInventory extends React.Component {
 	onBlkModalSave(drink) {
 		// upload image here
 		// create a new drinkType here
-		let url = dbManager.uploadImage(this.state.inventoryId, drink.drinkType.icon);
-		drink.drinkType.icon = url;
+		//let url = dbManager.uploadImage(this.state.inventoryId, drink.drinkType.icon);
+		//drink.drinkType.icon = url;
 
 		let newDrinks = this.state.drinks
 		newDrinks.push(drink);
-		
+
 		this.setState({
 			inputBlkUpdateModalVisible: false,
 			drinks: newDrinks
 		});
+
 		console.log("OK\n");
 		const drinkObj = this.parseDrink(drink);
 		
