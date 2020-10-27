@@ -8,16 +8,6 @@ export default class Runner {
     stationId;  // String
     key;        // String
 
-    constructor(id) {
-        this.id = id;
-    }
-
-    async init() {
-        var data = await dbManager.getRunner(this.id);
-        Object.assign(this, data.data());
-        return this;
-    }
-
     static async setInstance(id) {
         dbManager.setStorage(RUNNER_KEY, id);
         dbManager.getRunnerHandle(id).onSnapshot(update);
@@ -27,6 +17,16 @@ export default class Runner {
         var id = await dbManager.getStorage(RUNNER_KEY);
         var runner = new Runner(id);
         return await runner.init();
+    }
+
+    constructor(id) {
+        this.id = id;
+    }
+
+    async init() {
+        var data = await dbManager.getRunner(this.id);
+        Object.assign(this, data.data());
+        return this;
     }
 }
 

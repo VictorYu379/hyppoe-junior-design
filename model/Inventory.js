@@ -10,26 +10,6 @@ export default class Inventory {
     drinks;
     pairItems;
 
-    constructor(id) {
-        this.id = id;
-    }
-
-    async getData() {
-        var handle = dbManager.getInventoryHandle(this.id);
-        var data = await handle.get();
-        this.name = data.data().name;
-        var drinks = await handle.collection("drinks").get();
-        var pairItems = await handle.collection("pairItems").get();
-        this.drinks = drinks.docs.map(drinkInfo => new Drink({
-            ...drinkInfo.data(),
-            id: drinkInfo.id
-        }));
-        this.pairItems = pairItems.docs.map(pairItemInfo => new PairItem(pairItemInfo.data()));
-        await Promise.all(this.drinks.map(drink => drink.init()));
-        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
-        return this;
-    }
-
     static setInventory(id) {
         dbManager.getInventoryHandle(id).onSnapshot(updateInventory);
         dbManager.getInventoryHandle(id).collection("drinks").onSnapshot(updateDrinksInInventory);
@@ -65,6 +45,26 @@ export default class Inventory {
             return {stationKey: station.key, assign: items};
         });
         return [avail, assign, total];
+    }
+
+    constructor(id) {
+        this.id = id;
+    }
+
+    async getData() {
+        var handle = dbManager.getInventoryHandle(this.id);
+        var data = await handle.get();
+        this.name = data.data().name;
+        var drinks = await handle.collection("drinks").get();
+        var pairItems = await handle.collection("pairItems").get();
+        this.drinks = drinks.docs.map(drinkInfo => new Drink({
+            ...drinkInfo.data(),
+            id: drinkInfo.id
+        }));
+        this.pairItems = pairItems.docs.map(pairItemInfo => new PairItem(pairItemInfo.data()));
+        await Promise.all(this.drinks.map(drink => drink.init()));
+        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
+        return this;
     }
 
     getTotalInventory() {

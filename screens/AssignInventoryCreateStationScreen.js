@@ -26,7 +26,6 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
 
     componentDidMount() {
         var stations = getGlobalStations();
-        console.log(stations);
         var newStations = {};
         var newTotalValue = 0;
         stations.map(station => {
@@ -52,19 +51,13 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
     }
 
     onStationModalSave(station) {
-        var newStation = {
-            id: this.state.stationId,
-            percentage: 0,
-            totalAvailable: "$0"
-        };
         this.setState(update(this.state, {
             stations: {
                 $merge: {
-                    [this.state.stationId]: newStation
+                    [station.key]: station
                 }
             }
         }));
-        this.setState({ stationId: this.state.stationId + 1 });
         this.setState({ stationModalVisible: false });
     }
 
@@ -84,22 +77,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 <InventoryTopBox inventory={"Assign"} />
                 <StationModal
                     visible={this.state.stationModalVisible}
-                    onSave={() => {
-                        var newStation = {
-                            id: this.state.stationId,
-                            percentage: 0,
-                            totalAvailable: "$0"
-                        };
-                        this.setState(update(this.state, {
-                            stations: {
-                                $merge: {
-                                    [this.state.stationId]: newStation
-                                }
-                            }
-                        }));
-                        this.setState({ stationId: this.state.stationId + 1 });
-                        this.setState({ stationModalVisible: false });
-                    }} />
+                    onSave={this.onStationModalSave.bind(this)} />
                 <View style={styles.scrollsContainer}>
                     <View
                         style={{ width: '50%' }}
@@ -130,13 +108,14 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {Object.keys(this.state.stations).map(stationId => {
+                            {Object.keys(this.state.stations).map((stationId, index) => {
                                 var station = this.state.stations[stationId];
                                 if (station.deleted === true) {
                                     return;
                                 }
                                 return (
                                     <StationBox
+                                        key={index}
                                         verb={"Add to"}
                                         station={station}
                                         inventorySelected={this.state.inventorySelected}
