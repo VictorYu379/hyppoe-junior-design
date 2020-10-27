@@ -4,8 +4,10 @@ import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
 import Accordion from 'react-native-collapsible/Accordion';
 import Station from 'model/Station';
-import Event from 'model/Event';
+//import Event from 'model/Event';
+import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
+import Job from 'model/Job';
 
 export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
@@ -18,10 +20,10 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	const [soldItems, setSold] = useState([]);
 	const [totalItems, setTotal] = useState([]);
 	const sections = ['avail', 'sold'];
-
+	console.log(Job.getReturnJobsDetailedData())
 	// Reading event and manager from global storage
-	const [event, setEvent] = useState();
-	const [manager, setManager] = useState();
+	// const [event, setEvent] = useState();
+	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
 		Event.getInstance()
@@ -35,9 +37,12 @@ export default function ManagerDashBoardScreen({ navigation }) {
 				sold.map(station => {
 					stationKeys.push(station.stationKey);
 				});
+				
 				setStations(stationKeys);
 			})
 		Manager.getInstance().then(manager => { setManager(manager); });
+		// Event.getInstance().then(event => { setEvent(event); });
+		// Manager.getInstance().then(manager => { setManager(manager); });
 	}, [])
 	// console.log(event);
 	// console.log(manager);

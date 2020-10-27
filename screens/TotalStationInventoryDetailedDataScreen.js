@@ -4,7 +4,6 @@ import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import Station from 'model/Station';
-import Event from 'model/Event';
 
 export default function TotalStationInventoryDetailedDataScreen({ navigation }) {
 
@@ -21,19 +20,15 @@ export default function TotalStationInventoryDetailedDataScreen({ navigation }) 
 	}
 
 	useEffect(() => {
-		Event.getInstance()
-			.then(event => Station.getStations(event.stations))
-			.then(stas => {
-				var [avail, sold, total] = Station.getTotalDetailedData(stas);
-				setAvail(avail);
-				setSold(sold);
-				setTotal(total);
-				var stationKeys = [];
-				sold.map(station => {
-					stationKeys.push(station.stationKey);
-				});
-				setStations(stationKeys);
-			})
+		var [avail, sold, total] = Station.getTotalDetailedData();
+		setAvail(avail);
+		setSold(sold);
+		setTotal(total);
+		var stationKeys = [];
+		sold.map(station => {
+			stationKeys.push(station.stationKey);
+		});
+		setStations(stationKeys);
 	}, [])
 
 	const textColor = (text) => {

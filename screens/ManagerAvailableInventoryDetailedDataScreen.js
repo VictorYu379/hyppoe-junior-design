@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
-import Event from 'model/Event';
-import Station from 'model/Station';
-import Inventory from 'model/Inventory';
+import { getGlobalStations } from 'model/Station';
+import Inventory, { globalInventory } from 'model/Inventory';
 
 export default function ManagerAvailableInventoryDetailedDataScreen({ navigation }) {
 
@@ -22,25 +21,16 @@ export default function ManagerAvailableInventoryDetailedDataScreen({ navigation
 	}
 
 	useEffect(() => {
-		Event.getInstance()
-			.then(event => {
-				var promises = [];
-				var inventory = new Inventory(event.inventory);
-				promises.push(inventory.getData());
-				promises.push(Station.getStations(event.stations));
-				return Promise.all(promises);
-			})
-			.then(([inventory, stations]) => {
-				var [avail, assign, total] = Inventory.getDetailedData(inventory, stations);
-				setAvail(avail);
-				setAssigned(assign);
-				setTotal(total);
-				var stationKeys = [];
-				assign.map(station => {
-					stationKeys.push(station.stationKey);
-				});
-				setStations(stationKeys);
-			})
+		var stations = getGlobalStations();
+		var [avail, assign, total] = Inventory.getDetailedData(globalInventory, stations);
+		setAvail(avail);
+		setAssigned(assign);
+		setTotal(total);
+		var stationKeys = [];
+		assign.map(station => {
+			stationKeys.push(station.stationKey);
+		});
+		setStations(stationKeys);
 	}, [])
 
 	const textColor = (text) => {

@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
+import Station from 'model/Station';
 
 export default function ManagerAvailableInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
@@ -12,6 +13,8 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+
+	console.log(Station.getTotalDetailedData())
 
 	const imageList = [
 		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
