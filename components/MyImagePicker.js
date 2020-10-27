@@ -26,7 +26,7 @@ export default function MyImagePicker(props) {
     console.log(result);
 
     if (!result.cancelled) {
-      props.setImage({uri: result.uri});
+      props.setImage({uri: result.uri}, result.uri);
     }
   };
 

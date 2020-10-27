@@ -6,6 +6,7 @@ export default class Runner {
     id;         // String
     name;       // String
     stationId;  // String
+    key;        // String
 
     constructor(id) {
         this.id = id;
@@ -19,6 +20,7 @@ export default class Runner {
 
     static async setInstance(id) {
         dbManager.setStorage(RUNNER_KEY, id);
+        dbManager.getRunnerHandle(id).onSnapshot(update);
     }
 
     static async getInstance() {
@@ -27,3 +29,10 @@ export default class Runner {
         return await runner.init();
     }
 }
+
+function update(data) {
+    globalRunner.id = data.id;
+    Object.assign(globalRunner, data.data());
+}
+
+export var globalRunner = new Runner("");

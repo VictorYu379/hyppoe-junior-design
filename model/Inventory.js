@@ -27,6 +27,10 @@ export default class Inventory {
         return this;
     }
 
+    static setInventory(id) {
+        dbManager.getInventoryHandle(id).onSnapshot(update);
+    }
+
     static getDetailedData(inventory, stations) {
         var avail = [];
         var total = [];
@@ -68,3 +72,18 @@ export default class Inventory {
         return [quantity, value];
     }
 }
+
+async function update(data) {
+    globalInventory.id = data.id;
+    Object.assign(globalInventory, data.data());
+    var [drinks, pairItems] = await Promise.all([
+        dbManager.getDrinksInInventory(globalInventory.id),
+        dbManager.getPairItemsInInventory(globalInventory.id)
+    ]);
+    globalInventory.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+    globalInventory.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+    await Promise.all(globalInventory.drinks.map(drink => drink.init()));
+    await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
+}
+
+export var globalInventory = new Inventory("");

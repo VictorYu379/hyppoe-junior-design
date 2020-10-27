@@ -35,6 +35,7 @@ export default class Station {
         return this;
     }
 
+    // Can be deprecated as now we have direct access to globalStations of an Event
     static getStations(ids) {
         var promises = ids.map(id => {
             var station = new Station(id);
@@ -44,16 +45,26 @@ export default class Station {
     }
 
     static async setInstance(id) {
-        dbManager.setStorage(STATION_KEY, id);
+        dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
+        stationID = id;
     }
 
+    // To be deprecated, use getGlobalStation() instead
     static async getInstance() {
         var stationID = await dbManager.getStorage(STATION_KEY);
         var station = new Station(stationID);
         return await station.init();
     }
 
-    static getDetailedData(station) {
+    static setStations(ids) {
+        ids.map(id => {
+            dbManager.getStationHandle(id).onSnapshot(update);
+        })
+    }
+
+    // Returns the needed data for individual station detailed data screen
+    static getDetailedData() {
+        var station = getGlobalStation();
         var avail = [];
         var total = [];
         station.drinks.map(drink => {
@@ -75,9 +86,11 @@ export default class Station {
         return [avail, sold, total];
     }
 
-    static getTotalDetailedData(stations) {
+    // Returns the needed data for total stations detailed data screen
+    static getTotalDetailedData() {
         var avail = [];
         var total = [];
+        var stations = getGlobalStations();
         stations.map(station => {
             station.drinks.map(drink => {
                 var index = avail.findIndex(item => item.name == drink.name);
@@ -118,3 +131,34 @@ export default class Station {
         return totalValue;
     }
 }
+
+async function update(data) {
+    var station = new Station(data.id);
+    Object.assign(station, data.data());
+    var [drinks, pairItems] = await Promise.all([
+        dbManager.getDrinksInStation(station.id),
+        dbManager.getPairItemsInStation(station.id)
+    ]);
+    station.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+    station.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+    await Promise.all(station.drinks.map(drink => drink.init()));
+    await Promise.all(station.pairItems.map(pairItem => pairItem.init()));
+    station.servers = station.servers.map(server => new Server(server));
+    await Promise.all(station.servers.map(server => server.init()));
+    globalStations[station.id] = station;
+}
+
+export function getGlobalStation() {
+    return globalStations[stationID];
+}
+
+export function getGlobalStations() {
+    var res = [];
+    for (var id in globalStations) {
+        res.push(globalStations[id]);
+    }
+    return res;
+}
+
+export var globalStations = {};
+var stationID = "";

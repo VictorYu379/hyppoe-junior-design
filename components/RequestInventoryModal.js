@@ -72,7 +72,7 @@ export default class RequestInventoryModal extends React.Component {
             Item: {
                 ...this.state.Item, 
                 Quantity: 0,
-                AddedQuantity: Math.max(this.state.Item.AddedQuantity + Number(val), 0),
+                RequestQuantity: Math.max(this.state.Item.RequestQuantity + Number(val), 0),
             }
         });
     }   
@@ -88,9 +88,18 @@ export default class RequestInventoryModal extends React.Component {
                 Unit: 0,
                 Pack: 0,
                 Quantity: Number(val),
-                AddedQuantity: Number(val)
+                RequestQuantity: Number(val)
             }
         });
+    }
+
+    updatePiaredItem(key, val) {
+        if (Number(val) < 0) {
+            val = 0;
+        }
+        const p = this.state.Item.Paired;
+        p.set(key, val);
+        this.setState({Item: {...this.state.Item, Paired: p}});
     }
 
     getPercentage() {

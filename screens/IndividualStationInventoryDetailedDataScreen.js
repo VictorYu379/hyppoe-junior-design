@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
-import Station from 'model/Station';
+import Station, { getGlobalStation } from 'model/Station';
 
 export default function IndividualStationInventoryDetailedDataScreen({ navigation }) {
 
@@ -21,18 +21,17 @@ export default function IndividualStationInventoryDetailedDataScreen({ navigatio
 	}
 
 	useEffect(() => {
-		Station.getInstance().then(station => {
-			setStation(station.key);
-			var [avail, sold, total] = Station.getDetailedData(station);
-			setAvail(avail);
-			setSold(sold);
-			setTotal(total);
-			var tabletIds = [];
-			sold.map(tablet => {
-				tabletIds.push(tablet.tabletId);
-			});
-			setTablets(tabletIds);
-		})
+		var station = getGlobalStation();
+		setStation(station.key);
+		var [avail, sold, total] = Station.getDetailedData();
+		setAvail(avail);
+		setSold(sold);
+		setTotal(total);
+		var tabletIds = [];
+		sold.map(tablet => {
+			tabletIds.push(tablet.tabletId);
+		});
+		setTablets(tabletIds);
 	}, [])
 
 	const textColor = (text) => {

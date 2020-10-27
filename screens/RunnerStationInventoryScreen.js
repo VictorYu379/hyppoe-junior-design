@@ -22,8 +22,9 @@ export default function DummyScreen({ navigation }) {
 				width={'43%'}  
 				square 
 				margin={5}
-                touchable>
-
+				touchable
+				onPress = {() => {navigation.navigate("Individual Station Inventory Detailed Data Screen");}}
+			>
 				<View style={{
 					flexDirection: 'row',
 					margin: 3,
@@ -31,7 +32,6 @@ export default function DummyScreen({ navigation }) {
 					alignItems: 'center',
 					// borderWidth: 1,
 				}}>
-
 					<Image 
 						source={item.img}
 						style={{
@@ -45,9 +45,6 @@ export default function DummyScreen({ navigation }) {
 							marginHorizontal: 2
 							// borderWidth: 5
 						}} />
-
-
-
 					<View style={{
 						width: '40%',
 						height: '50%',
@@ -64,10 +61,7 @@ export default function DummyScreen({ navigation }) {
 						</View>
 						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
-					
 				</View>
-
-
 			</ShadowedBox>
 		);
 	});
@@ -75,15 +69,11 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
-
-
 				<View style={{
 							flexDirection: 'row',
 							justifyContent: 'center',
 							alignItems: 'center',
 				}}>
-
-
 					<View style={{
 							width: '70%',
 							//height: '40%',
@@ -106,8 +96,6 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
 							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationStats.value}</Text>
 						</View>
-
-
 						<View style={{
 							width: '70%',
 							height: '50%',
@@ -119,14 +107,6 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
 						</View>
 					</View>
-
-
-
-
-
-
-
-
 					<View style={{
 							width: '30%',
 							height: '80%',
@@ -149,15 +129,8 @@ export default function DummyScreen({ navigation }) {
 								Available Inventory
 						</Text>
 					</View>
-
-		
-
 				</View>
-
-
-
 			</ShadowedBox>
-
 
 			<View style={{
 				justifyContent:'center', 

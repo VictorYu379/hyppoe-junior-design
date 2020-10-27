@@ -6,47 +6,94 @@ import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import Inventory from 'model/Inventory';
 import Event from 'model/Event';
+import { dbManager } from 'model/DBManager';
+
 
 export default class TotalInventory extends React.Component {
 	state = {
         inputInvUpdateModalVisible: false,
 		inputBlkUpdateModalVisible: false,
 		selectedDrink: 0,
+<<<<<<< HEAD
 		drinks: [],
 		percentage: 0,
 		totalValue: 0.00,
 		totalUnits: 0
     };
+=======
+		inventoryId: null,
+        drinks: []
+	};
+	
+	parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drink.details,
+            drinkType: drink.drinkType.id,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
+    }
+
+>>>>>>> master
 
 	onInvModalSave(drink) {
+		console.log(drink.drinkType);
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
 		this.setState({
 			inputInvUpdateModalVisible: false,
 			drinks: newDrinks
 		});
+		const drinkObj = this.parseDrink(drink);
+		console.log("INV ID: ", this.state.inventoryId);
+		dbManager.updateDrinkTypeInfo(drink.drinkType)
+					.catch(e => {console.log(e)});
+		dbManager.updateDrinkInventoryByType(this.state.inventoryId, 
+			drinkObj
+		);
 	}
 
 	onBlkModalSave(drink) {
-		var newDrinks = this.state.drinks;
+		// upload image here
+		// create a new drinkType here
+		//let url = dbManager.uploadImage(this.state.inventoryId, drink.drinkType.icon);
+		//drink.drinkType.icon = url;
+
+		let newDrinks = this.state.drinks
 		newDrinks.push(drink);
+
 		this.setState({
 			inputBlkUpdateModalVisible: false,
 			drinks: newDrinks
 		});
+
+		console.log("OK\n");
+		const drinkObj = this.parseDrink(drink);
+		
+		dbManager.createDrinkTypeInfo(drink.drinkType);
+		dbManager.createDrinkInventory(this.state.inventoryId, drinkObj)
 	}
 
 	componentDidMount() {
 		async function queryDrinks(self) {
 			var event = await Event.getInstance();
 			var totalInventory = new Inventory(event.inventory);
+			console.log("id: ", totalInventory.id);
 			await totalInventory.getData();
+<<<<<<< HEAD
 			var [quantity, value] = totalInventory.getTotalInventory();
 			self.setState({
 				drinks: totalInventory.drinks,
 				percentage: quantity > 0 ? 100 : 0,
 				totalValue: value,
 				totalUnits: quantity
+=======
+			self.setState({
+				inventoryId: totalInventory.id,
+				drinks: totalInventory.drinks,
+				eventId: event.id
+>>>>>>> master
 			});
 		}
 		queryDrinks(this);
