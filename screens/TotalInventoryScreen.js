@@ -4,8 +4,8 @@ import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
-import Inventory from 'model/Inventory';
-import Event from 'model/Event';
+import Inventory, { globalInventory } from 'model/Inventory';
+import { globalEvent } from 'model/Event';
 import { dbManager } from 'model/DBManager';
 
 
@@ -71,18 +71,15 @@ export default class TotalInventory extends React.Component {
 
 	componentDidMount() {
 		async function queryDrinks(self) {
-			var event = await Event.getInstance();
-			var totalInventory = new Inventory(event.inventory);
-			console.log("id: ", totalInventory.id);
-			await totalInventory.getData();
-			var [quantity, value] = totalInventory.getTotalInventory();
+			console.log("id: ", globalInventory.id);
+			var [quantity, value] = globalInventory.getTotalInventory();
 			self.setState({
-				drinks: totalInventory.drinks,
+				drinks: globalInventory.drinks,
 				percentage: quantity > 0 ? 100 : 0,
 				totalValue: value,
 				totalUnits: quantity,
-				inventoryId: totalInventory.id,
-				eventId: event.id
+				inventoryId: globalInventory.id,
+				eventId: globalEvent.id
 			});
 		}
 		queryDrinks(this);
