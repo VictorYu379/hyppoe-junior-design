@@ -1,17 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import { globalRunner } from 'model/Runner';
+import Job from 'model/Job';
 
 export default function RunnerHistoryScreen({ navigation }) {
 
-	const taskList = [
-		{key: 1, item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
-		{key: 2, item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
-		{key: 3, item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
-	]
+	const [taskList, setTaskList] = useState([]);
+	const [runner, setRunner] = useState("");
 
-	const runner = '1'
+	useEffect(() => {
+		setRunner(globalRunner.key);
+		setTaskList(Job.getRunnerJobs(globalRunner.id));
+	}, [])
 
 	const textColor = (text) => {
 		if (text == 'Complete') {

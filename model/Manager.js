@@ -6,6 +6,7 @@ export default class Manager {
     id;         // String
     name;       // String
     eventId;    // String
+    key;        // String
 
     constructor(id) {
         this.id = id;

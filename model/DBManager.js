@@ -36,6 +36,12 @@ class DBManager {
 
     // return: DocumentReference
     // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
+    getRunnerHandle(id) {
+        return this.dbh.collection("Runner").doc(id);
+    }
+
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
     getServer(id) {
         return this.dbh.collection("Server").doc(id).get();
     }
