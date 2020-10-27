@@ -14,7 +14,6 @@ export default function StationBox(props) {
     }
     return (
         <ShadowedBox
-            key={props.station.id}
             width={'80%'}
             square
             margin={5}>
