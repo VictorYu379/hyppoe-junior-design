@@ -20,7 +20,10 @@ export default class Inventory {
         this.name = data.data().name;
         var drinks = await handle.collection("drinks").get();
         var pairItems = await handle.collection("pairItems").get();
-        this.drinks = drinks.docs.map(drinkInfo => new Drink(drinkInfo.data()));
+        this.drinks = drinks.docs.map(drinkInfo => new Drink({
+            ...drinkInfo.data(),
+            id: drinkInfo.id
+        }));
         this.pairItems = pairItems.docs.map(pairItemInfo => new PairItem(pairItemInfo.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
@@ -28,7 +31,9 @@ export default class Inventory {
     }
 
     static setInventory(id) {
-        dbManager.getInventoryHandle(id).onSnapshot(update);
+        dbManager.getInventoryHandle(id).onSnapshot(updateInventory);
+        dbManager.getInventoryHandle(id).collection("drinks").onSnapshot(updateDrinksInInventory);
+        dbManager.getInventoryHandle(id).collection("pairItems").onSnapshot(updatePairItemsInInventory);
     }
 
     static getDetailedData(inventory, stations) {
@@ -71,18 +76,63 @@ export default class Inventory {
         });
         return [quantity, value];
     }
+
+    updateDrink(drink) {
+        return Promise.all([
+                dbManager.updateDrinkTypeInfo(drink.typeId, {
+                icon : drink.icon,
+                name : drink.name,
+                unitPerPack : drink.unit,
+                ouncePerUnit : drink.ouncePerUnit,
+                pricePerUnit : drink.pricePerUnit,
+                alert : drink.alert,
+                costPerUnit : drink.costPerUnit
+            }),
+            dbManager.updateDrinkInInventory(this.id, drink.id, {
+                details: drink.details || "",
+                drinkType: drink.typeId,
+                pack: drink.pack,
+                quantity: drink.quantity
+            })
+        ]);
+    }
+
+    addDrink(drink) {
+        return Promise.all([
+            dbManager.createDrinkTypeInfo({
+                icon : drink.icon || "",
+                name : drink.name,
+                unitPerPack : drink.unit,
+                ouncePerUnit : drink.ouncePerUnit,
+                pricePerUnit : drink.pricePerUnit,
+                alert : drink.alert,
+                costPerUnit : drink.costPerUnit
+            }), 
+            dbManager.createDrinkInventory(this.id, {
+                details: drink.details || "",
+                drinkType: drink.typeId || "",
+                pack: drink.pack,
+                quantity: drink.quantity
+            })
+        ]);
+    }
 }
 
-async function update(data) {
+async function updateInventory(data) {
     globalInventory.id = data.id;
     Object.assign(globalInventory, data.data());
-    var [drinks, pairItems] = await Promise.all([
-        dbManager.getDrinksInInventory(globalInventory.id),
-        dbManager.getPairItemsInInventory(globalInventory.id)
-    ]);
-    globalInventory.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-    globalInventory.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+}
+
+async function updateDrinksInInventory(drinks) {
+    globalInventory.drinks = drinks.docs.map(drink => new Drink({
+        ...drink.data(),
+        id: drink.id
+    }));
     await Promise.all(globalInventory.drinks.map(drink => drink.init()));
+}
+
+async function updatePairItemsInInventory(items) {
+    globalInventory.pairItems = items.doc.map(pairItem => new PairItem(pairItem.data()));
     await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
 }
 

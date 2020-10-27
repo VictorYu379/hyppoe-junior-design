@@ -25,7 +25,10 @@ export default class Job {
             dbManager.getDrinksInJob(this.id),
             dbManager.getPairItemsInJob(this.id)
         ]);
-        this.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.drinks = drinks.docs.map(drink => new Drink({
+            ...drink.data(),
+            id: drink.id
+        }));
         this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
@@ -151,7 +154,10 @@ async function update(data) {
         dbManager.getDrinksInJob(job.id),
         dbManager.getPairItemsInJob(job.id)
     ]);
-    job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+    job.drinks = drinks.docs.map(drink => new Drink({
+        ...drink.data(),
+        id: drink.id
+    }));
     job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
     await Promise.all(job.drinks.map(drink => drink.init()));
     await Promise.all(job.pairItems.map(pairItem => pairItem.init()));

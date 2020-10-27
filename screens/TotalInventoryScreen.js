@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
-import Inventory, { globalInventory } from 'model/Inventory';
+import { globalInventory } from 'model/Inventory';
 import { globalEvent } from 'model/Event';
-import { dbManager } from 'model/DBManager';
 
 
 export default class TotalInventory extends React.Component {
@@ -24,7 +23,7 @@ export default class TotalInventory extends React.Component {
 	parseDrink(drink) {
         const obj = {
             details: drink.details === undefined ? "" : drink.details,
-            drinkType: drink.drinkType.id,
+            drinkType: drink.typeId,
             pack: drink.pack, 
             quantity: drink.quantity
         }
@@ -32,20 +31,13 @@ export default class TotalInventory extends React.Component {
     }
 
 	onInvModalSave(drink) {
-		console.log(drink.drinkType);
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
 		this.setState({
 			inputInvUpdateModalVisible: false,
 			drinks: newDrinks
 		});
-		const drinkObj = this.parseDrink(drink);
-		console.log("INV ID: ", this.state.inventoryId);
-		dbManager.updateDrinkTypeInfo(drink.drinkType)
-					.catch(e => {console.log(e)});
-		dbManager.updateDrinkInventoryByType(this.state.inventoryId, 
-			drinkObj
-		);
+		globalInventory.updateDrink(drink).then(r => this.updateData());
 	}
 
 	onBlkModalSave(drink) {
@@ -63,26 +55,23 @@ export default class TotalInventory extends React.Component {
 		});
 
 		console.log("OK\n");
-		const drinkObj = this.parseDrink(drink);
-		
-		dbManager.createDrinkTypeInfo(drink.drinkType);
-		dbManager.createDrinkInventory(this.state.inventoryId, drinkObj)
+		globalInventory.addDrink(drink).then(r => this.updateData());
 	}
 
 	componentDidMount() {
-		async function queryDrinks(self) {
-			console.log("id: ", globalInventory.id);
-			var [quantity, value] = globalInventory.getTotalInventory();
-			self.setState({
-				drinks: globalInventory.drinks,
-				percentage: quantity > 0 ? 100 : 0,
-				totalValue: value,
-				totalUnits: quantity,
-				inventoryId: globalInventory.id,
-				eventId: globalEvent.id
-			});
-		}
-		queryDrinks(this);
+		this.updateData();
+	}
+
+	updateData() {
+		var [quantity, value] = globalInventory.getTotalInventory();
+		this.setState({
+			drinks: globalInventory.drinks,
+			percentage: quantity > 0 ? 100 : 0,
+			totalValue: value,
+			totalUnits: quantity,
+			inventoryId: globalInventory.id,
+			eventId: globalEvent.id
+		});
 	}
 
 	render() {

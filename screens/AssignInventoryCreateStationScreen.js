@@ -8,9 +8,8 @@ import InventoryTopBox from 'components/InventoryTopBox';
 import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
 import update from 'immutability-helper';
-import Inventory from 'model/Inventory';
-import Event from 'model/Event';
-import Station from '../model/Station';
+import { globalInventory } from 'model/Inventory';
+import { getGlobalStations } from '../model/Station';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
     state = {
@@ -26,27 +25,18 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-        Event.getInstance()
-            .then(event => {
-                var promises = [];
-                var totalInventory = new Inventory(event.inventory);
-                promises.push(totalInventory.getData());
-                promises.push(Station.getStations(event.stations));
-                return Promise.all(promises);
-            })
-            .then(([totalInventory, stations]) => {
-                this.setState({ drinks: totalInventory.drinks });
-                var newStations = {};
-                var newTotalValue = 0;
-                stations.map(station => {
-                    newTotalValue += station.getTotalValue();
-                    newStations[station.id] = station;
-                });
-                this.setState({
-                    stations: newStations,
-                    totalValue: newTotalValue
-                });
-            });
+		var stations = getGlobalStations();
+        var newStations = {};
+        var newTotalValue = 0;
+        stations.map(station => {
+            newTotalValue += station.getTotalValue();
+            newStations[station.id] = station;
+        });
+        this.setState({
+            drinks: globalInventory.drinks,
+            stations: newStations,
+            totalValue: newTotalValue
+        });
     }
 
     onDrinkBoxLayout(event) {
