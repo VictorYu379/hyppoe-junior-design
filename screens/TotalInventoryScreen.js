@@ -12,7 +12,10 @@ export default class TotalInventory extends React.Component {
         inputInvUpdateModalVisible: false,
 		inputBlkUpdateModalVisible: false,
 		selectedDrink: 0,
-        drinks: []
+		drinks: [],
+		percentage: 0,
+		totalValue: 0.00,
+		totalUnits: 0
     };
 
 	onInvModalSave(drink) {
@@ -38,7 +41,13 @@ export default class TotalInventory extends React.Component {
 			var event = await Event.getInstance();
 			var totalInventory = new Inventory(event.inventory);
 			await totalInventory.getData();
-			self.setState({drinks: totalInventory.drinks});
+			var [quantity, value] = totalInventory.getTotalInventory();
+			self.setState({
+				drinks: totalInventory.drinks,
+				percentage: quantity > 0 ? 100 : 0,
+				totalValue: value,
+				totalUnits: quantity
+			});
 		}
 		queryDrinks(this);
 	}
@@ -93,7 +102,7 @@ export default class TotalInventory extends React.Component {
 						<Text style={{fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'}}>
 							Total Inventory:
 						</Text>
-						<Text style={{fontSize: 30, color: 'red'}}>0%</Text>
+						<Text style={{fontSize: 30, color: 'red'}}>{this.state.percentage}%</Text>
 					</View>
 					<View style={{
 						width: '90%',
@@ -104,14 +113,14 @@ export default class TotalInventory extends React.Component {
 							justifyContent: 'space-between',
 						}}>
 							<Text style={styles.normalText}>Total Inventory Value:</Text>
-							<Text style={styles.normalText}>$0.00</Text>
+							<Text style={styles.normalText}>${this.state.totalValue}</Text>
 						</View>
 						<View style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
 						}}>
 							<Text style={styles.normalText}>Total Units:</Text>
-							<Text style={styles.normalText}>0 of 0</Text>
+							<Text style={styles.normalText}>{this.state.totalUnits} of {this.state.totalUnits}</Text>
 						</View>
 					</View>
 				</ShadowedBox>

@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function StationBox(props) {
     var color = 'green';
-    if (props.station.percentage < 26) {
+    var value = props.station.getTotalValue();
+    var percentage = Math.round((1.0 * value / props.totalValue) * 100);
+    if (percentage < 26) {
         color = 'red';
-    } else if (props.station.percentage < 70) {
-        color = 'yellow';
+    } else if (percentage < 70) {
+        color = 'orange';
     }
     return (
         <ShadowedBox
@@ -64,7 +66,7 @@ export default function StationBox(props) {
                             fontSize: 30,
                             fontWeight: '300',
                             color
-                        }}>{props.station.percentage}%</Text>
+                        }}>{percentage}%</Text>
                     </View>
                     <View style={{
                         height: '15%',
@@ -83,7 +85,7 @@ export default function StationBox(props) {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <Text>{props.station.totalAvailable}</Text>
+                        <Text>$ {value}</Text>
                     </View>
                 </TouchableOpacity>
             }

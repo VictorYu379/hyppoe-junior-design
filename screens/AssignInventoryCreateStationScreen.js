@@ -20,7 +20,8 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
         stationModalVisible: false,
         stations: {},
         drinks: [],
-        stationId: 3
+        stationId: 3,
+        totalValue: 0,
     };
     _scrollView1 = React.createRef();
 
@@ -35,12 +36,16 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
             })
             .then(([totalInventory, stations]) => {
                 this.setState({ drinks: totalInventory.drinks });
-                var newStations = {}
+                var newStations = {};
+                var newTotalValue = 0;
                 stations.map(station => {
+                    newTotalValue += station.getTotalValue();
                     newStations[station.id] = station;
                 });
-                this.setState({ stations: newStations });
-                console.log(newStations);
+                this.setState({
+                    stations: newStations,
+                    totalValue: newTotalValue
+                });
             });
     }
 
@@ -129,6 +134,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
                                         enableDelete={true}
+                                        totalValue={this.state.totalValue}
                                         onDelete={() => {
                                             this.setState(update(
                                                 this.state,

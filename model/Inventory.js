@@ -30,15 +30,14 @@ export default class Inventory {
     static getDetailedData(inventory, stations) {
         var avail = [];
         var total = [];
-        inventory.drinks.map(drink => {
-            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
-            total[item.key] = drink.quantity;
-            avail[avail.length] = item;
+        inventory.drinks.forEach((drink, index) => {
+            var item = {key: index, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+            total.push(drink.quantity);
+            avail.push(item);
         });
-        var assign = [];
-        stations.map(station => {
+        var assign = stations.map(station => {
             var items = [];
-            station.drinks.map(drink => {
+            station.drinks.forEach(drink => {
                 var index = avail.findIndex(item => item.name == drink.name);
                 total[index] += drink.quantity;
                 if (items[index] == undefined) {
@@ -47,15 +46,25 @@ export default class Inventory {
                     items[index].assign += drink.quantity;
                 }
             });
-            station.servers.map(server => {
-                server.soldDrinks.map(drink => {
+            station.servers.forEach(server => {
+                server.soldDrinks.forEach(drink => {
                     var index = avail.findIndex(item => item.name == drink.name);
                     total[index] += drink.quantity;
                     items[index].assign += drink.quantity;
                 })
             })
-            assign[assign.length] = {stationKey: station.key, assign: items};
+            return {stationKey: station.key, assign: items};
         });
         return [avail, assign, total];
+    }
+
+    getTotalInventory() {
+        var quantity = 0;
+        var value = 0;
+        this.drinks.forEach(drink => {
+            quantity += drink.quantity;
+            value += drink.pricePerUnit * drink.quantity;
+        });
+        return [quantity, value];
     }
 }

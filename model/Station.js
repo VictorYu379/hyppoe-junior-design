@@ -109,4 +109,12 @@ export default class Station {
         });
         return [avail, sold, total];
     }
+
+    getTotalValue() {
+        var totalValue = 0;
+        this.drinks.forEach(drink => {
+            totalValue += drink.quantity * drink.pricePerUnit;
+        });
+        return totalValue;
+    }
 }
