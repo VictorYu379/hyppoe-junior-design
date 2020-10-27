@@ -4,10 +4,10 @@ import ShadowedBox from 'components/ShadowedBox';
 import Runner from 'model/Runner';
 import Station from 'model/Station';
 
-export default function DummyScreen({ navigation }) {
+export default function RunnerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
-
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+
 
 	// Reading runner from global storage
 	const [runner, setRunner] = useState();
@@ -28,9 +28,6 @@ export default function DummyScreen({ navigation }) {
 				height={'20%'} 
 				margin={10}
 			>
-
-
-
 					<View style={{
 							marginVertical: 20,
 							width: '100%',
@@ -39,15 +36,11 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 							margin: 10
-					}}>
-							
+					}}>	
 						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:20, marginLeft:20}}>Runner DashBoard</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>Station1:Big Tent</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>Runner: 1</Text>
 					</View>
-
-
-					
 			</ShadowedBox>
 
 
@@ -59,14 +52,13 @@ export default function DummyScreen({ navigation }) {
 				//height: '60%',
 				paddingLeft: '2%'
 			}}>
-				
 				<ShadowedBox 
 					width={'40%'} 
 					height={'23%'}  
 					margin={5}
 					touchable
+					onPress={() => {navigation.navigate("Runner Task Screen");}}
 				>
-
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -74,8 +66,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '50%',
 							height: '100%',
@@ -93,7 +83,6 @@ export default function DummyScreen({ navigation }) {
 									Tasks
 								</Text>
 							</View>
-
 							<View style={{
 								width: '100%',
 								height: '50%',
@@ -105,8 +94,6 @@ export default function DummyScreen({ navigation }) {
 								</Text>
 							</View>
 						</View>
-
-						
 						<View style={{
 							width: '50%',
 							height: '100%',
@@ -121,15 +108,16 @@ export default function DummyScreen({ navigation }) {
 								Pending
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
-
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Runner Station Inventory");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -137,8 +125,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '60%',
 							height: '100%',
@@ -174,8 +160,6 @@ export default function DummyScreen({ navigation }) {
 								</Text>
 							</View>
 						</View>
-
-						
 						<View style={{
 							width: '40%',
 							height: '100%',
@@ -196,15 +180,16 @@ export default function DummyScreen({ navigation }) {
 								Total Available
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
-
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'} 
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Runner Request Inventory");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -212,8 +197,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '60%',
 							height: '100%',
@@ -231,7 +214,6 @@ export default function DummyScreen({ navigation }) {
 									Request
 								</Text>
 							</View>
-
 							<View style={{
 								width: '100%',
 								height: '50%',
@@ -243,8 +225,6 @@ export default function DummyScreen({ navigation }) {
 								</Text>
 							</View>
 						</View>
-
-						
 						<View style={{
 							width: '40%',
 							height: '100%',
@@ -262,15 +242,16 @@ export default function DummyScreen({ navigation }) {
 								Pending
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
-
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Runner Return Inventory");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -278,8 +259,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '60%',
 							height: '100%',
@@ -300,7 +279,6 @@ export default function DummyScreen({ navigation }) {
 									Inventory
 								</Text>
 							</View>
-
 							<View style={{
 								width: '100%',
 								height: '50%',
@@ -312,8 +290,6 @@ export default function DummyScreen({ navigation }) {
 								</Text>
 							</View>
 						</View>
-
-						
 						<View style={{
 							width: '40%',
 							height: '100%',
@@ -331,15 +307,16 @@ export default function DummyScreen({ navigation }) {
 								Returned Items
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
-
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Station Alerts Screen");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -347,8 +324,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '60%',
 							height: '100%',
@@ -360,8 +335,6 @@ export default function DummyScreen({ navigation }) {
 								Alerts
 							</Text>
 						</View>
-
-						
 						<View style={{
 							width: '40%',
 							height: '100%',
@@ -379,15 +352,16 @@ export default function DummyScreen({ navigation }) {
 								Set Alerts
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'23%'}  margin={5} touchable>
-
+				<ShadowedBox 
+					width={'40%'} 
+					height={'23%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Runner History Screen");}}
+				>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -395,8 +369,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'center',
 						// borderWidth: 1,
 					}}>
-
-
 						<View style={{
 							width: '60%',
 							height: '100%',
@@ -426,8 +398,6 @@ export default function DummyScreen({ navigation }) {
 								</Text>
 							</View>
 						</View>
-
-						
 						<View style={{
 							width: '40%',
 							height: '100%',
@@ -445,13 +415,8 @@ export default function DummyScreen({ navigation }) {
 								Inventory
 							</Text>
 						</View>
-						
-
 					</View>
-
-
 				</ShadowedBox>
-
 			</View>
 		</View>
 	);

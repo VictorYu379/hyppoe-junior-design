@@ -49,8 +49,8 @@ export default class InputUpdateInventoryModal extends React.Component {
                 CurrentQuantity: drink.quantity,
                 TotalQuantity: drink.quantity,
                 AddedQuantity: 0,
-                Ounces: drink.ouncePerUnit,
-                Price: drink.pricePerUnit,
+                Ounces: drink.drinkType.ouncePerUnit,
+                Price: drink.drinkType.pricePerUnit,
                 Cost: 0,
             }
         });
@@ -104,7 +104,8 @@ export default class InputUpdateInventoryModal extends React.Component {
                 visible={this.props.visible}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
-            }}>
+            }}
+            >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={{
@@ -450,21 +451,20 @@ export default class InputUpdateInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => { 
-                                    if (this.state.Item.AddedQuantity == 0) {
-                                        Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                    } else {
-                                        var newDrink = new Drink({
-                                            ...this.state.drink,
-                                            drinkType: {
-                                                ...this.state.drink.drinkType,
-                                                name: this.state.Item.Name,
-                                            },
-                                            quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
-                                            pack: this.state.Item.Pack,
-                                            details: this.state.Item.Details
-                                        })
-                                        this.props.onSave(newDrink); 
-                                    }   
+                                    var newDrink = new Drink({
+                                        ...this.state.drink,
+                                        drinkType: {
+                                            ...this.state.drink.drinkType,
+                                            name: this.state.Item.Name,
+                                            costPerUnit: this.state.Item.Cost,
+                                            ouncePerUnit: this.state.Item.Ounces,
+                                            pricePerUnit: this.state.Item.Price,
+                                        },
+                                        quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
+                                        pack: this.state.Item.Pack,
+                                        details: this.state.Item.Details
+                                    })
+                                    this.props.onSave(newDrink); 
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>

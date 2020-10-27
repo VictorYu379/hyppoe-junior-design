@@ -21,7 +21,6 @@ import ManagerStationInventoryScreen from './screens/ManagerStationInventoryScre
 import IndividualStationInventoryDetailedDataScreen from './screens/IndividualStationInventoryDetailedDataScreen';
 import ServerConfirmInventoryScreen from './screens/ServerConfirmInventoryScreen';
 import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
-import ServerReturnInventoryScreen from './screens/ServerReturnInventoryScreen';
 import ManagerDashBoardScreen from './screens/ManagerDashBoardScreen';
 import ManagerAvailableInventoryScreen from './screens/ManagerAvailableInventoryScreen';
 import ManagerAvailableInventoryDetailedDataScreen from './screens/ManagerAvailableInventoryDetailedDataScreen';
@@ -105,14 +104,6 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
-							name="Runner History Screen"
-							component={RunnerHistoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
 							name="Manager Individual Station Inventory"
 							component={ManagerIndivitualStationDataScreen}
 							options={{
@@ -177,6 +168,14 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
+							name="Runner History Screen"
+							component={RunnerHistoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Runner Request Inventory"
 							component={RunnerRequestInventoryScreen}
 							options={{
@@ -192,6 +191,8 @@ export default function App() {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
+						
+						
 						<Stack.Screen
 							name="Total Inventory"
 							component={TotalInventoryScreen}
@@ -213,6 +214,24 @@ export default function App() {
 						<Stack.Screen
 							name="Total Inventory Station Overview"
 							component={TotalInventoryStationOverviewScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Station Alerts Screen"
+							component={StationAlertsScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}
+						/>
+						<Stack.Screen
+							name="Individual Station Inventory Detailed Data Screen"
+							component={IndividualStationInventoryDetailedDataScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

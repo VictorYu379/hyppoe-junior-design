@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 
+
 var firebaseConfig = {
     apiKey: "AIzaSyCl2oC7L8StE__HClrXmSJYyR1FPs_2GIc",
     authDomain: "hyppoe-inventory-management.firebaseapp.com",
@@ -20,6 +21,7 @@ firebase.initializeApp(firebaseConfig);
 class DBManager {
     constructor() {
         this.dbh = firebase.firestore();
+        this.store = firebase.storage();
     }
 
     // return: Promise<QuerySnapshot>
@@ -155,10 +157,102 @@ class DBManager {
         return this.dbh.collection("Event").doc(id).get();
     }
 
-    // return: DocumentReference
-    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
-    getEventHandle(id) {
-        return this.dbh.collection("Event").doc(id);
+    // return Promise<void>
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkTypeInfo(data) {
+        const typeId = data.id;
+        obj = {
+            icon : data.icon,
+            name : data.name,
+            unitPerPack : data.unitPerPack,
+            ouncePerUnit : data.ouncePerUnit,
+            pricePerUnit : data.pricePerUnit,
+            alert : data.alert,
+            costPerUnit : data.costPerUnit
+        };
+        return this.dbh.collection("DrinkType").doc(typeId).update(obj);
+    }
+
+    // return void
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkInventoryByType(inventoryId, data) {
+        this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").get()
+        .then(snapshot => {
+		    console.log("Drinks: ", snapshot.size);
+		    snapshot.forEach(snap => {
+                console.log(data);
+                if (snap.data().drinkType == data.drinkType) {
+                    console.log("FOUND:", data.drinkType);
+                    this.dbh.collection("Inventory")
+                    .doc(inventoryId)
+                    .collection("drinks")
+                    .doc(snap.id).update(data)
+                    .then(d => {console.log(d)})
+                    .catch(e => {console.log(e)});
+                }
+		       	console.log("Runner ID: ", snap.id, snap.data());
+		    })
+        })
+        .catch(e => {console.log(e)});
+    }
+
+    upload_Image(eventId, imgFile) {
+        // Unimplemented.
+        /*const blob = FetchBlob.polyfill.Blob;
+        const fs = FetchBlob.fs;
+        window.XMLHttpRequest = FetchBlob.XMLHttpRequest;
+        window.Blob = blob;
+        const image = FetchBlob.wrap(imgFile);
+
+        let photoBlob = null;
+        let url = null;
+        ref = this.store.ref().child(eventId).child("drinks");
+        blob.build(image, {type: "image/jpg"})
+            .then((blob) => {
+                photoBlob = blob;
+                return ref.put(blob, {contentType: "image/jpg"});
+            })
+            .then((snap) => {
+                url = snap.downloadURL;
+                photoBlob.close();
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+        return url;*/
+    }
+
+    // return Promise
+    createDrinkInventory(inventoryId, data) {
+        this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").add(data);
+    }
+
+    // return void
+    createDrinkTypeInfo(data) {
+        this.dbh.collection("DrinkType").get()
+        .then(snapshot => {
+            console.log("Drinks: ", snapshot.size);
+            var found = false;
+		    snapshot.forEach(snap => {
+                console.log(data);
+                if (snap.data().id == data.id) {
+                    console.log("FOUND:", data.id);
+                    found = true;
+                }
+            });
+            if (!found) {
+                this.dbh.collection("DrinkType").add(data);
+            }
+            console.log("FOUND: ", found);
+        })
+        .catch(e => {console.log(e)});
+    }
+
+    // return Promise<void>
+    // https://firebase.google.com/docs/database/web/read-and-write
+    updateDrinkInventoryById(drinkId, obj) {
+        console.log(drinkId, obj);
+        return this.dbh.collection("Inventory").doc("h6Q9BwsaW51bnTv9zUe8").collection("drinks").doc(drinkId).update(obj);
     }
 }
 

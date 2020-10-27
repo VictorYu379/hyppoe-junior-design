@@ -4,6 +4,8 @@ import { TextInput } from "react-native-gesture-handler"
 import PairItemModal from './PairItemModal'
 import MyCheckbox from './MyCheckBox'
 import MyImagePicker from './MyImagePicker'
+import Drink from "../model/Drink"
+import DrinkType from "../model/DrinkType"
 
 export default class InputBlankInventoryModal extends React.Component {
 
@@ -21,9 +23,11 @@ export default class InputBlankInventoryModal extends React.Component {
         this.state = {
             includeInInvCount: true,
             pairItemModalVisible: false,
+            drink: new Drink(),
             Item: {
                 Name: "Enter in Item Name...",
                 Image: require("assets/add-photo.png"),
+                ImageURI: "",
                 Unit: 0,
                 Pack: 0,
                 Quantity: 0,
@@ -75,12 +79,13 @@ export default class InputBlankInventoryModal extends React.Component {
         });
     }
 
-    updateImage(obj) {
+    updateImage(obj, uri) {
         console.log(obj);
         this.setState({
             Item: {
                 ...this.state.Item,
-                Image: obj
+                Image: obj,
+                ImageURI: uri,
             }
         });
     }
@@ -88,6 +93,12 @@ export default class InputBlankInventoryModal extends React.Component {
     getPercentage() {
         return  Math.round((this.state.Item.CurrentQuantity
             +this.state.Item.AddedQuantity)/Math.max(this.state.Item.TotalQuantity, 1)*100);    
+    }
+
+    processName(str) {
+        return str.replace(/\W+(.)/g, (match, chr) => {
+             return chr.toUpperCase();
+        });
     }
 
     updateCurrentQuantity(val) {
@@ -142,7 +153,7 @@ export default class InputBlankInventoryModal extends React.Component {
                                     lineHeight: 20,
                                 }}
                                 multiline={true}
-                                onChangeText={text => this.updateItem("Name", text)}
+                                onChangeText={text => this.setState({Item: {...this.state.Item, Name: text}})}
                                 value={this.state.Item.Name}
                                 />
                                 <Text style={{
@@ -452,7 +463,25 @@ export default class InputBlankInventoryModal extends React.Component {
                             
                             <TouchableHighlight
                                 style={styles.openButton}
-                                onPress={() => { this.props.onSave(); }}>
+                                onPress={() => { 
+                                    console.log(this.state.Item.Image.uri);
+                                    var newDrink = new Drink({
+                                        ...this.state.drink,
+                                        drinkType: {
+                                            ...this.state.drink.drinkType,
+                                            id:   this.processName(this.state.Item.Name),
+                                            icon: this.state.Item.ImageURI,
+                                            name: this.state.Item.Name,
+                                            costPerUnit: this.state.Item.Cost,
+                                            ouncePerUnit: this.state.Item.Ounces,
+                                            pricePerUnit: this.state.Item.Price,
+                                        },
+                                        quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
+                                        pack: this.state.Item.Pack,
+                                        details: this.state.Item.Details
+                                    })
+                                    this.props.onSave(newDrink); 
+                                }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>
                     </View>
