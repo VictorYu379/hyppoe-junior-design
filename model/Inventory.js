@@ -67,14 +67,14 @@ export default class Inventory {
 async function update(data) {
     globalInventory.id = data.id;
     Object.assign(globalInventory, data.data());
-    var [drinks, pairItems] = await Promise.all([
-        dbManager.getDrinksInInventory(globalInventory.id),
-        dbManager.getPairItemsInInventory(globalInventory.id)
-    ]);
-    globalInventory.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-    globalInventory.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-    await Promise.all(globalInventory.drinks.map(drink => drink.init()));
-    await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
+    dbManager.getDrinksInInventoryHandle(globalInventory.id).onSnapshot(async (drinks) => {
+        globalInventory.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        await Promise.all(globalInventory.drinks.map(drink => drink.init()));
+    });
+    dbManager.getPairItemsInInventoryHandle(globalInventory.id).onSnapshot(async (pairItems) => {
+        globalInventory.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
+    });
 }
 
 export var globalInventory = new Inventory("");

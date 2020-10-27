@@ -147,14 +147,14 @@ export default class Job {
 async function update(data) {
     var job = new Job(data.id);
     Object.assign(job, data.data());
-    var [drinks, pairItems] = await Promise.all([
-        dbManager.getDrinksInJob(job.id),
-        dbManager.getPairItemsInJob(job.id)
-    ]);
-    job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-    job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-    await Promise.all(job.drinks.map(drink => drink.init()));
-    await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
+    dbManager.getDrinksInJobHandle(job.id).onSnapshot(async (drinks) => {
+        job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        await Promise.all(job.drinks.map(drink => drink.init()));
+    });
+    dbManager.getPairItemsInJobHandle(job.id).onSnapshot(async (pairItems) => {
+        job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
+    });
     job.runner = new Runner(job.runnerId);
     await job.runner.init();
     globalJobs[job.id] = job;
