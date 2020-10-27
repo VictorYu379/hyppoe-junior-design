@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import Station from 'model/Station';
+import Event, { globalEvent } from 'model/Event';
+import Manager from 'model/Manager';
+import Job from 'model/Job';
 
 export default function ManagerPendingInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
@@ -15,11 +19,23 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	]
 
 
+	const JobList = Job.getJobs()
+	console.log(JobList)
 
 
-	const runnerList = runnerTaskList.map(item => {
+	const filter = () => {
+		let StationJobList = []
+		JobList.map(item => {
+			if(item.to !== "Inventory"){
+				StationJobList.push(item)
+			}
+		});
+		return StationJobList
+	}
+
+	const runnerList = JobList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -33,10 +49,16 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 					<View style={styles.sectionTitle}>
 						<View style={{...styles.rowView, width:'90%'}}>
 							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Runner {item.runnerId}:
+								{item.runner}:
 							</Text>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								{item.drinkName}
+							<Text style={{
+								fontSize: 10, 
+								color: 'gray', 
+								justifyContent: 'flex-start',
+							}}> 
+								{item.item < 16
+                					? `${item.item}`
+                					: `${item.item.substring(0, 15)}...`}
 							</Text>
 						</View>
 					</View>
@@ -49,10 +71,10 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							Inventory
+							{item.from}
 						</Text>
-						<Text style={[item.pickup == "Pending"? styles.pendingText : styles.completedText]}>
-								{item.pickup}
+						<Text style={styles.completedText}>
+								{"Complete"}
 						</Text>
 					</View>
 
@@ -64,10 +86,10 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							Station {item.stationId}
+							{item.to}
 						</Text>
-						<Text style={[item.dropoff == "Pending"? styles.pendingText : styles.completedText]}>
-								{item.dropoff}
+						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
+								{item.status == "Complete"?"Complete":"Pending"}
 						</Text>
 					</View>
 				</View>
@@ -77,9 +99,11 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		);
 	});
 
-	const stationList = stationTaskList.map(item => {
+	const StationJobsList = filter()
+
+	const stationList = StationJobsList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height={'30%'}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -93,10 +117,12 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 					<View style={styles.sectionTitle}>
 						<View style={{...styles.rowView, width:'90%'}}>
 							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Station {item.stationId}:
+								{item.to}:
 							</Text>
 							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								{item.drinkName}
+								{item.item < 16
+                					? `${item.item}`
+                					: `${item.item.substring(0, 15)}...`}		
 							</Text>
 						</View>
 					</View>
@@ -111,8 +137,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							Inventory
 						</Text>
-						<Text style={[item.pickup == "Pending"? styles.pendingText : styles.completedText]}>
-								{item.pickup}
+						<Text style={[styles.completedText]}>
+							Complete
 						</Text>
 					</View>
 
@@ -124,10 +150,10 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							Station {item.stationId}
+							{item.to}
 						</Text>
-						<Text style={[item.dropoff == "Pending"? styles.pendingText : styles.completedText]}>
-								{item.dropoff}
+						<Text style={[item.dropoff == "Complete"? styles.completedText : styles.pendingText]}>
+							{item.dropoff == "Complete"?"Complete":"Pending"}
 						</Text>
 					</View>
 				</View>
@@ -183,9 +209,17 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 				marginLeft:50,
 			}}>
 				{runnerList}
+			</View>
+			<View style={{
+				flexWrap: 'wrap',
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				width: '100%',
+				//height: '60%',
+				paddingLeft: '2%',
+				marginLeft:50,
+			}}>
 				{stationList}
-				
-				
 			</View>
 		</View>
 	);

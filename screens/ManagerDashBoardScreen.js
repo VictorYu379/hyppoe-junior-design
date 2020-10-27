@@ -9,6 +9,7 @@ import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
 
+
 export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
@@ -20,7 +21,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	const [soldItems, setSold] = useState([]);
 	const [totalItems, setTotal] = useState([]);
 	const sections = ['avail', 'sold'];
-	console.log(Job.getReturnJobsDetailedData())
+	//console.log(Job.getReturnJobsDetailedData())
 	// Reading event and manager from global storage
 	// const [event, setEvent] = useState();
 	// const [manager, setManager] = useState();
@@ -47,6 +48,10 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	// console.log(event);
 	// console.log(manager);
 
+	const [pendingStat, count] = Job.getPendingJobsDetailedData()
+	console.log(count)
+
+	
 
 	const textColor = (text) => {
 		let rate = Number(text);
@@ -77,6 +82,15 @@ export default function ManagerDashBoardScreen({ navigation }) {
 		}
 		return res;
 	}
+
+	const totalPendingQtyandValue = () => {
+		let qty = 0;
+		let value = 0;
+		pendingStat.map(item => qty += item.count)
+		pendingStat.map(item => value += item.count * item.price)
+		return [qty,value]
+	}
+	
 
 	const totalValue = (text) => {
 		let res = 0;
@@ -224,10 +238,15 @@ export default function ManagerDashBoardScreen({ navigation }) {
 						<View style={{
 							...styles.sectionTitle,
 							width: '40%',
+							flexDirection: 'column',
+							justifyContent: 'center',
 						}}>
-							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{"  "}{formatNum(totalValue('total'))}$
-						</Text>
+							<Text style={{ 
+								fontSize: 12, 
+								color: 'gray',
+							}}>
+								{formatNum(totalValue('avail'))}$
+							</Text>
 						</View>
 
 					</View>
@@ -273,7 +292,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
-									2
+									{count}
 								</Text>
 								<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
 									Total Pending
@@ -300,7 +319,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 						}}>
 							
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{totalPendingQtyandValue()[0]} Qty
 							</Text>
 						</View>
 
@@ -309,7 +328,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							width: '40%',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{"  "}{stationStats.value}$
+								{totalPendingQtyandValue()[1]}$
 						</Text>
 						</View>
 

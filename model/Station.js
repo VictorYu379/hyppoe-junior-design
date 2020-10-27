@@ -86,6 +86,45 @@ export default class Station {
         return [avail, sold, total];
     }
 
+
+    static getTotalAvailableInventoryData() {
+        var avail = [];
+        var total = [];
+        var stations = getGlobalStations();
+        stations.map(station => {
+            station.drinks.map(drink => {
+                var index = avail.findIndex(item => item.name == drink.name);
+                if (index == -1) {
+                    var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit, icon: drink.icon};
+                    total[item.key] = drink.quantity;
+                    avail[avail.length] = item;
+                } else {
+                    avail[index].avail += drink.quantity;
+                    total[index] += drink.quantity;
+                }
+            });
+        });
+        var sold = [];
+        stations.map(station => {
+            var items = [];
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    var index = avail.findIndex(item => item.name == drink.name);
+                    total[index] += drink.quantity;
+                    if (items[index] == undefined) {
+                        items[index] = {key: index, name: drink.name, sold: drink.quantity, price: drink.pricePerUnit};
+                    } else {
+                        items[index].sold += drink.quantity;
+                    }
+                })
+            })
+            sold[sold.length] = {stationKey: station.key, sold: items};
+        });
+        return [avail, sold, total];
+    }
+    
+
+    
     // Returns the needed data for total stations detailed data screen
     static getTotalDetailedData() {
         var avail = [];

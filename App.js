@@ -63,6 +63,14 @@ export default function App() {
 				<NavigationContainer>
 					<Stack.Navigator>
 						<Stack.Screen
+							name="Dummy Page"
+							component={DummyScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Manager Dashboard"
 							component={ManagerDashBoardScreen}
 							options={{
