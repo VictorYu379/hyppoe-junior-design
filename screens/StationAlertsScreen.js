@@ -1,21 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import Event from 'model/Event'
 
 export default function StationAlertsScreen({ navigation }) {
 
-	const alerts = [
-        {key: 1, name: 'Station Total Remaining', type: 'Push Notification', rate: '15%'},
-        {key: 2, name: 'Station Individual Item Remaining', type: 'Push Notification', rate: '15%'},
-        {key: 3, name: 'Available Total Remaining', type: 'Push Notification', rate: '15%'},
-        {key: 4, name: 'Inventory Total Remaining', type: 'Push Notification', rate: '15%'},
-        {key: 5, name: 'Lowest to Highest Station Activity', type: 'Push Notification', rate: '30m'},
-        {key: 6, name: 'Lowest to Highest Item Activity', type: 'Push Notification', rate: '1hr'},
-        {key: 7, name: 'Assign Alert', type: 'Push Notification', rate: 'OFF'},
-        {key: 8, name: 'Confirmed Alert', type: 'Push Notification', rate: 'OFF'},
-        {key: 9, name: 'Station Requests Alert', type: 'Push Notification', rate: 'OFF'},
-	]
+	const [alerts, setAlerts] = useState([]);
+
+	useEffect(() => {
+		setAlerts(Event.getAlerts());
+	}, [])
 
 	const textColor = (text) => {
         if (text == 'OFF') {

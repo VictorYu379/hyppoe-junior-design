@@ -12,6 +12,7 @@ export default class Event {
     stations;       // List<String> (ids)
     jobs;           // List<String> (ids)
     managers;       // List<String> (ids)
+    alerts;         // Map<String, String>
 
     constructor(id) {
         this.id = id;
@@ -33,6 +34,26 @@ export default class Event {
         var eventID = await dbManager.getStorage(EVENT_KEY);
         var event = new Event(eventID);
         return await event.init();
+    }
+
+    static getAlerts() {
+        var alerts = [];
+        Object.entries(globalEvent.alerts).map(([key, value]) => {
+            alerts[alerts.length] = {key: alerts.length, name: key, type: 'Push Notification', rate: value};
+        });
+        alerts.sort((a, b) => {
+            if (a.rate == 'OFF' && b.rate == 'OFF') {
+                return (a.key <= b.key) ? -1 : 1;
+            }
+            if (a.rate == 'OFF') {
+                return 1;
+            }
+            if (b.rate == 'OFF') {
+                return -1;
+            }
+            return (a.key <= b.key) ? -1 : 1;
+        });
+        return alerts;
     }
 }
 

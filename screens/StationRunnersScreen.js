@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import Job from 'model/Job';
 
 export default function StationRunnersScreen({ navigation }) {
 
-	const taskList = [
-		{key: 1, runner: 'Unassigned', item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
-		{key: 2, runner: 'Runner 1', item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
-		{key: 3, runner: 'Runner 2', item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
-	]
+	const [taskList, setTaskList] = useState([]);
+
+	useEffect(() => {
+		setTaskList(Job.getJobs());
+	}, [])
 
 	const textColor = (text) => {
 		if (text == 'Complete') {
@@ -29,7 +30,8 @@ export default function StationRunnersScreen({ navigation }) {
 					flexDirection: 'column',
 					flex: 7,
 				}}>
-					<Text style={styles.rowTitle}>{task.runner}: {task.item}</Text>
+					<Text style={styles.rowTitle}>{task.runner}:</Text>
+					<Text style={styles.rowTitle}>{task.item}</Text>
 					<Text style={styles.rowText}>{task.from} to {task.to}</Text>
 				</View>
 				<Text style={{
