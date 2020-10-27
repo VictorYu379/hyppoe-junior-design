@@ -138,14 +138,14 @@ export default class Station {
 async function update(data) {
     var station = new Station(data.id);
     Object.assign(station, data.data());
-    var [drinks, pairItems] = await Promise.all([
-        dbManager.getDrinksInStation(station.id),
-        dbManager.getPairItemsInStation(station.id)
-    ]);
-    station.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-    station.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-    await Promise.all(station.drinks.map(drink => drink.init()));
-    await Promise.all(station.pairItems.map(pairItem => pairItem.init()));
+    dbManager.getDrinksInStationHandle(station.id).onSnapshot(async (drinks) => {
+        station.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        await Promise.all(station.drinks.map(drink => drink.init()));
+    });
+    dbManager.getPairItemsInStationHandle(station.id).onSnapshot(async (pairItems) => {
+        station.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(station.pairItems.map(pairItem => pairItem.init()));
+    });
     station.servers = station.servers.map(server => new Server(server));
     await Promise.all(station.servers.map(server => server.init()));
     globalStations[station.id] = station;

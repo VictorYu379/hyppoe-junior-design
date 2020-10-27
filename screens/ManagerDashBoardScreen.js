@@ -14,11 +14,11 @@ export default function DummyScreen({ navigation }) {
 	// const [event, setEvent] = useState();
 	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
-	useEffect(() => {
-		// Event.getInstance().then(event => { setEvent(event); });
-		// Manager.getInstance().then(manager => { setManager(manager); });
-		console.log(globalEvent);
-	}, [])
+	// useEffect(() => {
+	// 	// Event.getInstance().then(event => { setEvent(event); });
+	// 	// Manager.getInstance().then(manager => { setManager(manager); });
+	// 	// console.log(globalEvent);
+	// }, [])
 	// console.log(event);
 	// console.log(manager);
 
