@@ -14,15 +14,11 @@ export default class TotalInventory extends React.Component {
         inputInvUpdateModalVisible: false,
 		inputBlkUpdateModalVisible: false,
 		selectedDrink: 0,
-<<<<<<< HEAD
 		drinks: [],
 		percentage: 0,
 		totalValue: 0.00,
-		totalUnits: 0
-    };
-=======
+		totalUnits: 0,
 		inventoryId: null,
-        drinks: []
 	};
 	
 	parseDrink(drink) {
@@ -34,8 +30,6 @@ export default class TotalInventory extends React.Component {
         }
         return obj;
     }
-
->>>>>>> master
 
 	onInvModalSave(drink) {
 		console.log(drink.drinkType);
@@ -81,19 +75,14 @@ export default class TotalInventory extends React.Component {
 			var totalInventory = new Inventory(event.inventory);
 			console.log("id: ", totalInventory.id);
 			await totalInventory.getData();
-<<<<<<< HEAD
 			var [quantity, value] = totalInventory.getTotalInventory();
 			self.setState({
 				drinks: totalInventory.drinks,
 				percentage: quantity > 0 ? 100 : 0,
 				totalValue: value,
-				totalUnits: quantity
-=======
-			self.setState({
+				totalUnits: quantity,
 				inventoryId: totalInventory.id,
-				drinks: totalInventory.drinks,
 				eventId: event.id
->>>>>>> master
 			});
 		}
 		queryDrinks(this);
