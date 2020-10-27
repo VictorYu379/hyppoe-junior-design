@@ -27,7 +27,7 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
-				onPress={() => navigation.navigate('Runner Dash Board Screen')}>
+				onPress={() => navigation.navigate('Total Inventory')}>
 				<Text>Open up App.js to start working on your app!</Text>
 			</TouchableOpacity>
 			<StatusBar style="auto" />

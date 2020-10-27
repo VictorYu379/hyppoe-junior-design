@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 
+
 var firebaseConfig = {
     apiKey: "AIzaSyCl2oC7L8StE__HClrXmSJYyR1FPs_2GIc",
     authDomain: "hyppoe-inventory-management.firebaseapp.com",
@@ -20,6 +21,7 @@ firebase.initializeApp(firebaseConfig);
 class DBManager {
     constructor() {
         this.dbh = firebase.firestore();
+        this.store = firebase.storage();
     }
 
     // return: Promise<QuerySnapshot>
@@ -99,6 +101,7 @@ class DBManager {
         return this.dbh.collection("DrinkType").doc(typeId).update(obj);
     }
 
+    // return void
     // https://firebase.google.com/docs/database/web/read-and-write
     updateDrinkInventoryByType(inventoryId, data) {
         this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").get()
@@ -117,6 +120,58 @@ class DBManager {
                 }
 		       	console.log("Runner ID: ", snap.id, snap.data());
 		    })
+        })
+        .catch(e => {console.log(e)});
+    }
+
+    upload_Image(eventId, imgFile) {
+        // Unimplemented.
+        /*const blob = FetchBlob.polyfill.Blob;
+        const fs = FetchBlob.fs;
+        window.XMLHttpRequest = FetchBlob.XMLHttpRequest;
+        window.Blob = blob;
+        const image = FetchBlob.wrap(imgFile);
+
+        let photoBlob = null;
+        let url = null;
+        ref = this.store.ref().child(eventId).child("drinks");
+        blob.build(image, {type: "image/jpg"})
+            .then((blob) => {
+                photoBlob = blob;
+                return ref.put(blob, {contentType: "image/jpg"});
+            })
+            .then((snap) => {
+                url = snap.downloadURL;
+                photoBlob.close();
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+        return url;*/
+    }
+
+    // return Promise
+    createDrinkInventory(inventoryId, data) {
+        this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").add(data);
+    }
+
+    // return void
+    createDrinkTypeInfo(data) {
+        this.dbh.collection("DrinkType").get()
+        .then(snapshot => {
+            console.log("Drinks: ", snapshot.size);
+            var found = false;
+		    snapshot.forEach(snap => {
+                console.log(data);
+                if (snap.data().id == data.id) {
+                    console.log("FOUND:", data.id);
+                    found = true;
+                }
+            });
+            if (!found) {
+                this.dbh.collection("DrinkType").add(data);
+            }
+            console.log("FOUND: ", found);
         })
         .catch(e => {console.log(e)});
     }

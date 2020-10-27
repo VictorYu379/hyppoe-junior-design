@@ -104,14 +104,6 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
-							name="Runner History Screen"
-							component={RunnerHistoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
 							name="Manager Individual Station Inventory"
 							component={ManagerIndivitualStationDataScreen}
 							options={{
@@ -176,14 +168,6 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
-							name="Runner Dash Board Screen"
-							component={RunnerDashBoardScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
 							name="Runner History Screen"
 							component={RunnerHistoryScreen}
 							options={{
@@ -207,22 +191,8 @@ export default function App() {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
 								}
 							}}/>
-						<Stack.Screen
-							name="Runner Station Inventory"
-							component={RunnerStationInventoryScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
-							name="Runner Task Screen"
-							component={RunnerTaskScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
+						
+						
 						<Stack.Screen
 							name="Total Inventory"
 							component={TotalInventoryScreen}
