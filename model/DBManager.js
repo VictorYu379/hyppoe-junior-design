@@ -163,6 +163,12 @@ class DBManager {
         return this.dbh.collection("Event").doc(id).get();
     }
 
+    // return: DocumentReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
+    getEventHandle(id) {
+        return this.dbh.collection("Event").doc(id);
+    }
+
     // return Promise<void>
     // https://firebase.google.com/docs/database/web/read-and-write
     updateDrinkTypeInfo(data) {
