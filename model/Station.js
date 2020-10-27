@@ -26,7 +26,10 @@ export default class Station {
             dbManager.getDrinksInStation(this.id),
             dbManager.getPairItemsInStation(this.id)
         ]);
-        this.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.drinks = drinks.docs.map(drink => new Drink({
+            ...drink.data(),
+            id: drink.id
+        }));
         this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
@@ -121,6 +124,14 @@ export default class Station {
             sold[sold.length] = {stationKey: station.key, sold: items};
         });
         return [avail, sold, total];
+    }
+
+    getTotalValue() {
+        var totalValue = 0;
+        this.drinks.forEach(drink => {
+            totalValue += drink.quantity * drink.pricePerUnit;
+        });
+        return totalValue;
     }
 }
 
