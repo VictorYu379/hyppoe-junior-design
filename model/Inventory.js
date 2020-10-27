@@ -132,7 +132,7 @@ async function updateDrinksInInventory(drinks) {
 }
 
 async function updatePairItemsInInventory(items) {
-    globalInventory.pairItems = items.doc.map(pairItem => new PairItem(pairItem.data()));
+    globalInventory.pairItems = items.docs.map(pairItem => new PairItem(pairItem.data()));
     await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
 }
 

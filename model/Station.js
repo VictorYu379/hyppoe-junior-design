@@ -15,8 +15,9 @@ export default class Station {
     drinks;     // List<Drinks>
     pairItems;  // List<PairItems>
 
-    constructor(id) {
-        this.id = id;
+    constructor(data) {
+        console.log(data);
+        Object.assign(data);
     }
 
     async init() {
@@ -41,7 +42,7 @@ export default class Station {
     // Can be deprecated as now we have direct access to globalStations of an Event
     static getStations(ids) {
         var promises = ids.map(id => {
-            var station = new Station(id);
+            var station = new Station({id});
             return station.init();
         });
         return Promise.all(promises);
@@ -55,7 +56,7 @@ export default class Station {
     // To be deprecated, use getGlobalStation() instead
     static async getInstance() {
         var stationID = await dbManager.getStorage(STATION_KEY);
-        var station = new Station(stationID);
+        var station = new Station({ id: stationID });
         return await station.init();
     }
 
@@ -136,8 +137,9 @@ export default class Station {
 }
 
 async function update(data) {
-    var station = new Station(data.id);
+    var station = new Station({ id: data.id });
     Object.assign(station, data.data());
+    console.log(station);
     dbManager.getDrinksInStationHandle(station.id).onSnapshot(async (drinks) => {
         station.drinks = drinks.docs.map(drink => new Drink(drink.data()));
         await Promise.all(station.drinks.map(drink => drink.init()));

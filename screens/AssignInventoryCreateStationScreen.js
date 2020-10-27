@@ -25,7 +25,8 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-		var stations = getGlobalStations();
+        var stations = getGlobalStations();
+        console.log(stations);
         var newStations = {};
         var newTotalValue = 0;
         stations.map(station => {
@@ -48,6 +49,23 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
         this._scrollView1.current.scrollTo({
             y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight
         });
+    }
+
+    onStationModalSave(station) {
+        var newStation = {
+            id: this.state.stationId,
+            percentage: 0,
+            totalAvailable: "$0"
+        };
+        this.setState(update(this.state, {
+            stations: {
+                $merge: {
+                    [this.state.stationId]: newStation
+                }
+            }
+        }));
+        this.setState({ stationId: this.state.stationId + 1 });
+        this.setState({ stationModalVisible: false });
     }
 
     render() {
