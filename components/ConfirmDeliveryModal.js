@@ -1,7 +1,9 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import MyCheckBox from "./MyCheckBox"
+import Drink from "model/Drink"
+import Station from "model/Station"
+import MyCheckBox from "components/MyCheckBox"
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
 export default class ConfirmDeliveryModal extends React.Component {
@@ -18,28 +20,50 @@ export default class ConfirmDeliveryModal extends React.Component {
     constructor(props) {
         super(props)
 
-        var paired = new Map();
-        for (item of this.props.pairedItems) {
-            paired.set(item, true);
-        }
+        // var paired = new Map();
+        // for (item of this.props.pairedItems) {
+        //     paired.set(item, true);
+        // }
         this.state = {
             modalVisible: false,
+            drink: new Drink(),
+            station: new Station(),
             Item: {
-                Paired: paired,
-                Name: this.props.drinkName,
-                Unit: 10,
-                Pack: 2,
-                AssignedQuantity: 20,
-                ConfirmQuantity: 20,
+                Paired: [],
+                Name: "",
+                Unit: 0,
+                Pack: 0,
+                AssignedQuantity: 0,
+                ConfirmQuantity: 0,
                 Quantity: 0,
-                TotalQuantity: 100,
-                CurrentQuantity: 50,
+                TotalQuantity: 0,
+                CurrentQuantity: 0,
                 Quantity: 0,
-                Price: 10,
+                Price: 0,
                 Details: "",
             }
         }
-        this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
+        // this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
+        this.pairdItemList = [];
+    }
+
+    inputDrinkAndStation(drink, station) {
+        this.setState({
+            station,
+            drink,
+            Item: {
+                Name: drink.name,
+                Unit: drink.unit,
+                Pack: drink.pack,
+                Quantity: 0,
+                AssignedQuantity: drink.quantity,
+                ConfirmQuantity: drink.quantity,
+                TotalQuantity: 0,
+                CurrentQuantity: drink.quantity,
+                Price: drink.drinkType.pricePerUnit,
+                Details: drink.details
+            }
+        });
     }
 
     getPairedItemList(itemList) {
