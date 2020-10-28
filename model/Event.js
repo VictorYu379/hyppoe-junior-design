@@ -1,3 +1,5 @@
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 import { dbManager } from 'model/DBManager';
 import Station from 'model/Station';
 import Inventory from 'model/Inventory';
@@ -54,6 +56,12 @@ export default class Event {
             return (a.key <= b.key) ? -1 : 1;
         });
         return alerts;
+    }
+
+    addStation(station) {
+        return dbManager.getEventHandle(this.id).update({
+            stations: this.stations.concat(station.id)
+        });
     }
 }
 

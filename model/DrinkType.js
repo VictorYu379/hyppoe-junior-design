@@ -2,7 +2,7 @@ export default class DrinkType {
     id;             // String
     icon;         // String
     name;           // String
-    unitPerUnit;    // int
+    unitPerPack;    // int
     ouncePerUnit;   // float
     pricePerUnit;   // float
     costPerUnit;     // float
@@ -14,7 +14,7 @@ export default class DrinkType {
             this.id = "";
             this.icon = "";
             this.name = "",
-            this.unitPerUnit = 0,
+            this.unitPerPack = 0,
             this.ouncePerUnit = 0.0,
             this.pricePerUnit = 0.0;
             this.alert = false;

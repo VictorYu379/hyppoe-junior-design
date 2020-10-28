@@ -466,7 +466,6 @@ export default class InputBlankInventoryModal extends React.Component {
                                 onPress={() => { 
                                     console.log(this.state.Item.Image.uri);
                                     var newDrink = new Drink({
-                                        ...this.state.drink,
                                         drinkType: {
                                             ...this.state.drink.drinkType,
                                             id:   this.processName(this.state.Item.Name),

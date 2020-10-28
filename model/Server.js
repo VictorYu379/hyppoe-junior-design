@@ -23,7 +23,10 @@ export default class Server {
             dbManager.getDrinksInServer(this.id),
             dbManager.getPairItemsInServer(this.id)
         ]);
-        this.soldDrinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.soldDrinks = drinks.docs.map(drink => new Drink({
+            ...drink.data(),
+            id: drink.id
+        }));
         this.usedPairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.soldDrinks.map(drink => drink.init()));
         await Promise.all(this.usedPairItems.map(pairItem => pairItem.init()));

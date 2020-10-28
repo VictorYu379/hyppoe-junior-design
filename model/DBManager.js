@@ -91,6 +91,12 @@ class DBManager {
         return this.dbh.collection("Station").doc(id).get();
     }
 
+    // return: CollectionReference
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference
+    getStationCollectionHandle() {
+        return this.dbh.collection("Station");
+    }
+
     // return: DocumentReference
     // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentChange
     getStationHandle(id) {
@@ -169,24 +175,59 @@ class DBManager {
         return this.dbh.collection("Event").doc(id);
     }
 
+    getDrinksInInventoryHandle(id) {
+        return this.dbh.collection("Inventory").doc(id).collection("drinks");
+    }
+
+    getPairItemsInInventoryHandle(id) {
+        return this.dbh.collection("Inventory").doc(id).collection("pairItems");
+    }
+
+    getDrinksInStationHandle(id) {
+        return this.dbh.collection("Station").doc(id).collection("drinks");
+    }
+
+    getPairItemsInStationHandle(id) {
+        return this.dbh.collection("Station").doc(id).collection("pairItems");
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getPairItemsInServer(id) {
+        return this.dbh.collection("Server").doc(id).collection("usedPairItems").get();
+    }
+
+    getDrinksInJob(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("drinks").get();
+    }
+
+    // return: Promise<QuerySnapshot>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot
+    getPairItemsInJob(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("pairItems").get();
+    }
+
+    getDrinksInJobHandle(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("drinks");
+    }
+
+    getPairItemsInJobHandle(id) {
+        return this.dbh.collection("Jobs").doc(id).collection("pairItems");
+    }
+
     // return Promise<void>
     // https://firebase.google.com/docs/database/web/read-and-write
-    updateDrinkTypeInfo(data) {
-        const typeId = data.id;
-        obj = {
-            icon : data.icon,
-            name : data.name,
-            unitPerPack : data.unitPerPack,
-            ouncePerUnit : data.ouncePerUnit,
-            pricePerUnit : data.pricePerUnit,
-            alert : data.alert,
-            costPerUnit : data.costPerUnit
-        };
-        return this.dbh.collection("DrinkType").doc(typeId).update(obj);
+    updateDrinkTypeInfo(id, data) {
+        return this.dbh.collection("DrinkType").doc(id).update(data);
+    }
+
+    updateDrinkInInventory(inventoryId, drinkId, data) {
+        return this.dbh.collection("Inventory").doc(inventoryId)
+                       .collection("drinks").doc(drinkId)
+                       .update(data);
     }
 
     // return void
-    // https://firebase.google.com/docs/database/web/read-and-write
     updateDrinkInventoryByType(inventoryId, data) {
         this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").get()
         .then(snapshot => {
@@ -234,31 +275,38 @@ class DBManager {
         return url;*/
     }
 
-    // return Promise
+    // return Promise<DocumentReference>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference
     createDrinkInventory(inventoryId, data) {
-        this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").add(data);
+        return this.dbh.collection("Inventory").doc(inventoryId).collection("drinks").add(data);
+    }
+
+    // return: Promise<DocumentReference>
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference
+    createDrinkTypeInfo(data) {
+        return this.dbh.collection("DrinkType").add(data);
     }
 
     // return void
-    createDrinkTypeInfo(data) {
-        this.dbh.collection("DrinkType").get()
-        .then(snapshot => {
-            console.log("Drinks: ", snapshot.size);
-            var found = false;
-		    snapshot.forEach(snap => {
-                console.log(data);
-                if (snap.data().id == data.id) {
-                    console.log("FOUND:", data.id);
-                    found = true;
-                }
-            });
-            if (!found) {
-                this.dbh.collection("DrinkType").add(data);
-            }
-            console.log("FOUND: ", found);
-        })
-        .catch(e => {console.log(e)});
-    }
+    // createDrinkTypeInfo(data) {
+    //     this.dbh.collection("DrinkType").get()
+    //     .then(snapshot => {
+    //         console.log("Drinks: ", snapshot.size);
+    //         var found = false;
+	// 	    snapshot.forEach(snap => {
+    //             console.log(data);
+    //             if (snap.data().id == data.id) {
+    //                 console.log("FOUND:", data.id);
+    //                 found = true;
+    //             }
+    //         });
+    //         if (!found) {
+    //             this.dbh.collection("DrinkType").add(data);
+    //         }
+    //         console.log("FOUND: ", found);
+    //     })
+    //     .catch(e => {console.log(e)});
+    // }
 
     // return Promise<void>
     // https://firebase.google.com/docs/database/web/read-and-write

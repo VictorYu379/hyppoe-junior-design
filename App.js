@@ -49,7 +49,6 @@ import StationAlertsScreen from './screens/StationAlertsScreen';
 const Stack = createStackNavigator();
 
 export default function App() {
-	console.disableYellowBox = true;
 	let [fontsLoaded] = useFonts({
 		'Arial-BoldMT': require('./assets/fonts/ArialBold.ttf'),
 		'Arial': require('./assets/fonts/Arial.ttf')

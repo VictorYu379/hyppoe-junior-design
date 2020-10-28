@@ -3,6 +3,7 @@ import DrinkType from 'model/DrinkType';
 
 
 export default class Drink {
+    id;         // String
     drinkType;  // DrinkType
     quantity;   // int
     pack;       // int
@@ -22,7 +23,7 @@ export default class Drink {
     async init() {
         // Here we are trying to change this.drinkType from a string to a DrinkType instance
         var drinkType = await dbManager.getDrinkType(this.drinkType);
-        this.drinkType = new DrinkType(drinkType.data(), this.drinkType);
+        this.drinkType = new DrinkType(drinkType.data(), drinkType.id);
     }
 
     get icon() {
@@ -43,5 +44,17 @@ export default class Drink {
 
     get pricePerUnit() {
         return this.drinkType.pricePerUnit;
+    }
+
+    get typeId() {
+        return this.drinkType.id;
+    }
+
+    get alert() {
+        return this.drinkType.alert;
+    }
+
+    get costPerUnit() {
+        return this.drinkType.costPerUnit;
     }
 }
