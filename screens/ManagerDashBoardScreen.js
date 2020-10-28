@@ -4,6 +4,7 @@ import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
 import Accordion from 'react-native-collapsible/Accordion';
 import Station from 'model/Station';
+import Inventory from 'model/Inventory';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
@@ -19,7 +20,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	//const [availItems, setAvail] = useState([]);
 	//const [soldItems, setSold] = useState([]);
 	//const [totalItems, setTotal] = useState([]);
-	const sections = ['avail', 'sold'];
+	const sections = ['avail', 'sold']; 
 	//console.log(Job.getReturnJobsDetailedData())
 	// Reading event and manager from global storage
 	// const [event, setEvent] = useState();
@@ -33,6 +34,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	}, [])
 	// console.log(event);
 	// console.log(manager);
+	//console.log(Inventory.getDetailedData())
 
 	const [pendingStat, count] = Job.getPendingJobsDetailedData()
 	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()

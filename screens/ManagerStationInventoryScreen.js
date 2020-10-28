@@ -6,13 +6,13 @@ import Station, {getGlobalStations}from 'model/Station';
 
 
 
-export default function ManagerStationInventoryScreen({ navigation }) {
+export default function ManagerStationInventoryScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	// TODO: When clicking on the box and navigate to Individual Station Inventory, 
 	// the stationID of the directed station need to be set as below.
-	Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
-	console.log(getGlobalStations())
+	//Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
+	//console.log(getGlobalStations())
 	const StationDataList = Station.getStationInventoryData()
 	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
 
@@ -82,7 +82,9 @@ export default function ManagerStationInventoryScreen({ navigation }) {
 
 	const stationList = StationDataList.map(item => {
 		return (
-			<ShadowedBox width={'40%'} height = {100}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory", {stationId: item.id})}>
+			<ShadowedBox width={'40%'} height = {100}  margin={5} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory", {
+				stationId: item.id,
+			})}>
 
 				<View style={{
 					flexDirection: 'row',
