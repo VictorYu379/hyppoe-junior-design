@@ -8,7 +8,7 @@ import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
-//import console = require('console');
+
 
 export default function ManagerAvailableInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
@@ -16,33 +16,21 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 	const [drinkSelected, setDrinkSelected] = useState(null);
 	const [stations, setStations] = useState([]);
 	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
-	const [availItems, setAvail] = useState([]);
-	const [soldItems, setSold] = useState([]);
-	const [totalItems, setTotal] = useState([]);
+	//const [availItems, setAvail] = useState([]);
+	//const [soldItems, setSold] = useState([]);
+	//const [totalItems, setTotal] = useState([]);
 	const [manager, setManager] = useState([]);
 
 	
 
 	useEffect(() => {
-		Event.getInstance()
-			.then(event => Station.getStations(event.stations))
-			.then(stas => {
-				var [avail, sold, total] = Station.getTotalAvailableInventoryData(stas);
-				setAvail(avail);
-				setSold(sold);
-				setTotal(total);
-				var stationKeys = [];
-				sold.map(station => {
-					stationKeys.push(station.stationKey);
-				});
-				
-				setStations(stationKeys);
-			})
+		Event.getInstance().then(event => Station.getStations(event.stations))
 		Manager.getInstance().then(manager => { setManager(manager); });
 		// Event.getInstance().then(event => { setEvent(event); });
 		// Manager.getInstance().then(manager => { setManager(manager); });
 	}, [])
 	
+	const [availItems,soldItems,totalItems] = Station.getTotalAvailableInventoryData()
 	//console.log(availItems)
 
 	const data = availItems.map(function(e, i) {
@@ -51,6 +39,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 	  });
 
 	console.log(data)
+
 
 	const imageList = [
 		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},

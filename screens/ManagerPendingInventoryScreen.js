@@ -100,6 +100,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	});
 
 	const StationJobsList = filter()
+	console.log(StationJobsList)
 
 	const stationList = StationJobsList.map(item => {
 		return (
@@ -152,8 +153,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.to}
 						</Text>
-						<Text style={[item.dropoff == "Complete"? styles.completedText : styles.pendingText]}>
-							{item.dropoff == "Complete"?"Complete":"Pending"}
+						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
+							{item.status == "Complete"?"Complete":"Pending"}
 						</Text>
 					</View>
 				</View>

@@ -87,6 +87,24 @@ export default class Station {
     }
 
 
+    static getStationInventoryData() {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            var stationTotal = 0
+            var stationAvail = 0
+            var stationValue = 0
+            station.drinks.map(drink => {
+                stationTotal += drink.quantity
+                stationAvail += drink.quantity
+                stationValue += drink.quantity * drink.pricePerUnit
+            });
+            var item = {key: station.key, name: station.name, total: stationTotal, avail: stationAvail, value: stationValue, id: station.id};
+            res.push(item)     
+        });
+        return res
+    }
+
     static getTotalAvailableInventoryData() {
         var avail = [];
         var total = [];

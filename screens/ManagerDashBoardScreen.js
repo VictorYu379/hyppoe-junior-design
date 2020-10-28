@@ -4,7 +4,6 @@ import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
 import Accordion from 'react-native-collapsible/Accordion';
 import Station from 'model/Station';
-//import Event from 'model/Event';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
@@ -17,9 +16,9 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	const [activeSections, setSections] = useState([0]);
 	const [activeStations, setActiveStations] = useState([0]);
 	const [stations, setStations] = useState([]);
-	const [availItems, setAvail] = useState([]);
-	const [soldItems, setSold] = useState([]);
-	const [totalItems, setTotal] = useState([]);
+	//const [availItems, setAvail] = useState([]);
+	//const [soldItems, setSold] = useState([]);
+	//const [totalItems, setTotal] = useState([]);
 	const sections = ['avail', 'sold'];
 	//console.log(Job.getReturnJobsDetailedData())
 	// Reading event and manager from global storage
@@ -27,20 +26,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Event.getInstance()
-			.then(event => Station.getStations(event.stations))
-			.then(stas => {
-				var [avail, sold, total] = Station.getTotalDetailedData(stas);
-				setAvail(avail);
-				setSold(sold);
-				setTotal(total);
-				var stationKeys = [];
-				sold.map(station => {
-					stationKeys.push(station.stationKey);
-				});
-				
-				setStations(stationKeys);
-			})
+		Event.getInstance().then(event => Station.getStations(event.stations))
 		Manager.getInstance().then(manager => { setManager(manager); });
 		// Event.getInstance().then(event => { setEvent(event); });
 		// Manager.getInstance().then(manager => { setManager(manager); });
@@ -49,9 +35,8 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	// console.log(manager);
 
 	const [pendingStat, count] = Job.getPendingJobsDetailedData()
-	console.log(count)
+	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
 
-	
 
 	const textColor = (text) => {
 		let rate = Number(text);
@@ -73,14 +58,14 @@ export default function ManagerDashBoardScreen({ navigation }) {
 			soldItems.map(station => {
 				station.sold.map(item => res += item.sold);
 			});
-		} else {
+		} else {  
 			soldItems.map(station => {
 				if (station.stationKey == text) {
 					station.sold.map(item => res += item.sold);
 				}
 			});
 		}
-		return res;
+		return res;  
 	}
 
 	const totalPendingQtyandValue = () => {
@@ -374,16 +359,16 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize,
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
+									{percent(total('avail'), total('total'))}%
 								</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
 									Total Available
 								</Text>
 							</View>
@@ -407,10 +392,10 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{total('avail')} of
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{total('total')} Qty
 							</Text>
 						</View>
 
@@ -420,7 +405,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								2
+								{totalItems.length}
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
 								Stations
