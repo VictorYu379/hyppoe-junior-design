@@ -241,7 +241,7 @@ export default class Station {
         this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
-        this.servers = this.servers.map.filter(server => server !== "")
+        this.servers = this.servers.filter(server => server !== "")
                                        .map(server => new Server(server));
         await Promise.all(this.servers.map(server => server.init()));
         return this;

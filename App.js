@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
+
 import DummyScreen from './screens/DummyScreen';
 import TotalInventoryScreen from './screens/TotalInventoryScreen';
 import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStationOverviewScreen';
@@ -15,7 +16,6 @@ import AssignInventoryCreateStationScreen from './screens/AssignInventoryCreateS
 import ManagerStationInventoryScreen from './screens/ManagerStationInventoryScreen';
 import ManagerReturnInventoryScreen from './screens/ManagerReturnInventoryScreen';
 import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen';
-import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
 import ManagerDashBoardScreen from './screens/ManagerDashBoardScreen';
 import ManagerAvailableInventoryScreen from './screens/ManagerAvailableInventoryScreen';
 import ManagerAvailableInventoryDetailedDataScreen from './screens/ManagerAvailableInventoryDetailedDataScreen';
@@ -30,9 +30,10 @@ import ServerPendingInventoryScreen from './screens/ServerPendingInventoryScreen
 import ServerPendingInventoryHistory from './screens/ServerPendingInventoryHistory';
 import ServerIndividualDataScreen from './screens/ServerIndividualStationDataScreen';
 import ServerStationInventoryScreen from './screens/ServerIndividualStationDataScreen';
+import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
 
 //Runner Screen
-
+import RunnerDashBoardScreen from 'screens/RunnerDashBoardScreen';
 import RunnerRequestInventoryScreen from './screens/RunnerRequestInventoryScreen';
 import RunnerReturnInventoryScreen from './screens/RunnerReturnInventoryScreen';
 import RunnerHistoryScreen from './screens/RunnerHistoryScreen';
@@ -44,6 +45,7 @@ import IndividualStationInventoryScreen from './screens/IndividualStationInvento
 
 import ReturnInventoryDetailedDataScreen from './screens/ReturnInventoryDetailedDataScreen';
 import StationAlertsScreen from './screens/StationAlertsScreen';
+
 
 
 const Stack = createStackNavigator();
@@ -72,6 +74,30 @@ export default function App() {
 						<Stack.Screen
 							name="Manager Dashboard"
 							component={ServerDashBoardScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Dashboard"
+							component={ServerDashBoardScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner Dashboard"
+							component={RunnerDashBoardScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Return Inventory"
+							component={ServerReturnInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
