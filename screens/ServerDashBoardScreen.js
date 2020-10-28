@@ -190,7 +190,11 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox
+					width={'40%'}
+					height={'19%'}
+					margin={5}
+					touchable>
 
 					<View style={{
 						flexDirection: 'row',
@@ -265,7 +269,12 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox
+					width={'40%'}
+					height={'19%'} 
+					margin={5} 
+					touchable
+					onPress={() => navigation.navigate("Server Return Inventory")}>
 
 					<View style={{
 						flexDirection: 'row',
@@ -334,7 +343,12 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox
+					width={'40%'}
+					height={'19%'}
+					margin={5}
+					touchable
+					onPress={() => navigation.navigate("Server Confirm Inventory")}>
 
 					<View style={{
 						flexDirection: 'row',
@@ -465,7 +479,12 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox
+					width={'40%'}
+					height={'19%'}
+					margin={5}
+					touchable
+					onPress={() => navigation.navigate("Server Request Inventory")}>
 
 					<View style={{
 						flexDirection: 'row',

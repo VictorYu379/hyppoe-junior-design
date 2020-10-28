@@ -5,7 +5,6 @@ import ShadowedBox from 'components/ShadowedBox';
 export default function DrinkBox(props) {
     return (
         <ShadowedBox
-            key={props.key}
             width={'80%'}
             square
             margin={5}

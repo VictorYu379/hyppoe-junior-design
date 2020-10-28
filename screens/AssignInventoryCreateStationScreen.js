@@ -7,9 +7,10 @@ import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
+import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
 import update from 'immutability-helper';
 import { globalInventory } from 'model/Inventory';
-import { getGlobalStations } from '../model/Station';
+import { getGlobalStations } from 'model/Station';
 
 export default class AssignInventoryCreateStationScreen extends React.Component {
     state = {
@@ -19,24 +20,14 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
         stationModalVisible: false,
         stations: {},
         drinks: [],
-        stationId: 3,
+        stationSelected: null,
         totalValue: 0,
+        assignInventoryModalVisible: false
     };
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-		var stations = getGlobalStations();
-        var newStations = {};
-        var newTotalValue = 0;
-        stations.map(station => {
-            newTotalValue += station.getTotalValue();
-            newStations[station.id] = station;
-        });
-        this.setState({
-            drinks: globalInventory.drinks,
-            stations: newStations,
-            totalValue: newTotalValue
-        });
+        this.updateData();
     }
 
     onDrinkBoxLayout(event) {
@@ -50,6 +41,43 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
         });
     }
 
+    onStationModalSave(station) {
+        this.setState(update(this.state, {
+            stations: {
+                $merge: {
+                    [station.key]: station
+                }
+            }
+        }));
+        this.setState({ stationModalVisible: false });
+    }
+
+    onConfirmDelivery(station, drink) {
+        //////
+        // create job
+        //////
+        this.setState({
+            assignInventoryModalVisible: false,
+            inventorySelected: null,
+        });
+        this.updateData();
+    }
+
+    updateData() {
+        var stations = getGlobalStations();
+        var newStations = {};
+        var newTotalValue = 0;
+        stations.map(station => {
+            newTotalValue += station.getTotalValue();
+            newStations[station.key] = station;
+        });
+        this.setState({
+            drinks: globalInventory.drinks,
+            stations: newStations,
+            totalValue: newTotalValue
+        });
+    }
+
     render() {
         return (
             <TouchableOpacity
@@ -59,6 +87,14 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 onPress={() => {
                     this.setState({ inventorySelected: null });
                 }}>
+                <ConfirmDeliveryModal
+                    drink={this.state.drinks[this.state.inventorySelected]}
+                    pairedItems={[
+                        "12 ounce cup"
+                    ]}
+                    visible={this.state.assignInventoryModalVisible}
+                    ref={m => {this.confirmDeliveryModal = m}}
+                    onSave={this.onConfirmDelivery.bind(this)}/>
                 <BottomBlueButton
                     text={"Finish Stations"}
                     onPress={() => this.props.navigation.navigate("Manager Dashboard")}
@@ -66,22 +102,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 <InventoryTopBox inventory={"Assign"} />
                 <StationModal
                     visible={this.state.stationModalVisible}
-                    onSave={() => {
-                        var newStation = {
-                            id: this.state.stationId,
-                            percentage: 0,
-                            totalAvailable: "$0"
-                        };
-                        this.setState(update(this.state, {
-                            stations: {
-                                $merge: {
-                                    [this.state.stationId]: newStation
-                                }
-                            }
-                        }));
-                        this.setState({ stationId: this.state.stationId + 1 });
-                        this.setState({ stationModalVisible: false });
-                    }} />
+                    onSave={this.onStationModalSave.bind(this)} />
                 <View style={styles.scrollsContainer}>
                     <View
                         style={{ width: '50%' }}
@@ -98,8 +119,8 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                 return (
                                     <DrinkBox
                                         key={index}
-                                        onPress={this.onDrinkBoxPressed.bind(this, index)}
                                         drink={drink}
+                                        onPress={this.onDrinkBoxPressed.bind(this, index)}
                                         greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}
                                         onLayout={this.onDrinkBoxLayout.bind(this)}/>
                                 );
@@ -112,17 +133,25 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {Object.keys(this.state.stations).map(stationId => {
+                            {Object.keys(this.state.stations).map((stationId, index) => {
                                 var station = this.state.stations[stationId];
                                 if (station.deleted === true) {
                                     return;
                                 }
                                 return (
                                     <StationBox
+                                        key={index}
                                         verb={"Add to"}
                                         station={station}
                                         inventorySelected={this.state.inventorySelected}
-                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
+                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
+                                        onAdd={() => {
+                                            this.confirmDeliveryModal.inputDrinkAndStation(
+                                                this.state.drinks[this.state.inventorySelected],
+                                                this.state.stations[station.key]
+                                            );
+                                            this.setState({ assignInventoryModalVisible: true });
+                                        }}
                                         enableDelete={true}
                                         totalValue={this.state.totalValue}
                                         onDelete={() => {
@@ -130,7 +159,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                                 this.state,
                                                 {
                                                     stations: {
-                                                        [station.id]: {
+                                                        [station.key]: {
                                                             $merge: {
                                                                 deleted: true
                                                             }

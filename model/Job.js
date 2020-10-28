@@ -104,7 +104,10 @@ export default class Job {
                 from = "Station " + job.stationKey;
                 to = "Inventory";
             }
-            var runner = "Runner " + job.runner.key;
+            var runner = "Unassigned";
+            if (job.runnerId != "") {
+                runner = "Runner " + job.runner.key;
+            }
             tasks.push({key: tasks.length, runner: runner, item: item, from: from, to: to, status: job.status});
         });
         tasks.sort((a, b) => {
@@ -158,8 +161,10 @@ async function update(data) {
         job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
     });
-    job.runner = new Runner(job.runnerId);
-    await job.runner.init();
+    if (job.runnerId != "") {
+        job.runner = new Runner(job.runnerId);
+        await job.runner.init();
+    }
     globalJobs[job.id] = job;
 }
 

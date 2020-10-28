@@ -1,6 +1,9 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, KeyboardAvoidingView } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
+import Station from "model/Station";
+import { globalStations } from "model/Station";
+import { globalEvent } from "model/Event";
 
 export default class StationModal extends React.Component {
 
@@ -149,7 +152,22 @@ export default class StationModal extends React.Component {
                         <TouchableHighlight
                             style={styles.openButton}
                             underlayColor='grey'
-                            onPress={() => this.props.onSave()}>
+                            onPress={() => {
+                                var data = {
+                                    name: this.state.Station.Name,
+                                    key: Object.keys(globalStations).length + 1,
+                                    servers: Array(this.state.Station.Servers).fill(""),
+                                    runners: Array(this.state.Station.Runners).fill(""),
+                                    details: this.state.Station.Details
+                                };
+                                Station.createNewStation(data)
+                                .then(station => {
+                                    return new Promise(resolve => {
+                                        globalEvent.addStation(station).then(resolve(station));
+                                    });
+                                })
+                                .then(station => this.props.onSave(station));
+                            }}>
                             <Text style={styles.textStyle}>Save</Text>
                         </TouchableHighlight>
                     </View>

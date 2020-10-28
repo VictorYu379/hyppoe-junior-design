@@ -5,36 +5,26 @@ import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import ReturnInventoryModal from 'components/ReturnInventoryModal';
-import Inventory from 'model/Inventory';
-import Event from 'model/Event';
-import Station from '../model/Station';
+import { getGlobalStations } from 'model/Station';
+import { globalInventory } from 'model/Inventory';
 
 export default class ManagerAssignInventoryScreen extends React.Component {
     state = {
         inventorySelected: null,
         scrollViewHeight: 0,
         elementHeight: 0,
-        returnInventoryModalVisible: false,
         stationModalVisible: false,
         stations: [],
-        drinks: []
+        drinks: [],
+        stationSelected: null,
+        totalValue: 0,
+        assignInventoryModalVisible: false
     };
     
     _scrollView1 = React.createRef();
 
     componentDidMount() {
-        Event.getInstance()
-            .then(event => {
-                var promises = [];
-                var totalInventory = new Inventory(event.inventory);
-                promises.push(totalInventory.getData());
-                promises.push(Station.getStations(event.stations));
-                return Promise.all(promises);
-            })
-            .then(([totalInventory, stations]) => {
-                this.setState({ drinks: totalInventory.drinks });
-                this.setState({ stations });
-            });
+        this.updateData();
     }
 
     onDrinkBoxLayout(event) {
@@ -48,6 +38,21 @@ export default class ManagerAssignInventoryScreen extends React.Component {
         });
     }
 
+    updateData() {
+        var stations = getGlobalStations();
+        var newStations = {};
+        var newTotalValue = 0;
+        stations.map(station => {
+            newTotalValue += station.getTotalValue();
+            newStations[station.key] = station;
+        });
+        this.setState({
+            drinks: globalInventory.drinks,
+            stations: newStations,
+            totalValue: newTotalValue
+        });
+    }
+
     render() {
         return (
             <TouchableOpacity
@@ -58,8 +63,8 @@ export default class ManagerAssignInventoryScreen extends React.Component {
                 <ReturnInventoryModal
                     sourceImg={null} 
                     drinkName={null}
-                    visible={this.state.returnInventoryModalVisible} 
-                    onSave={() => this.setState({returnInventoryModalVisible: false})} />
+                    visible={this.state.assignInventoryModalVisible} 
+                    onSave={() => this.setState({assignInventoryModalVisible: false})} />
                 <InventoryTopBox inventory={"Assign"} />
                 <View style={styles.scrollsContainer}>
                     <View
@@ -89,15 +94,20 @@ export default class ManagerAssignInventoryScreen extends React.Component {
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {this.state.stations.map((station, index) => {
+                            {Object.keys(this.state.stations).map((stationId, index) => {
+                                var station = this.state.stations[stationId];
+                                if (station.deleted === true) {
+                                    return;
+                                }
                                 return (
                                     <StationBox
                                         verb={"Add to"}
                                         key={index}
                                         station={station}
+                                        totalValue={this.state.totalValue}
                                         inventorySelected={this.state.inventorySelected}
-                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
-                                        onAdd={() => this.setState({returnInventoryModalVisible: true})}
+                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
+                                        onAdd={() => this.setState({assignInventoryModalVisible: true})}
                                         />
                                 );
                             })}

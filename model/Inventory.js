@@ -1,6 +1,7 @@
 import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
+import { getGlobalStations } from 'model/Station';
 
 export default class Inventory {
     id;         // String
@@ -10,36 +11,17 @@ export default class Inventory {
     drinks;
     pairItems;
 
-    constructor(id) {
-        this.id = id;
-    }
-
-    async getData() {
-        var handle = dbManager.getInventoryHandle(this.id);
-        var data = await handle.get();
-        this.name = data.data().name;
-        var drinks = await handle.collection("drinks").get();
-        var pairItems = await handle.collection("pairItems").get();
-        this.drinks = drinks.docs.map(drinkInfo => new Drink({
-            ...drinkInfo.data(),
-            id: drinkInfo.id
-        }));
-        this.pairItems = pairItems.docs.map(pairItemInfo => new PairItem(pairItemInfo.data()));
-        await Promise.all(this.drinks.map(drink => drink.init()));
-        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
-        return this;
-    }
-
     static setInventory(id) {
         dbManager.getInventoryHandle(id).onSnapshot(updateInventory);
         dbManager.getInventoryHandle(id).collection("drinks").onSnapshot(updateDrinksInInventory);
         dbManager.getInventoryHandle(id).collection("pairItems").onSnapshot(updatePairItemsInInventory);
     }
 
-    static getDetailedData(inventory, stations) {
+    static getDetailedData() {
+        var stations = getGlobalStations();
         var avail = [];
         var total = [];
-        inventory.drinks.forEach((drink, index) => {
+        globalInventory.drinks.forEach((drink, index) => {
             var item = {key: index, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
             total.push(drink.quantity);
             avail.push(item);
@@ -65,6 +47,26 @@ export default class Inventory {
             return {stationKey: station.key, assign: items};
         });
         return [avail, assign, total];
+    }
+
+    constructor(id) {
+        this.id = id;
+    }
+
+    async getData() {
+        var handle = dbManager.getInventoryHandle(this.id);
+        var data = await handle.get();
+        this.name = data.data().name;
+        var drinks = await handle.collection("drinks").get();
+        var pairItems = await handle.collection("pairItems").get();
+        this.drinks = drinks.docs.map(drinkInfo => new Drink({
+            ...drinkInfo.data(),
+            id: drinkInfo.id
+        }));
+        this.pairItems = pairItems.docs.map(pairItemInfo => new PairItem(pairItemInfo.data()));
+        await Promise.all(this.drinks.map(drink => drink.init()));
+        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
+        return this;
     }
 
     getTotalInventory() {
@@ -132,7 +134,7 @@ async function updateDrinksInInventory(drinks) {
 }
 
 async function updatePairItemsInInventory(items) {
-    globalInventory.pairItems = items.doc.map(pairItem => new PairItem(pairItem.data()));
+    globalInventory.pairItems = items.docs.map(pairItem => new PairItem(pairItem.data()));
     await Promise.all(globalInventory.pairItems.map(pairItem => pairItem.init()));
 }
 
