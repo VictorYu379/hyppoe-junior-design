@@ -2,6 +2,8 @@ import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity} from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
+import Drink from "model/Drink"
+import Station from "model/Station"
 import MyCheckBox from './MyCheckBox'
 
 export default class ReturnInventoryModal extends React.Component {
@@ -19,25 +21,50 @@ export default class ReturnInventoryModal extends React.Component {
         super(props)
         this.state = {
             modalVisible: false,
+            drink: new Drink(),
+            station: new Station(),
             Item: {
-                Name: this.props.drinkName,
+                Paired: [],
+                Name: "",
                 Unit: 0,
                 Pack: 0,
+                AssignedQuantity: 0,
+                ConfirmQuantity: 0,
                 Quantity: 0,
+                TotalQuantity: 0,
                 CurrentQuantity: 0,
-                TotalQuantity: 100,
-                AddedQuantity: 0,
-                Price: 10,
+                Quantity: 0,
+                Price: 0,
+                Details: "",
                 Damaged: false,
                 Unhappy: false,
                 Misorder: false,
                 Spilled: false,
                 OtherReasons: "",
+                AddedQuantity: 0,
             }
-        }
+        };
+    }
+
+    inputDrinkAndStation(drink, station) {
+        this.setState({
+            station,
+            drink,
+            Item: {
+                Name: drink.name,
+                Unit: drink.unit,
+                Pack: drink.pack,
+                Quantity: 0,
+                AssignedQuantity: drink.quantity,
+                ConfirmQuantity: drink.quantity,
+                TotalQuantity: 0,
+                CurrentQuantity: drink.quantity,
+                Price: drink.drinkType.pricePerUnit,
+                Details: drink.details
+            }
+        });
     }
     
-
     updateItem(key, val) {
         if (Number(val) < 0) {
             val = 0;
