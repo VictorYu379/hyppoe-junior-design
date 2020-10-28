@@ -74,8 +74,15 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			
 
+			<ShadowedBox 
+					width={'80%'} 
+					height={'20%'}  
+					margin={10}
+					touchable
+					onPress={() => {navigation.navigate("Individual Inventory Station Overview");}}
+				>
 
 				<View style={{
 							flexDirection: 'row',

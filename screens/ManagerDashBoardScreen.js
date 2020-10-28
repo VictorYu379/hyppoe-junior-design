@@ -2,12 +2,15 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
-import Job from 'model/Job';
+import Accordion from 'react-native-collapsible/Accordion';
 import Station from 'model/Station';
-import Event from 'model/Event';
 import Inventory from 'model/Inventory';
+import Event, { globalEvent } from 'model/Event';
+import Manager from 'model/Manager';
+import Job from 'model/Job';
 
-export default function DummyScreen({ navigation }) {
+
+export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
@@ -46,24 +49,114 @@ export default function DummyScreen({ navigation }) {
 		// Get number of set alerts;
 		// console.log(Event.getNumOfAlerts()); 		
 	}, [])
+  
+	const [activeSections, setSections] = useState([0]);
+	const [activeStations, setActiveStations] = useState([0]);
+	const [stations, setStations] = useState([]);
+	//const [availItems, setAvail] = useState([]);
+	//const [soldItems, setSold] = useState([]);
+	//const [totalItems, setTotal] = useState([]);
+	const sections = ['avail', 'sold']; 
+	//console.log(Job.getReturnJobsDetailedData())
+	// Reading event and manager from global storage
+	// const [event, setEvent] = useState();
+	// const [manager, setManager] = useState();
+	// The second argument [] is to make useEffect run only once (like componentDidMount)
+	// console.log(event);
+	// console.log(manager);
+	//console.log(Inventory.getDetailedData())
+
+	const [pendingStat, count] = Job.getPendingJobsDetailedData()
+	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
+
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const total = (text) => {
+		let res = 0;
+		if (text == 'total') {
+			totalItems.map(num => res += num);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold);
+			});
+		} else {  
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold);
+				}
+			});
+		}
+		return res;  
+	}
+
+	const totalPendingQtyandValue = () => {
+		let qty = 0;
+		let value = 0;
+		pendingStat.map(item => qty += item.count)
+		pendingStat.map(item => value += item.count * item.price)
+		return [qty,value]
+	}
+	
+
+	const totalValue = (text) => {
+		let res = 0;
+		if (text == 'total') {
+			availItems.map(item => res += total[item.key] * item.price);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail * item.price);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold * item.price);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold * item.price);
+				}
+			});
+		}
+		return res;
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const formatNum = (num) => {
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	}
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'19%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 				<View style={{
 					marginVertical: 20,
 					width: '100%',
 					height: '100%',
 					flexDirection: 'column',
-					justifyContent: 'flex-start',
+					justifyContent: 'center',
 					alignItems: 'flex-start',
 					margin: 10
 				}}>
 
 					<Text style={{ fontSize: 16, fontWeight: "bold", margin: 10, marginTop: 10, marginLeft: 20 }}>Manager DashBoard</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Station 1:Big Tent</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Server Tablet: 1</Text>
 				</View>
 
 
@@ -119,18 +212,18 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
-							</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
+									{percent(total('avail'), total('total'))}%
+								</Text>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+									}}>
 									Total Available
-							</Text>
+								</Text>
 							</View>
 
 						</View>
@@ -152,11 +245,99 @@ export default function DummyScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{total('avail')} of
 						</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{total('total')} Qty
 						</Text>
+						</View>
+
+						<View style={{
+							...styles.sectionTitle,
+							width: '40%',
+							flexDirection: 'column',
+							justifyContent: 'center',
+						}}>
+							<Text style={{ 
+								fontSize: 12, 
+								color: 'gray',
+							}}>
+								{formatNum(totalValue('avail'))}$
+							</Text>
+						</View>
+
+					</View>
+
+
+				</ShadowedBox>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate('Manager Pending Inventory')}>
+
+					<View style={{
+						flexDirection: 'row',
+						margin: 3,
+						height: '40%',
+						alignItems: 'center',
+						// borderWidth: 1,
+					}}>
+
+
+						<View style={{
+							width: '60%',
+							height: '100%',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+									Pending
+								</Text>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+									Inventory
+								</Text>
+							</View>
+							<View style={{
+								width: '60%',
+								height: '100%',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
+									{count}
+								</Text>
+								<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
+									Total Pending
+								</Text>
+							</View>
+
+						</View>
+
+
+
+
+					</View>
+
+					<View style={{
+						flexDirection: 'row',
+						margin: 3,
+						height: '40%',
+						alignItems: 'center',
+						// borderWidth: 1,
+					}}>
+						<View style={{
+							width: '50%',
+							marginLeft: 10,
+						}}>
+							
+							<Text style={{ fontSize: 12, color: 'gray' }}>
+								{totalPendingQtyandValue()[0]} Qty
+							</Text>
 						</View>
 
 						<View style={{
@@ -164,77 +345,9 @@ export default function DummyScreen({ navigation }) {
 							width: '40%',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{"  "}{stationStats.value}$
+								{totalPendingQtyandValue()[1]}$
 						</Text>
 						</View>
-
-					</View>
-
-
-				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Manager Pending Inventory")}>
-
-					<View style={{
-						flexDirection: 'row',
-						margin: 3,
-						height: '100%',
-						alignItems: 'center',
-						// borderWidth: 1,
-					}}>
-
-
-						<View style={{
-							width: '50%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-							<View style={{
-								width: '100%',
-								height: '50%',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
-									Pending
-								</Text>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
-									Inventory
-								</Text>
-							</View>
-
-							<View style={{
-								width: '100%',
-								height: '50%',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									2400 Qty
-								</Text>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									86400$
-								</Text>
-							</View>
-						</View>
-
-
-						<View style={{
-							width: '50%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-							<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
-								2
-							</Text>
-							<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
-								Total Pending
-							</Text>
-						</View>
-
 
 					</View>
 
@@ -278,16 +391,16 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize,
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
+									{percent(total('avail'), total('total'))}%
 								</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(total('avail'), total('total'))),
+								}}>
 									Total Available
 								</Text>
 							</View>
@@ -311,10 +424,10 @@ export default function DummyScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{total('avail')} of
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{total('total')} Qty
 							</Text>
 						</View>
 
@@ -324,7 +437,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								2
+								{totalItems.length}
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
 								Stations

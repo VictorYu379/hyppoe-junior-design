@@ -43,6 +43,7 @@ export default class Station {
         })
     }
 
+
     // Returns the needed data for individual station detailed data screen
     static getDetailedData() {
         var station = getGlobalStation();
@@ -67,6 +68,112 @@ export default class Station {
         return [avail, sold, total];
     }
 
+
+    static getStationInventoryData() {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            var stationTotal = 0
+            var stationAvail = 0
+            var stationValue = 0
+            station.drinks.map(drink => {
+                stationTotal += drink.quantity
+                stationAvail += drink.quantity
+                stationValue += drink.quantity * drink.pricePerUnit
+            });
+            var item = {key: station.key, name: station.name, total: stationTotal, avail: stationAvail, value: stationValue, id: station.id};
+            res.push(item)     
+        });
+        return res
+    }
+
+    static getStationDrinksDataByID(ID) {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            if(station.id == ID) {
+                station.drinks.map(drink => {
+                    var item = {
+                        icon: drink.icon,
+                        name: drink.name,
+                        avail: drink.quantity,
+                        total: drink.quantity,
+                    }
+                    res.push(item)
+                })
+            }
+        })
+        return res
+    }
+
+    static getStationInventoryDataByID(ID) {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            if(station.id == ID) {
+                var stationTotal = 0
+                var stationAvail = 0
+                var stationValue = 0
+                station.drinks.map(drink => {
+                    stationTotal += drink.quantity
+                    stationAvail += drink.quantity
+                    stationValue += drink.quantity * drink.pricePerUnit
+                });
+                var item = {
+                    key: station.key, 
+                    name: station.name, 
+                    total: stationTotal, 
+                    avail: stationAvail, 
+                    value: stationValue, 
+                    id: station.id, 
+                    serverNum: station.servers.length,
+                    runnerNum: station.runners.length,
+                };
+                res.push(item)   
+            }  
+        });
+        return res
+    }
+
+
+    static getTotalAvailableInventoryData() {
+        var avail = [];
+        var total = [];
+        var stations = getGlobalStations();
+        stations.map(station => {
+            station.drinks.map(drink => {
+                var index = avail.findIndex(item => item.name == drink.name);
+                if (index == -1) {
+                    var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit, icon: drink.icon};
+                    total[item.key] = drink.quantity;
+                    avail[avail.length] = item;
+                } else {
+                    avail[index].avail += drink.quantity;
+                    total[index] += drink.quantity;
+                }
+            });
+        });
+        var sold = [];
+        stations.map(station => {
+            var items = [];
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    var index = avail.findIndex(item => item.name == drink.name);
+                    total[index] += drink.quantity;
+                    if (items[index] == undefined) {
+                        items[index] = {key: index, name: drink.name, sold: drink.quantity, price: drink.pricePerUnit};
+                    } else {
+                        items[index].sold += drink.quantity;
+                    }
+                })
+            })
+            sold[sold.length] = {stationKey: station.key, sold: items};
+        });
+        return [avail, sold, total];
+    }
+    
+
+    
     // Returns the needed data for total stations detailed data screen
     static getTotalDetailedData() {
         var avail = [];
@@ -103,6 +210,7 @@ export default class Station {
         });
         return [avail, sold, total];
     }
+
 
     // Returns the number of returned items of station based on stationId.
     // Returns the total number of returned items if stationId is omitted.
@@ -174,6 +282,26 @@ export default class Station {
 
     static getNumOfStations() {
         return getGlobalStations().length;
+    }
+
+
+    parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drink.details,
+            drinkType: drink.typeId,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
+    }
+
+    updateDrink(drink) {
+        let found = false;
+        let drinkId = drink.id;
+        console.log(this.parseDrink(drink));
+        dbManager.updateDrinkInStation(this.id, this.parseDrink(drink)).catch(e => {
+            console.log(e);
+        });
     }
 
     static createNewStation(data) {
