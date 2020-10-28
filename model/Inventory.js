@@ -1,6 +1,7 @@
 import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
+import { getGlobalStations } from 'model/Station';
 
 export default class Inventory {
     id;         // String
@@ -36,10 +37,11 @@ export default class Inventory {
         dbManager.getInventoryHandle(id).collection("pairItems").onSnapshot(updatePairItemsInInventory);
     }
 
-    static getDetailedData(inventory, stations) {
+    static getDetailedData() {
+        var stations = getGlobalStations();
         var avail = [];
         var total = [];
-        inventory.drinks.forEach((drink, index) => {
+        globalInventory.drinks.forEach((drink, index) => {
             var item = {key: index, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
             total.push(drink.quantity);
             avail.push(item);
