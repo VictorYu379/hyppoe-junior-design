@@ -32,9 +32,12 @@ export default class Station {
         }));
         this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
+       
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
         this.servers = this.servers.map(server => new Server(server));
+       
         await Promise.all(this.servers.map(server => server.init()));
+        console.log("OK");
         return this;
     }
 
@@ -124,6 +127,22 @@ export default class Station {
             sold[sold.length] = {stationKey: station.key, sold: items};
         });
         return [avail, sold, total];
+    }
+
+    updateDrink(drink) {
+        let found = false;
+        for (let i = 0 ; i < this.drinks.length; i++) {
+            if (drinks[i].id === drink.id) {
+                this.drinks[i] = drink;
+                found = true;
+            }
+        }
+        if (!found) {
+            this.drinks.push(drink);
+        }
+        dbManager.updateDrinkInStation(id, drink.id, dbManager.parseDrink(drink)).catch(e => {
+            console.log(e);
+        });
     }
 
     getTotalValue() {

@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, Toucha
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
 import MyCheckBox from './MyCheckBox'
+import Drink from "../model/Drink"
 
 export default class ReturnInventoryModal extends React.Component {
 
@@ -19,6 +20,8 @@ export default class ReturnInventoryModal extends React.Component {
         super(props)
         this.state = {
             modalVisible: false,
+            drink: new Drink(),
+            stationName: "",
             Item: {
                 Name: this.props.drinkName,
                 Unit: 0,
@@ -35,6 +38,41 @@ export default class ReturnInventoryModal extends React.Component {
                 OtherReasons: "",
             }
         }
+    }
+
+    inputDrink(drink, stationName) {
+        this.setState({
+            drink,
+            stationName: stationName,
+            Item: {
+                Name: drink.name,
+                Unit: drink.unit,
+                Pack: drink.pack,
+                Quantity: 0,
+                CurrentQuantity: drink.quantity,
+                TotalQuantity: drink.quantity,
+                AddedQuantity: 0,
+                Price: drink.drinkType.pricePerUnit,
+               
+            }
+        });
+    }
+
+    makeDetailString() {
+        let result = "";  
+        if (this.state.Damaged) {
+            result += "Damaged, ";
+        }
+        if (this.state.Unhappy) {
+            result += "Unhappy, ";
+        }
+        if (this.state.Misorder) {
+            result += "Misorder, ";
+        }
+        if (this.state.Spilled) {
+            result += "Spilled, ";
+        }
+        return result;
     }
     
 
@@ -179,11 +217,9 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Station 1 - Main Tent - Tablet1
+                                { this.state.stationName }
                             </Text>
                         </View>
-                        
-                        
 
                         <View style={styles.rowView}>
                             <Image
@@ -433,11 +469,14 @@ export default class ReturnInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    // if (this.state.Item.AddedQuantity == 0) {
-                                    //     Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                    // } else {
-                                        this.props.onSave(); 
-                                    // } 
+                                    var newDrink = new Drink({
+                                        id: this.state.drink.id,
+                                        drinkType: this.state.drink.drinkType,
+                                        quantity: (this.state.Item.AddedQuantity + this.state.Item.CurrentQuantity),
+                                        pack: this.state.Item.Pack,
+                                        details: this.makeDetailString() + this.state.Item.OtherReasons
+                                    })
+                                    this.props.onSave(newDrink); 
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>

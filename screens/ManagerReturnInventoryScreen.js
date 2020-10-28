@@ -8,6 +8,8 @@ import ReturnInventoryModal from 'components/ReturnInventoryModal';
 import Inventory from 'model/Inventory';
 import Event from 'model/Event';
 import Station from '../model/Station';
+import { globalInventory } from 'model/Inventory';
+import { globalEvent } from 'model/Event';
 
 export default class ManagerReturnInventoryScreen extends React.Component {
     state = {
@@ -17,7 +19,8 @@ export default class ManagerReturnInventoryScreen extends React.Component {
         returnInventoryModalVisible: false,
         stations: [],
         drinks: [],
-        stationId: 3
+        stationId: 3,
+        curStation: null,
     };
 
      _scrollView1 = React.createRef();
@@ -32,8 +35,12 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                 return Promise.all(promises);
             })
             .then(([totalInventory, stations]) => {
+                console.log(totalInventory.drinks);
                 this.setState({ drinks: totalInventory.drinks });
                 this.setState({ stations });
+            })
+            .catch(e => {
+                console.log(e);
             });
     }
 
@@ -48,6 +55,16 @@ export default class ManagerReturnInventoryScreen extends React.Component {
         });
     }
 
+    onReturnInvModalSave(drink) {
+        var newDrinks = this.state.drinks;
+		newDrinks[this.state.inventorySelected] = drink;
+        this.setState({
+            drinks: newDrinks,
+            eturnInventoryModalVisible: false
+        });
+        this.state.curStation.updateDrink(drink);
+    }
+
     render() {
         return (
             <TouchableOpacity
@@ -56,10 +73,10 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
                 <ReturnInventoryModal
-                    sourceImg={null} 
-                    drinkName={null}
+                    key={this.state.inputDrinkName}
+                    ref={m => {this.returnInventoryModal = m}}
                     visible={this.state.returnInventoryModalVisible} 
-                    onSave={() => this.setState({returnInventoryModalVisible: false})} />
+                    onSave={this.onReturnInvModalSave.bind(this)} />
                 <InventoryTopBox inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
                 <View style={styles.scrollsContainer}>
                     <View
@@ -97,7 +114,14 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                                         station={station}
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
-                                        onAdd={() => this.setState({returnInventoryModalVisible: true})}
+                                        onAdd={() => {
+                                            this.setState({
+                                                returnInventoryModalVisible: true,
+                                                stationId: station.id,
+                                                curStation: station
+                                            })
+                                            this.returnInventoryModal.inputDrink(this.state.drinks[this.state.inventorySelected], station.name);
+                                        }}
                                         />
                                 );
                             })}

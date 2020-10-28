@@ -161,6 +161,12 @@ class DBManager {
         return this.dbh.collection("DrinkType").doc(id).update(data);
     }
 
+    updateDrinkInStation(stationId, drinkId, data) {
+        return this.dbh.collection("Station").doc(stationId)
+                        .collection("drinks").doc(drinkId)
+                        .update(data);
+    }
+
     updateDrinkInInventory(inventoryId, drinkId, data) {
         return this.dbh.collection("Inventory").doc(inventoryId)
                        .collection("drinks").doc(drinkId)
@@ -253,6 +259,16 @@ class DBManager {
     updateDrinkInventoryById(drinkId, obj) {
         console.log(drinkId, obj);
         return this.dbh.collection("Inventory").doc("h6Q9BwsaW51bnTv9zUe8").collection("drinks").doc(drinkId).update(obj);
+    }
+
+    parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drink.details,
+            drinkType: drink.typeId,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
     }
 }
 
