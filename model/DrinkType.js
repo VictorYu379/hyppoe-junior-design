@@ -22,6 +22,9 @@ export default class DrinkType {
         } else {
             Object.assign(this, data);
             this.id = id;
+            if (this.costPerUnit == undefined) {
+                this.costPerUnit = 0.0;
+            }
         }
         //console.log(this.costPerUnit, this.ouncePerUnit);
     }

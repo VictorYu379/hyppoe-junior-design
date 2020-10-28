@@ -116,6 +116,42 @@ export default class Job {
         return tasks;
     }
 
+    static getPendingJobsDetailedData() {
+        var returnListTotal = [];
+        var returnList = [];
+        var jobs = getGlobalJobs();
+        var count = 0;
+        jobs.map(job => {
+            if (job.status !== 'Complete') {
+                count = count + 1;
+                job.drinks.map(drink => {
+                    var index = returnListTotal.findIndex(item => item.name == drink.name);
+                    if (index == -1) {
+                        returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                    } else {
+                        returnListTotal[index].count += drink.quantity;
+                    }
+                    index = returnList.findIndex(item => item.name == job.stationKey);
+                    if (index == -1) {
+                        var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
+                        returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
+                    } else {
+                        var drinks = [...returnList[index].items];
+                        var drinkIndex = drinks.findIndex(item => item.name == drink.name);
+                        if (drinkIndex == -1) {
+                            drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                        } else {
+                            drinks[drinkIndex].count += drink.quantity;
+                        }
+                        returnList[index] = {...returnList[index], items: drinks};
+                    }
+                });
+            }
+        })
+        return [returnListTotal, count];
+    }
+
+
     static getReturnJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];
