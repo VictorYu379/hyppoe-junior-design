@@ -14,6 +14,42 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
+
+	// The second argument [] is to make useEffect run only once (like componentDidMount)
+	useEffect(() => {
+		// Get inventory details (avail of total qty, total available percentage, total value)
+		// console.log(Inventory.getInventorySummary());
+
+		// Get station inventory details (avail of total qty, total available percentage)
+		// console.log(Station.getStationInventorySummary()); // All stations
+		// console.log(Station.getStationInventorySummary("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getStationInventorySummary("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of stations;
+		// console.log(Station.getNumOfStations()); 
+
+		// Get number of stations below inventory;
+		// console.log(Station.getNumOfStationBelowInventory());
+
+		// Get [number of pending jobs, total qty, total value]
+		// console.log(Job.getNumOfJobsInTransit()); // All stations
+		// console.log(Job.getNumOfJobsInTransit("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfJobsInTransit("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get [number of returned items, total value]
+		// console.log(Job.getNumOfReturnItems()); // All stations
+		// console.log(Job.getNumOfReturnItems("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfReturnItems("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of runners
+		// console.log(Station.getNumOfRunners()); // All stations
+		// console.log(Station.getNumOfRunners("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getNumOfRunners("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of set alerts;
+		// console.log(Event.getNumOfAlerts()); 		
+	}, [])
+  
 	const [activeSections, setSections] = useState([0]);
 	const [activeStations, setActiveStations] = useState([0]);
 	const [stations, setStations] = useState([]);
@@ -668,7 +704,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Alerts")}>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Station Alerts Screen")}>
 
 					<View style={{
 						flexDirection: 'row',
