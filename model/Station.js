@@ -210,6 +210,24 @@ export default class Station {
         return [avail, sold, total];
     }
 
+    parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drink.details,
+            drinkType: drink.typeId,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
+    }
+
+    updateDrink(drink) {
+        let found = false;
+        let drinkId = drink.id;
+        console.log(this.parseDrink(drink));
+        dbManager.updateDrinkInStation(this.id, this.parseDrink(drink)).catch(e => {
+            console.log(e);
+        });
+    }
     static createNewStation(data) {
         var newStation = new Station(data);
         return dbManager.getStationCollectionHandle().add({

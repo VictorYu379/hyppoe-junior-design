@@ -221,6 +221,31 @@ class DBManager {
         return this.dbh.collection("DrinkType").doc(id).update(data);
     }
 
+    updateDrinkInStation(stationId, data) {
+        console.log("ok");
+        return this.dbh.collection("Station").doc(stationId).collection("drinks").get()
+            .then(snapshot => {
+                snapshot.forEach(snap => {
+                    console.log(data);
+                    if (snap.data().drinkType == data.drinkType) {
+                        data.quantity += snap.data().quantity;
+                        data.pack += snap.data().pack;
+                        console.log("FOUND:", data.drinkType);
+                        this.dbh.collection("Station")
+                        .doc(stationId)
+                        .collection("drinks")
+                        .doc(snap.id).update(data)
+                        .then(d => {console.log(d)})
+                        .catch(e => {console.log(e)});
+                    }
+                    console.log("snap id: ", snap.id, snap.data());
+                })
+            })
+            .catch(e => {
+                console.log(e);
+            })
+    }
+
     updateDrinkInInventory(inventoryId, drinkId, data) {
         return this.dbh.collection("Inventory").doc(inventoryId)
                        .collection("drinks").doc(drinkId)
@@ -243,7 +268,7 @@ class DBManager {
                     .then(d => {console.log(d)})
                     .catch(e => {console.log(e)});
                 }
-		       	console.log("Runner ID: ", snap.id, snap.data());
+		       	console.log("snap id: ", snap.id, snap.data());
 		    })
         })
         .catch(e => {console.log(e)});
