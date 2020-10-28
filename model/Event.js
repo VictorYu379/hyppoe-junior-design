@@ -58,6 +58,17 @@ export default class Event {
         return alerts;
     }
 
+    static getNumOfAlerts() {
+        var alerts = this.getAlerts();
+        var res = 0;
+        alerts.map(alert => {
+            if (alert.rate != 'OFF') {
+                res += 1;
+            }
+        });
+        return res;
+    }
+
     addStation(station) {
         return dbManager.getEventHandle(this.id).update({
             stations: this.stations.concat(station.id)

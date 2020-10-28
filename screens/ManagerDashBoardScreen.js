@@ -2,25 +2,50 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
-import Event, { globalEvent } from 'model/Event';
-import Manager from 'model/Manager';
+import Job from 'model/Job';
+import Station from 'model/Station';
+import Event from 'model/Event';
+import Inventory from 'model/Inventory';
 
 export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
-	// Reading event and manager from global storage
-	// const [event, setEvent] = useState();
-	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
-	// useEffect(() => {
-	// 	// Event.getInstance().then(event => { setEvent(event); });
-	// 	// Manager.getInstance().then(manager => { setManager(manager); });
-	// 	// console.log(globalEvent);
-	// }, [])
-	// console.log(event);
-	// console.log(manager);
+	useEffect(() => {
+		// Get inventory details (avail of total qty, total available percentage, total value)
+		// console.log(Inventory.getInventorySummary());
+
+		// Get station inventory details (avail of total qty, total available percentage)
+		// console.log(Station.getStationInventorySummary()); // All stations
+		// console.log(Station.getStationInventorySummary("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getStationInventorySummary("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of stations;
+		// console.log(Station.getNumOfStations()); 
+
+		// Get number of stations below inventory;
+		// console.log(Station.getNumOfStationBelowInventory());
+
+		// Get [number of pending jobs, total qty, total value]
+		// console.log(Job.getNumOfJobsInTransit()); // All stations
+		// console.log(Job.getNumOfJobsInTransit("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfJobsInTransit("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get [number of returned items, total value]
+		// console.log(Job.getNumOfReturnItems()); // All stations
+		// console.log(Job.getNumOfReturnItems("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfReturnItems("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of runners
+		// console.log(Station.getNumOfRunners()); // All stations
+		// console.log(Station.getNumOfRunners("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getNumOfRunners("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of set alerts;
+		// console.log(Event.getNumOfAlerts()); 		
+	}, [])
 
 	return (
 		<View style={styles.container}>
