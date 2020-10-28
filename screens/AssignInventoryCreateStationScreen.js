@@ -119,7 +119,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                         verb={"Add to"}
                                         station={station}
                                         inventorySelected={this.state.inventorySelected}
-                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview")}
+                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { station })}
                                         enableDelete={true}
                                         totalValue={this.state.totalValue}
                                         onDelete={() => {
