@@ -241,8 +241,9 @@ export default function ServerDashBoardScreen({ navigation }) {
 					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => {navigation.navigate("Server Station Inventory Screen");}}
-				>
+					onPress={() => navigation.navigate("Server Station Inventory Screen", {
+						stationId: stationId,
+					})}>
 
 
 					<View style={{

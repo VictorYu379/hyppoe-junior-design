@@ -42,7 +42,6 @@ import HyppoeHeader from './components/HyppoeHeader';
 import IndividualStationInventoryDetailedDataScreen from './screens/IndividualStationInventoryDetailedDataScreen';
 
 import StationRunnersScreen from './screens/StationRunnersScreen';
-import IndividualStationInventoryScreen from './screens/IndividualStationInventoryDetailedDataScreen';
 
 import ReturnInventoryDetailedDataScreen from './screens/ReturnInventoryDetailedDataScreen';
 import StationAlertsScreen from './screens/StationAlertsScreen';
