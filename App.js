@@ -72,7 +72,7 @@ export default function App() {
 							}}/>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={ServerDashBoardScreen}
+							component={ManagerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

@@ -674,7 +674,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Alerts")}>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Station Alerts Screen")}>
 
 					<View style={{
 						flexDirection: 'row',
