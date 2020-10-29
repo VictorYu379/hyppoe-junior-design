@@ -252,6 +252,19 @@ class DBManager {
         return this.dbh.collection("DrinkType").add(data);
     }
 
+    async createNewJob(job, drinks, pairItems) {
+        const res = await this.dbh.collection("Jobs").add(job);
+        console.log(res.id);
+        const id = res.id;
+        const ref = this.dbh.collection("Jobs").doc(id);
+        for (let drink of drinks) {
+            await ref.collection("drinks").add(drink);
+        }
+        for (let pairItem of pairItems) {
+            await ref.collection("pairItems").add(pairItem);
+        }
+    }
+
     // return void
     // createDrinkTypeInfo(data) {
     //     this.dbh.collection("DrinkType").get()

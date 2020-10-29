@@ -227,6 +227,14 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
+							name="Server Request Inventory"
+							component={ServerRequestInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Server Confirm Inventory Screen"
 							component={ServerConfirmInventoryScreen}
 							options={{

@@ -1,6 +1,7 @@
 import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
+import Drink from "../model/Drink"
 import MyCheckBox from './MyCheckBox'
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
@@ -17,29 +18,46 @@ export default class RequestInventoryModal extends React.Component {
     // Pass paired item from parent class.
     constructor(props) {
         super(props)
-
-        var paired = new Map();
-        for (item of this.props.pairedItems) {
-            paired.set(item, true);
-        }
         this.state = {
             modalVisible: false,
             pickUp: false,
             checked: false,
+            drink: new Drink(),
             Item: {
-                Paired: paired,
-                Name: this.props.drinkName,
-                Unit: 10,
-                Pack: 2,
-                RequestQuantity: 20,
-                TotalQuantity: 100,
-                CurrentQuantity: 50,
+                Name: "",
+                Unit: 0,
+                Pack: 0,
+                RequestQuantity: 0,
+                TotalQuantity: 0,
+                CurrentQuantity: 0,
                 Quantity: 0,
-                Price: 10,
+                Price: 0,
                 Details: "",
             }
         }
-        this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
+    }
+
+    inputDrinkAndStation(drink, stationName, pairItems) {
+        this.setState({
+            stationName: stationName,
+            drink: drink,
+            Item: {
+                Name: drink.name,
+                Unit: drink.unit,
+                Pack: drink.pack,
+                Quantity: 0,
+                AssignedQuantity: drink.quantity,
+                ConfirmQuantity: drink.quantity,
+                TotalQuantity: 0,
+                CurrentQuantity: drink.quantity,
+                Price: drink.drinkType.pricePerUnit,
+                Details: drink.details,
+                AddedQuantity: 0,
+                RequestQuantity: 0
+            }
+        });
+        console.log(pairItems);
+        this.pairdItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
     }
 
     getPairedItemList(itemList) {
@@ -52,8 +70,7 @@ export default class RequestInventoryModal extends React.Component {
                     <MyCheckBox
                         checkedImage={require('assets/checked.png')}
                         uncheckedImage={require('assets/unchecked.png')}
-                        checked={this.state.Item.Paired.get(item)}
-                        handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
+                        checked={true}
                         />
                 </View>
             );
@@ -132,7 +149,7 @@ export default class RequestInventoryModal extends React.Component {
                                         overflow: 'hidden',
                                         resizeMode: 'contain'
                                     }}
-                                    source={this.props.sourceImg}
+                                    source={{ uri: this.state.drink.icon }}
                                 />
                             </View>
                             <View style={{
@@ -206,7 +223,7 @@ export default class RequestInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                To: Station 1 - Big Tent
+                                To: { this.state.stationName }
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -399,7 +416,7 @@ export default class RequestInventoryModal extends React.Component {
                                 fontSize: 14
                             }}
                             multiline={true}
-                            onChangeText={text => this.updateItem("Details", text)}
+                            onChangeText={text => this.setState({Item: {...this.state.Item, Details: text}})}
                             placeholder="Notes ..."
                             value={this.state.Item.Details}
                             />
@@ -407,11 +424,14 @@ export default class RequestInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    if (this.state.Item.RequestQuantity == 0) {
-                                        Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                    } else {
-                                        this.props.onSave(); 
-                                    } 
+                                    var newDrink = new Drink({
+                                        id: this.state.drink.id,
+                                        drinkType: this.state.drink.drinkType,
+                                        quantity: this.state.Item.RequestQuantity,
+                                        pack: this.state.Item.Pack,
+                                        details: this.state.Item.Details
+                                    })
+                                    this.props.onSave(newDrink); 
                                 }}>
                                 <Text style={styles.textStyle}> Request </Text>
                             </TouchableHighlight>

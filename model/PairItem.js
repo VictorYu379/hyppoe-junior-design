@@ -31,4 +31,14 @@ export default class PairItem {
     get name() {
         return this.pairItemType.name;
     }
+
+    static parsePairItem(item) {
+        const obj = {
+            details: item.details === undefined ? "" : item.details,
+            pairItemType: item.pairItemType.name,
+            quantity: item.quantity === undefined ? 0 : item.quantity,
+            ounces: item.ounces === undefined ? 0 : item.ounces,
+        };
+        return obj;
+    }
 }

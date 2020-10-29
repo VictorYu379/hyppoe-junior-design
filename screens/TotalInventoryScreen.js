@@ -19,16 +19,6 @@ export default class TotalInventory extends React.Component {
 		totalUnits: 0,
 		inventoryId: null,
 	};
-	
-	parseDrink(drink) {
-        const obj = {
-            details: drink.details === undefined ? "" : drink.details,
-            drinkType: drink.typeId,
-            pack: drink.pack, 
-            quantity: drink.quantity
-        }
-        return obj;
-    }
 
 	onInvModalSave(drink) {
 		var newDrinks = this.state.drinks;

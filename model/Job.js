@@ -247,6 +247,26 @@ export default class Job {
         }
         return [res, val];
     }
+
+    static createNewJob(drink, stationKey, pairItems, typeName) {
+        const job = {
+            type: typeName,
+            stationKey: stationKey,
+            status: "Unstarted",
+            runner: "",
+            runnerId: "",
+            details: ""
+        };
+        drinks = [];
+        drinks.push(Drink.parseDrink(drink));
+        console.log(pairItems);
+        items = pairItems.map(item => {
+            item = PairItem.parsePairItem(item);
+            item.quantity = drink.quantity;
+            return item;
+        });
+        dbManager.createNewJob(job, drinks, items);
+    }
 }
 
 async function update(data) {
