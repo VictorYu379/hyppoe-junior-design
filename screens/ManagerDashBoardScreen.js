@@ -15,10 +15,19 @@ export default function ManagerDashBoardScreen({ navigation }) {
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
+	const [inventorySummary, setInventorySummary] = useState([]);
+	const [pendingInventorySummary, setpendingInventorySummary] = useState([]);
+	const [stationInventorySummary, setstationInventorySummary] = useState([]);
+	const [stationNum, setstationNum] = useState([]);
+	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
+	const [assignInventorySummary, setassignInventorySummary] = useState([]);
+	const [runnersSummary, setrunnersSummary] = useState([]);
+	const [alertsSummary, setalertsSummary] = useState([]);
+
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
 		// Get inventory details (avail of total qty, total available percentage, total value)
-		// console.log(Inventory.getInventorySummary());
+		//console.log(Inventory.getInventorySummary()); all stations
 
 		// Get station inventory details (avail of total qty, total available percentage)
 		// console.log(Station.getStationInventorySummary()); // All stations
@@ -32,7 +41,8 @@ export default function ManagerDashBoardScreen({ navigation }) {
 		// console.log(Station.getNumOfStationBelowInventory());
 
 		// Get [number of pending jobs, total qty, total value]
-		// console.log(Job.getNumOfJobsInTransit()); // All stations
+		//console.log(Job.getNumOfJobsInTransit()); // All stations
+
 		// console.log(Job.getNumOfJobsInTransit("P7HFuidmDgcaRRovoRjK")); // Station 1
 		// console.log(Job.getNumOfJobsInTransit("eloF9YmvIfMXKvUZDa9m")); // Station 2
 
@@ -48,26 +58,26 @@ export default function ManagerDashBoardScreen({ navigation }) {
 
 		// Get number of set alerts;
 		// console.log(Event.getNumOfAlerts()); 		
-	}, [])
-  
-	const [activeSections, setSections] = useState([0]);
-	const [activeStations, setActiveStations] = useState([0]);
-	const [stations, setStations] = useState([]);
-	//const [availItems, setAvail] = useState([]);
-	//const [soldItems, setSold] = useState([]);
-	//const [totalItems, setTotal] = useState([]);
-	const sections = ['avail', 'sold']; 
-	//console.log(Job.getReturnJobsDetailedData())
-	// Reading event and manager from global storage
-	// const [event, setEvent] = useState();
-	// const [manager, setManager] = useState();
-	// The second argument [] is to make useEffect run only once (like componentDidMount)
-	// console.log(event);
-	// console.log(manager);
-	//console.log(Inventory.getDetailedData())
+		var inventorySummary = Inventory.getInventorySummary();
+		setInventorySummary(inventorySummary);
+		var pendingInventorySummary = Job.getNumOfJobsInTransit();
+		setpendingInventorySummary(pendingInventorySummary);
+		var stationInventorySummary = Station.getStationInventorySummary();
+		setstationInventorySummary(stationInventorySummary);
+		var stationNum = Station.getNumOfStations();
+		setstationNum(stationNum);
+		var returnInventorySummary = Job.getNumOfReturnItems();
+		setreturnInventorySummary(returnInventorySummary);
+		var assignInventorySummary = Station.getNumOfStationBelowInventory();
+		setassignInventorySummary(assignInventorySummary);
+		var runnersSummary = Station.getNumOfRunners();
+		setrunnersSummary(runnersSummary);
+		var alertsSummary = Event.getNumOfAlerts();
+		setalertsSummary(alertsSummary);
 
-	const [pendingStat, count] = Job.getPendingJobsDetailedData()
-	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
+
+
+	}, [])
 
 
 	const textColor = (text) => {
@@ -78,55 +88,6 @@ export default function ManagerDashBoardScreen({ navigation }) {
 			return '#E8BD38';
 		}
         return '#1CD338';
-	}
-
-	const total = (text) => {
-		let res = 0;
-		if (text == 'total') {
-			totalItems.map(num => res += num);
-		} else if (text == 'avail') {
-			availItems.map(item => res += item.avail);
-		} else if (text == 'sold') {
-			soldItems.map(station => {
-				station.sold.map(item => res += item.sold);
-			});
-		} else {  
-			soldItems.map(station => {
-				if (station.stationKey == text) {
-					station.sold.map(item => res += item.sold);
-				}
-			});
-		}
-		return res;  
-	}
-
-	const totalPendingQtyandValue = () => {
-		let qty = 0;
-		let value = 0;
-		pendingStat.map(item => qty += item.count)
-		pendingStat.map(item => value += item.count * item.price)
-		return [qty,value]
-	}
-	
-
-	const totalValue = (text) => {
-		let res = 0;
-		if (text == 'total') {
-			availItems.map(item => res += total[item.key] * item.price);
-		} else if (text == 'avail') {
-			availItems.map(item => res += item.avail * item.price);
-		} else if (text == 'sold') {
-			soldItems.map(station => {
-				station.sold.map(item => res += item.sold * item.price);
-			});
-		} else {
-			soldItems.map(station => {
-				if (station.stationKey == text) {
-					station.sold.map(item => res += item.sold * item.price);
-				}
-			});
-		}
-		return res;
 	}
 
 	const percent = (a, b) => {
@@ -214,13 +175,13 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							}}>
 								<Text style={{
 									...styles.percentageHeaderBoxTextSize, 
-									color: textColor(percent(total('avail'), total('total'))),
+									color: textColor(percent(inventorySummary[0], inventorySummary[1])),
 								}}>
-									{percent(total('avail'), total('total'))}%
+									{percent(inventorySummary[0], inventorySummary[1])}%
 								</Text>
 								<Text style={{
 									...styles.HeaderBoxTextSize, 
-									color: textColor(percent(total('avail'), total('total'))),
+									color: textColor(percent(inventorySummary[0], inventorySummary[1])),
 									}}>
 									Total Available
 								</Text>
@@ -245,10 +206,10 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{total('avail')} of
+								{formatNum(inventorySummary[0])} of
 						</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{total('total')} Qty
+								{formatNum(inventorySummary[1])} Qty
 						</Text>
 						</View>
 
@@ -262,7 +223,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								fontSize: 12, 
 								color: 'gray',
 							}}>
-								{formatNum(totalValue('avail'))}$
+								{formatNum(inventorySummary[3])}$
 							</Text>
 						</View>
 
@@ -309,7 +270,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
-									{count}
+									{pendingInventorySummary[0]}
 								</Text>
 								<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
 									Total Pending
@@ -336,7 +297,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 						}}>
 							
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{totalPendingQtyandValue()[0]} Qty
+								{formatNum(pendingInventorySummary[1])} Qty
 							</Text>
 						</View>
 
@@ -345,7 +306,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							width: '40%',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{totalPendingQtyandValue()[1]}$
+								{formatNum(pendingInventorySummary[2])}$
 						</Text>
 						</View>
 
@@ -393,13 +354,13 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							}}>
 								<Text style={{
 									...styles.percentageHeaderBoxTextSize,
-									color: textColor(percent(total('avail'), total('total'))),
+									color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 								}}>
-									{percent(total('avail'), total('total'))}%
+									{percent(stationInventorySummary[0], stationInventorySummary[1])}%
 								</Text>
 								<Text style={{
 									...styles.HeaderBoxTextSize, 
-									color: textColor(percent(total('avail'), total('total'))),
+									color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 								}}>
 									Total Available
 								</Text>
@@ -424,10 +385,10 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{total('avail')} of
+								{formatNum(stationInventorySummary[0])} of
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{total('total')} Qty
+								{formatNum(stationInventorySummary[1])} Qty
 							</Text>
 						</View>
 
@@ -437,7 +398,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{totalItems.length}
+								{formatNum(stationNum)}
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
 								Stations
@@ -488,7 +449,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 9, color: 'gray' }}>
-									1200$
+									{formatNum(returnInventorySummary[1])}$
 								</Text>
 							</View>
 						</View>
@@ -502,7 +463,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								100
+								{formatNum(returnInventorySummary[0])}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total Returned
@@ -561,7 +522,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red', justifyContent: 'center' }}>
-								1
+								{formatNum(assignInventorySummary)}
 							</Text>
 							<Text style={{
 								...styles.HeaderBoxTextSize,
@@ -622,7 +583,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 9, color: 'gray' }}>
-									Pending Tasks:2
+									Pending Tasks:{formatNum(pendingInventorySummary[0])}
 								</Text>
 							</View>
 						</View>
@@ -636,7 +597,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								2
+								{formatNum(runnersSummary)}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total Runners
@@ -736,7 +697,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								6
+								{formatNum(alertsSummary)}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total
