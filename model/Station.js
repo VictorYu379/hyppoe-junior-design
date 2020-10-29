@@ -43,17 +43,49 @@ export default class Station {
         })
     }
 
+        static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        globalInventory.drinks.map(drink => {
+            item = {
+                icon: drink.icon, 
+                name:drink.name, 
+                avail:drink.quantity, 
+                total:drink.quantity
+            }
+            res.push(item)
+        })
+        stations.map(station => {
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
+    }
 
     // Returns the needed data for individual station detailed data screen
     static getDetailedData() {
         var station = getGlobalStation();
         var avail = [];
         var total = [];
-        station.drinks.map(drink => {
-            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
-            total[item.key] = drink.quantity;
-            avail[avail.length] = item;
-        });
+        if (station.drinks != undefined){
+            station.drinks.map(drink => {
+                var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+                total[item.key] = drink.quantity;
+                avail[avail.length] = item;
+            });
+        }
         var sold = [];
         station.servers.map(server => {
             var items = [];
@@ -211,6 +243,8 @@ export default class Station {
         return [avail, sold, total];
     }
 
+
+    
 
     // Returns the number of returned items of station based on stationId.
     // Returns the total number of returned items if stationId is omitted.
