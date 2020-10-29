@@ -4,9 +4,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
-import ReturnInventoryModal from 'components/ReturnInventoryModal';
+import RequestInventoryModal from 'components/RequestInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
+import Job from '../model/Job';
 
 export default class RunnerRequestInventoryScreen extends React.Component {
     state = {
@@ -18,7 +19,7 @@ export default class RunnerRequestInventoryScreen extends React.Component {
         drinks: [],
         stationSelected: null,
         totalValue: 0,
-        returnInventoryModalVisible: false
+        requestInventoryModalVisible: false
     };
 
      _scrollView1 = React.createRef();
@@ -38,8 +39,9 @@ export default class RunnerRequestInventoryScreen extends React.Component {
         });
     }
 
-    onReturnInventory(drink, station) {
-        this.setState({returnInventoryModalVisible: false});
+    onRequestInvModalSave(drink) {
+        this.setState({requestInventoryModalVisible: false});
+        Job.createNewJob(drink, this.state.curStation.key, this.state.pairItems, "Transfer");
     }
 
     updateData() {
@@ -52,6 +54,7 @@ export default class RunnerRequestInventoryScreen extends React.Component {
         });
         this.setState({
             drinks: globalInventory.drinks,
+            pairItems: globalInventory.pairItems,
             stations: newStations,
             totalValue: newTotalValue
         });
@@ -64,10 +67,10 @@ export default class RunnerRequestInventoryScreen extends React.Component {
                 style={styles.container}
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
-                <ReturnInventoryModal
-                    ref={m => {this.returnInventoryModal = m}}
-                    visible={this.state.returnInventoryModalVisible} 
-                    onSave={this.onReturnInventory.bind(this)} />
+                <RequestInventoryModal
+                    ref={m => {this.requestInventoryModal = m}}
+                    visible={this.state.requestInventoryModalVisible} 
+                    onSave={this.onRequestInvModalSave.bind(this)} />
                 <InventoryTopBox inventory={"Request"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
                 <View style={styles.scrollsContainer}>
                     <View
@@ -104,20 +107,24 @@ export default class RunnerRequestInventoryScreen extends React.Component {
                                 }
                                 return (
                                     <StationBox
-                                        verb={"Return to"}
+                                        verb={"Request to"}
                                         key={index}
                                         station={station}
                                         totalValue={this.state.totalValue}
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
                                         onAdd={() => {
-                                            this.setState({returnInventoryModalVisible: true});
-                                            this.returnInventoryModal.inputDrinkAndStation(
+                                            this.setState({
+                                                requestInventoryModalVisible: true,
+                                                curStation: station
+                                            });
+                                            this.requestInventoryModal.inputDrinkAndStation(
                                                 this.state.drinks[this.state.inventorySelected],
-                                                this.state.stations[station.key]
+                                                station.name,
+                                                this.state.pairItems
                                             );
                                         }}
-                                        />
+                                    />
                                 );
                             })}
                         </ScrollView>

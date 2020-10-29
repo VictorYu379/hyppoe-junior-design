@@ -2,6 +2,7 @@ import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Runner from 'model/Runner';
+import { globalStations } from 'model/Station';
 
 export default class Job {
     id;         // String
@@ -116,12 +117,39 @@ export default class Job {
         return tasks;
     }
 
-    static createNewJob() {
+    // Returns the number of in-transit jobs from/to station and their total qty/value based on stationId.
+    // Returns the total number of in-transit jobs and their total qty/value if stationId is omitted.
+    static getNumOfJobsInTransit(stationId) {
+        var jobs = getGlobalJobs();
+        var res = 0;
+        var qty = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            jobs.map(job => {
+                if (job.status == "In transit") {
+                    res += 1;
+                    job.drinks.map(drink => {
+                        qty += drink.quantity;
+                        val += drink.quantity * drink.pricePerUnit;
+                    });
+                }
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                jobs.map(job => {
+                    if (job.stationKey == station.key && job.status == "In transit") {
+                        res += 1;
+                        job.drinks.map(drink => {
+                            qty += drink.quantity;
+                            val += drink.quantity * drink.pricePerUnit;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, qty, val];
 
-    }
-
-    static updateJobStatus() {
-        
     }
 
     static getPendingJobsDetailedData() {
@@ -159,7 +187,6 @@ export default class Job {
         return [returnListTotal, count];
     }
 
-
     static getReturnJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];
@@ -191,6 +218,54 @@ export default class Job {
             }
         })
         return [returnListTotal, returnList];
+    }
+
+    // Returns the number of returned items and their total value of station based on stationId.
+    // Returns the total number of returned items and their total value if stationId is omitted.
+    static getNumOfReturnItems(stationId) {
+        var [returnListTotal, returnList] = this.getReturnJobsDetailedData();
+        var res = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            returnListTotal.map(item => { 
+                res += item.count;
+                val += item.count * item.price;
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                var stationKey = station.key;
+                returnList.map(station => {
+                    if (station.name == stationKey) {
+                        station.items.map(item => {
+                            res += item.count;
+                            val += item.count * item.price;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, val];
+    }
+
+    static createNewJob(drink, stationKey, pairItems, typeName) {
+        const job = {
+            type: typeName,
+            stationKey: stationKey,
+            status: "Unstarted",
+            runner: "",
+            runnerId: "",
+            details: ""
+        };
+        drinks = [];
+        drinks.push(Drink.parseDrink(drink));
+        console.log(pairItems);
+        items = pairItems.map(item => {
+            item = PairItem.parsePairItem(item);
+            item.quantity = drink.quantity;
+            return item;
+        });
+        dbManager.createNewJob(job, drinks, items);
     }
 }
 

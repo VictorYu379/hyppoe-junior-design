@@ -65,15 +65,10 @@ export default function App() {
 					<Stack.Navigator>
 						<Stack.Screen
 							name="Dummy Page"
-							component={DummyScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
+							component={DummyScreen}/>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={ServerDashBoardScreen}
+							component={ManagerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
@@ -226,6 +221,14 @@ export default function App() {
 						<Stack.Screen
 							name="Runner Request Inventory"
 							component={RunnerRequestInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Request Inventory"
+							component={ServerRequestInventoryScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

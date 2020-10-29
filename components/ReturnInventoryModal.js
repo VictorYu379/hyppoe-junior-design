@@ -473,7 +473,6 @@ export default class ReturnInventoryModal extends React.Component {
                             placeholder="Notes ..."
                             value={this.state.Item.OtherReasons}
                             />
-                            
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {

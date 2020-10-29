@@ -2,6 +2,7 @@ import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Server from 'model/Server';
+import { globalEvent } from 'model/Event';
 
 const STATION_KEY = "@station"
 
@@ -210,24 +211,88 @@ export default class Station {
         return [avail, sold, total];
     }
 
-    parseDrink(drink) {
-        const obj = {
-            details: drink.details === undefined ? "" : drink.details,
-            drinkType: drink.typeId,
-            pack: drink.pack, 
-            quantity: drink.quantity
+
+    // Returns the number of returned items of station based on stationId.
+    // Returns the total number of returned items if stationId is omitted.
+    static getNumOfRunners(stationId) {
+        var res = 0;
+        if (stationId === undefined) {
+            var stations = getGlobalStations();
+            stations.map(station => { res += station.runners.length });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                res = station.runners.length;
+            }
         }
-        return obj;
+        return res;
+    }
+
+    // Returns the station inventory details (avail of total qty, total available percentage) based on stationId.
+    // Returns the all stations' inventory details if stationId is omitted.
+    static getStationInventorySummary(stationId) {
+        var avail = 0;
+        var total = 0;
+        if (stationId === undefined) {
+            var stations = getGlobalStations();
+            stations.map(station => {
+                station.drinks.map(drink => {
+                    avail += drink.quantity;
+                    total += drink.quantity;
+                });
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        total += drink.quantity;
+                    })
+                })
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                station.drinks.map(drink => {
+                    avail += drink.quantity;
+                    total += drink.quantity;
+                });
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        total += drink.quantity;
+                    })
+                })
+            }
+        }
+        var percent = (total == 0) ? 0 : Math.round(avail * 100 / total);
+        return [avail, total, percent + "%"];
+    }
+
+    static getNumOfStationBelowInventory() {
+        var rate = globalEvent.alerts["Station Total Remaining"];
+        if (rate == 'OFF') {
+            return 0;
+        }
+        var res = 0;
+        rate = parseFloat(rate);
+        for (var id in globalStations) {
+            var percent = parseFloat(this.getStationInventorySummary(id)[2]);
+            if (percent < rate) {
+                res += 1;
+            }
+        }
+        return res;
+    }
+
+    static getNumOfStations() {
+        return getGlobalStations().length;
     }
 
     updateDrink(drink) {
         let found = false;
         let drinkId = drink.id;
-        console.log(this.parseDrink(drink));
-        dbManager.updateDrinkInStation(this.id, this.parseDrink(drink)).catch(e => {
+        console.log(Drink.parseDrink(drink));
+        dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
             console.log(e);
         });
     }
+
     static createNewStation(data) {
         var newStation = new Station(data);
         return dbManager.getStationCollectionHandle().add({

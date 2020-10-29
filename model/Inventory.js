@@ -49,6 +49,31 @@ export default class Inventory {
         return [avail, assign, total];
     }
 
+    // Returns the inventory details (avail of total qty, total available percentage, avail value;).
+    static getInventorySummary() {
+        var avail = 0;
+        var total = 0;
+        var value = 0;
+        var stations = getGlobalStations();
+        globalInventory.drinks.map(drink => {
+            avail += drink.quantity;
+            total += drink.quantity;
+            value += drink.quantity * drink.pricePerUnit;
+        })
+        stations.map(station => {
+            station.drinks.map(drink => {
+                total += drink.quantity;
+            });
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    total += drink.quantity;
+                })
+            })
+        });
+        var percent = (total == 0) ? 0 : Math.round(avail * 100 / total);
+        return [avail, total, percent + "%", value];
+    }
+
     constructor(id) {
         this.id = id;
     }
