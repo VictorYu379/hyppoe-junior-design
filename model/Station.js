@@ -43,6 +43,36 @@ export default class Station {
         })
     }
 
+        static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        globalInventory.drinks.map(drink => {
+            item = {
+                icon: drink.icon, 
+                name:drink.name, 
+                avail:drink.quantity, 
+                total:drink.quantity
+            }
+            res.push(item)
+        })
+        stations.map(station => {
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
+    }
 
     // Returns the needed data for individual station detailed data screen
     static getDetailedData() {

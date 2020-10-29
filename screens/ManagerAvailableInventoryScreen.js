@@ -8,6 +8,7 @@ import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
+import Inventory from 'model/Inventory';
 
 
 export default function ManagerAvailableInventoryScreen({ navigation }) {
@@ -25,20 +26,21 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 
 	useEffect(() => {
 		Event.getInstance().then(event => Station.getStations(event.stations))
-		Manager.getInstance().then(manager => { setManager(manager); });
+		Manager.getInstance().then(manager => { setManager(manager); }); 
 		// Event.getInstance().then(event => { setEvent(event); });
 		// Manager.getInstance().then(manager => { setManager(manager); });
 	}, [])
 	
 	const [availItems,soldItems,totalItems] = Station.getTotalAvailableInventoryData()
 	//console.log(availItems)
+	console.log(Inventory.getDrinksSummary())
 
 	const data = availItems.map(function(e, i) {
 		e.total = totalItems[i];
 		return e
 	  });
 
-	console.log(data)
+	//console.log(data)
 
 
 	const imageList = [
