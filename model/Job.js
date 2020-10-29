@@ -116,6 +116,14 @@ export default class Job {
         return tasks;
     }
 
+    static createNewJob() {
+
+    }
+
+    static updateJobStatus() {
+        
+    }
+
     static getPendingJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];
