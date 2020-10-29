@@ -7,7 +7,7 @@ import Station, { getGlobalStation } from 'model/Station';
 
 export default function IndividualStationInventoryDetailedDataScreen({ route, navigation }) {
 
-	const {stationId} = route.params
+	const stationId = route.params['stationId'];
 
 	const [station, setStation] = useState(" ");
 	const [activeSections, setSections] = useState([0]);
@@ -23,9 +23,9 @@ export default function IndividualStationInventoryDetailedDataScreen({ route, na
 	}
 
 	useEffect(() => {
-		var station = getGlobalStation();
-		setStation(stationId);
-		var [avail, sold, total] = Station.getDetailedData();
+		var station = getGlobalStation(stationId);
+		setStation(station.key);
+		var [avail, sold, total] = Station.getDetailedData(stationId);
 		setAvail(avail);
 		setSold(sold);
 		setTotal(total);

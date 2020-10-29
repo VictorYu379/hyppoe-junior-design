@@ -150,8 +150,9 @@ export default function RunnerDashBoardScreen({ navigation }) {
 					height={'23%'}  
 					margin={5} 
 					touchable
-					onPress={() => {navigation.navigate("Runner Station Inventory");}}
-				>
+					onPress={() => navigation.navigate("Runner Station Inventory", {
+						stationId: stationId,
+				})}>
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,

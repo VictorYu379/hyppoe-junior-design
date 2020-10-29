@@ -75,8 +75,8 @@ export default class Station {
     }
 
     // Returns the needed data for individual station detailed data screen
-    static getDetailedData() {
-        var station = getGlobalStation();
+    static getDetailedData(stationId) {
+        var station = getGlobalStation(stationId);
         var avail = [];
         var total = [];
         if (station.drinks != undefined){
@@ -392,8 +392,8 @@ async function update(data) {
     globalStations[station.id] = station;
 }
 
-export function getGlobalStation() {
-    return globalStations[stationID];
+export function getGlobalStation(stationId) {
+    return globalStations[stationId];
 }
 
 export function getGlobalStations() {
@@ -405,4 +405,3 @@ export function getGlobalStations() {
 }
 
 export var globalStations = {};
-var stationID = "";
