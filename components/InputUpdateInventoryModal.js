@@ -452,7 +452,7 @@ export default class InputUpdateInventoryModal extends React.Component {
                                 style={styles.openButton}
                                 onPress={() => { 
                                     var newDrink = new Drink({
-                                        ...this.state.drink,
+                                        id: this.state.drink.id,
                                         drinkType: {
                                             ...this.state.drink.drinkType,
                                             name: this.state.Item.Name,

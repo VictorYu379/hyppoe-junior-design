@@ -204,6 +204,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 					onPress={() => {navigation.navigate("Server Station Inventory Screen");}}
 				>
 
+
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -285,6 +286,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 					onPress={() => {navigation.navigate("Server Return Inventory Screen");}}
 				>
 
+
 					<View style={{
 						flexDirection: 'row',
 						margin: 3,
@@ -359,6 +361,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 					touchable
 					onPress={() => {navigation.navigate("Server Confirm Inventory Screen");}}
 				>
+
 
 					<View style={{
 						flexDirection: 'row',

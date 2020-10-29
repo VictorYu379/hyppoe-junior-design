@@ -26,12 +26,6 @@ export default function ManagerDashBoardScreen({ navigation }) {
 	// const [event, setEvent] = useState();
 	// const [manager, setManager] = useState();
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
-	useEffect(() => {
-		Event.getInstance().then(event => Station.getStations(event.stations))
-		Manager.getInstance().then(manager => { setManager(manager); });
-		// Event.getInstance().then(event => { setEvent(event); });
-		// Manager.getInstance().then(manager => { setManager(manager); });
-	}, [])
 	// console.log(event);
 	// console.log(manager);
 	//console.log(Inventory.getDetailedData())

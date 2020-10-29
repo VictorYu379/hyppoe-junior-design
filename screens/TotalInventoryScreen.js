@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import BottomBlueBUtton from 'components/BottomBlueButton';
 import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
-import Inventory from 'model/Inventory';
-import Event from 'model/Event';
-import { dbManager } from 'model/DBManager';
+import { globalInventory } from 'model/Inventory';
+import { globalEvent } from 'model/Event';
 
 
 export default class TotalInventory extends React.Component {
@@ -14,36 +13,31 @@ export default class TotalInventory extends React.Component {
         inputInvUpdateModalVisible: false,
 		inputBlkUpdateModalVisible: false,
 		selectedDrink: 0,
+		drinks: [],
+		percentage: 0,
+		totalValue: 0.00,
+		totalUnits: 0,
 		inventoryId: null,
-        drinks: []
 	};
 	
 	parseDrink(drink) {
         const obj = {
             details: drink.details === undefined ? "" : drink.details,
-            drinkType: drink.drinkType.id,
+            drinkType: drink.typeId,
             pack: drink.pack, 
             quantity: drink.quantity
         }
         return obj;
     }
 
-
 	onInvModalSave(drink) {
-		console.log(drink.drinkType);
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
 		this.setState({
 			inputInvUpdateModalVisible: false,
 			drinks: newDrinks
 		});
-		const drinkObj = this.parseDrink(drink);
-		console.log("INV ID: ", this.state.inventoryId);
-		dbManager.updateDrinkTypeInfo(drink.drinkType)
-					.catch(e => {console.log(e)});
-		dbManager.updateDrinkInventoryByType(this.state.inventoryId, 
-			drinkObj
-		);
+		globalInventory.updateDrink(drink).then(r => this.updateData());
 	}
 
 	onBlkModalSave(drink) {
@@ -61,25 +55,23 @@ export default class TotalInventory extends React.Component {
 		});
 
 		console.log("OK\n");
-		const drinkObj = this.parseDrink(drink);
-		
-		dbManager.createDrinkTypeInfo(drink.drinkType);
-		dbManager.createDrinkInventory(this.state.inventoryId, drinkObj)
+		globalInventory.addDrink(drink).then(r => this.updateData());
 	}
 
 	componentDidMount() {
-		async function queryDrinks(self) {
-			var event = await Event.getInstance();
-			var totalInventory = new Inventory(event.inventory);
-			console.log("id: ", totalInventory.id);
-			await totalInventory.getData();
-			self.setState({
-				inventoryId: totalInventory.id,
-				drinks: totalInventory.drinks,
-				eventId: event.id
-			});
-		}
-		queryDrinks(this);
+		this.updateData();
+	}
+
+	updateData() {
+		var [quantity, value] = globalInventory.getTotalInventory();
+		this.setState({
+			drinks: globalInventory.drinks,
+			percentage: quantity > 0 ? 100 : 0,
+			totalValue: value,
+			totalUnits: quantity,
+			inventoryId: globalInventory.id,
+			eventId: globalEvent.id
+		});
 	}
 
 	render() {
@@ -132,7 +124,7 @@ export default class TotalInventory extends React.Component {
 						<Text style={{fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'}}>
 							Total Inventory:
 						</Text>
-						<Text style={{fontSize: 30, color: 'red'}}>0%</Text>
+						<Text style={{fontSize: 30, color: 'red'}}>{this.state.percentage}%</Text>
 					</View>
 					<View style={{
 						width: '90%',
@@ -143,14 +135,14 @@ export default class TotalInventory extends React.Component {
 							justifyContent: 'space-between',
 						}}>
 							<Text style={styles.normalText}>Total Inventory Value:</Text>
-							<Text style={styles.normalText}>$0.00</Text>
+							<Text style={styles.normalText}>${this.state.totalValue}</Text>
 						</View>
 						<View style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
 						}}>
 							<Text style={styles.normalText}>Total Units:</Text>
-							<Text style={styles.normalText}>0 of 0</Text>
+							<Text style={styles.normalText}>{this.state.totalUnits} of {this.state.totalUnits}</Text>
 						</View>
 					</View>
 				</ShadowedBox>

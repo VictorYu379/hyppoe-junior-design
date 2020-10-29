@@ -25,7 +25,10 @@ export default class Job {
             dbManager.getDrinksInJob(this.id),
             dbManager.getPairItemsInJob(this.id)
         ]);
-        this.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        this.drinks = drinks.docs.map(drink => new Drink({
+            ...drink.data(),
+            id: drink.id
+        }));
         this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(this.drinks.map(drink => drink.init()));
         await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
@@ -101,7 +104,10 @@ export default class Job {
                 from = "Station " + job.stationKey;
                 to = "Inventory";
             }
-            var runner = "Runner " + job.runner.key;
+            var runner = "Unassigned";
+            if (job.runnerId != "") {
+                runner = "Runner " + job.runner.key;
+            }
             tasks.push({key: tasks.length, runner: runner, item: item, from: from, to: to, status: job.status});
         });
         tasks.sort((a, b) => {
@@ -183,16 +189,18 @@ export default class Job {
 async function update(data) {
     var job = new Job(data.id);
     Object.assign(job, data.data());
-    var [drinks, pairItems] = await Promise.all([
-        dbManager.getDrinksInJob(job.id),
-        dbManager.getPairItemsInJob(job.id)
-    ]);
-    job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-    job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-    await Promise.all(job.drinks.map(drink => drink.init()));
-    await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
-    job.runner = new Runner(job.runnerId);
-    await job.runner.init();
+    dbManager.getDrinksInJobHandle(job.id).onSnapshot(async (drinks) => {
+        job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
+        await Promise.all(job.drinks.map(drink => drink.init()));
+    });
+    dbManager.getPairItemsInJobHandle(job.id).onSnapshot(async (pairItems) => {
+        job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+        await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
+    });
+    if (job.runnerId != "") {
+        job.runner = new Runner(job.runnerId);
+        await job.runner.init();
+    }
     globalJobs[job.id] = job;
 }
 
