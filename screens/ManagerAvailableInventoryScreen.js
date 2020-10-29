@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
@@ -168,7 +168,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 				onSave={() => setInputBlkUpdateModalVisible(false)}
 			>
 			</InputBlankInventoryModal>
-			<ConfirmDeliveryModal
+			<ConfirmInventoryModal
                 sourceImg={imageSelected} 
                 drinkName={drinkSelected}
                 pairedItems={[

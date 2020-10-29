@@ -265,6 +265,39 @@ class DBManager {
         }
     }
 
+    updateJobStatus(drink, stationKey, pairItems, status) {
+        const baseRef = this.dbh.collection("Jobs");
+        baseRef.get()
+        .then(snapshot => {
+		    console.log("Drinks: ", snapshot.size);
+		    snapshot.forEach(snap => {
+                console.log(data);
+                if (snap.data().stationKey === stationKey) {
+                    let found = false;
+                    let id = "";
+                    baseRef.doc(snap.id)
+                        .collection("drinks")
+                        .once('value', function(snapshot) {
+                            snapshot.forEach(function(childSnapshot) {
+                                if (childSnapshot.data().drinkType == drink.drinkType) {
+                                    found = true;
+                                    id = childSnapshot.id;
+                                }
+                            });
+                    });
+                    if (found) {
+                        let newData = snap.data();
+                        newData.status == status;
+                        baseRef.doc(snap.id).update(newData);
+                        baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
+                    }
+                }
+		       	console.log("snap id: ", snap.id, snap.data());
+		    })
+        })
+        .catch(e => {console.log(e)});
+    }
+
     // return void
     // createDrinkTypeInfo(data) {
     //     this.dbh.collection("DrinkType").get()

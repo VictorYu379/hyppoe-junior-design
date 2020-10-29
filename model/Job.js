@@ -267,6 +267,16 @@ export default class Job {
         });
         dbManager.createNewJob(job, drinks, items);
     }
+
+    static updateJobStaus(drink, stationKey, pairItems, status) {
+        drink = Drink.parseDrink(drink);
+        items = pairItems.map(item => {
+            item = PairItem.parsePairItem(item);
+            item.quantity = drink.quantity;
+            return item;
+        });
+        dbManager.updateJobStatus(drink, stationKey, pairItems, status);
+    }
 }
 
 async function update(data) {

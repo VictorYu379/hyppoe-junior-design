@@ -4,9 +4,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
-import ReturnInventoryModal from 'components/ReturnInventoryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
+import Job from '../model/Job';
 
 export default class ServerConfirmInventoryScreen extends React.Component {
     state = {
@@ -18,7 +19,7 @@ export default class ServerConfirmInventoryScreen extends React.Component {
         drinks: [],
         stationSelected: null,
         totalValue: 0,
-        returnInventoryModalVisible: false
+        confirmInventoryModalVisible: false
     };
 
      _scrollView1 = React.createRef();
@@ -38,8 +39,12 @@ export default class ServerConfirmInventoryScreen extends React.Component {
         });
     }
 
-    onReturnInventory(drink, station) {
-        this.setState({returnInventoryModalVisible: false});
+    onConfirmInvModalSave(drink) {
+        this.setState({confirmInventoryModalVisible: false});
+        Job.updateJobStaus(drink, this.state.curStation.key, this.state.pairItems, "Confirmed");
+        curStation.updateDrink(drink);
+        // update status of job
+        // update inventory of station
     }
 
     updateData() {
@@ -52,6 +57,7 @@ export default class ServerConfirmInventoryScreen extends React.Component {
         });
         this.setState({
             drinks: globalInventory.drinks,
+            pairItems: globalInventory.pairItems,
             stations: newStations,
             totalValue: newTotalValue
         });
@@ -64,10 +70,11 @@ export default class ServerConfirmInventoryScreen extends React.Component {
                 style={styles.container}
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
-                <ReturnInventoryModal
-                    ref={m => {this.returnInventoryModal = m}}
-                    visible={this.state.returnInventoryModalVisible} 
-                    onSave={this.onReturnInventory.bind(this)} />
+                <confirmInventoryModal
+                    ref={m => {this.confirmInventoryModal = m}}
+                    serverMode={true}
+                    visible={this.state.confirmInventoryModalVisible} 
+                    onSave={this.onConfirmInvModalSave.bind(this)} />
                 <InventoryTopBox
                     inventory={"Confirm"}
                     touchable
@@ -114,10 +121,14 @@ export default class ServerConfirmInventoryScreen extends React.Component {
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
                                         onAdd={() => {
-                                            this.setState({returnInventoryModalVisible: true});
-                                            this.returnInventoryModal.inputDrinkAndStation(
+                                            this.setState({
+                                                confirmInventoryModalVisible: true,
+                                                curStation: station
+                                            });
+                                            this.confirmInventoryModal.inputDrinkAndStation(
                                                 this.state.drinks[this.state.inventorySelected],
-                                                this.state.stations[station.key]
+                                                station.name,
+                                                this.state.pairItems
                                             );
                                         }}
                                         />

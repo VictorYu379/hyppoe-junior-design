@@ -19,9 +19,9 @@ export default class RequestInventoryModal extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            modalVisible: false,
             pickUp: false,
             checked: false,
+            stationName: "",
             drink: new Drink(),
             Item: {
                 Name: "",
@@ -57,7 +57,7 @@ export default class RequestInventoryModal extends React.Component {
             }
         });
         console.log(pairItems);
-        this.pairdItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
+        this.pairItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
     }
 
     getPairedItemList(itemList) {
@@ -401,7 +401,7 @@ export default class RequestInventoryModal extends React.Component {
                                 source={require('assets/Seperator.png')}
                             />
                         </View>
-                        { this.pairdItemList }
+                        { this.pairItemList }
                         <Text style={styles.sectionTitle}> Details: </Text>
                         <TextInput
                             style={{

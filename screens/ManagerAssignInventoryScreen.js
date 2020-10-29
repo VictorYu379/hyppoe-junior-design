@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
-import ReturnInventoryModal from 'components/ReturnInventoryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
 
@@ -60,7 +60,7 @@ export default class ManagerAssignInventoryScreen extends React.Component {
                 style={styles.container}
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
-                <ReturnInventoryModal
+                <ConfirmInventoryModal
                     sourceImg={null} 
                     drinkName={null}
                     visible={this.state.assignInventoryModalVisible} 
