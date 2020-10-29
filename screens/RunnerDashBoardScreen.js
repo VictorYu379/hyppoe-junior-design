@@ -12,16 +12,16 @@ export default function RunnerDashBoardScreen({ navigation }) {
 	const stationId = "P7HFuidmDgcaRRovoRjK"
 
 	// Reading runner from global storage
-	const [runner, setRunner] = useState();
+	// const [runner, setRunner] = useState();
 	const [stationInventorySummary, setstationInventorySummary] = useState([]);
 	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
 	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Runner.getInstance().then(runner => { 
-			setRunner(runner);
-			Station.setInstance(runner.stationId);
-		});
+		// Runner.getInstance().then(runner => { 
+		// 	setRunner(runner);
+		// 	Station.setInstance(runner.stationId);
+		// });
 		var stationInventorySummary = Station.getStationInventorySummary(stationId);
 		setstationInventorySummary(stationInventorySummary);
 		var returnInventorySummary = Job.getNumOfReturnItems(stationId); 

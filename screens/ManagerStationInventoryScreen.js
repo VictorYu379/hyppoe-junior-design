@@ -11,7 +11,6 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 
 	// TODO: When clicking on the box and navigate to Individual Station Inventory, 
 	// the stationID of the directed station need to be set as below.
-	//Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
 	//console.log(getGlobalStations())
 	const StationDataList = Station.getStationInventoryData()
 	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()

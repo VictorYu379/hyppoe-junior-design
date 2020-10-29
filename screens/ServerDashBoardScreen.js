@@ -12,7 +12,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 	const stationId = "P7HFuidmDgcaRRovoRjK"
 	// Reading server from global storage
-	const [server, setServer] = useState();
+	// const [server, setServer] = useState();
 	const [stationInventorySummary, setstationInventorySummary] = useState([]);
 	const [pendingInventorySummary, setpendingInventorySummary] = useState([]);
 	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
@@ -20,10 +20,10 @@ export default function ServerDashBoardScreen({ navigation }) {
 	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Server.getInstance().then(server => { 
-			setServer(server);
-			Station.setInstance(server.stationId);
-		});
+		// Server.getInstance().then(server => { 
+		// 	setServer(server);
+		// 	Station.setInstance(server.stationId);
+		// });
 		var stationInventorySummary = Station.getStationInventorySummary(stationId);
 		setstationInventorySummary(stationInventorySummary);
 		var pendingInventorySummary = Job.getNumOfJobsInTransit(stationId); 

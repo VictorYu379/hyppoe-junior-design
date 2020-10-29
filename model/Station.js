@@ -25,17 +25,17 @@ export default class Station {
         return Promise.all(promises);
     }
 
-    static async setInstance(id) {
-        dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
-        stationID = id;
-    }
+    // deprecated functions
+    // static async setInstance(id) {
+    //     dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
+    // }
 
     // To be deprecated, use getGlobalStation() instead
-    static async getInstance() {
-        var stationID = await dbManager.getStorage(STATION_KEY);
-        var station = new Station({ id: stationID });
-        return await station.init();
-    }
+    // static async getInstance() {
+    //     var stationID = await dbManager.getStorage(STATION_KEY);
+    //     var station = new Station({ id: stationID });
+    //     return await station.init();
+    // }
 
     static setStations(ids) {
         ids.map(id => {
