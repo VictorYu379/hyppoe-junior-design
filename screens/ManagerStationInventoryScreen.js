@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 import Station, {getGlobalStations}from 'model/Station';
@@ -15,6 +15,14 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 	//console.log(getGlobalStations())
 	const StationDataList = Station.getStationInventoryData()
 	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
+	const [stationInventorySummary, setstationInventorySummary] = useState([]);
+
+	useEffect(() => {
+		var stationInventorySummary = Station.getStationInventorySummary();
+		setstationInventorySummary(stationInventorySummary);
+		//console.log(Station.getDetailedData())
+		
+	}, [])
 
 	const textColor = (text) => {
 		let rate = Number(text);
@@ -208,13 +216,13 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 					}}>
 						<Text style={{
 							...styles.percentageHeaderBoxTextSize,
-							color: textColor(percent(total('avail'), total('total'))),
+							color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 						}}>
-							{percent(total('avail'), total('total'))}%
+							{percent(stationInventorySummary[0], stationInventorySummary[1])}%
 						</Text>
 						<Text style={{
 							...styles.HeaderBoxTextSize, 
-							color: textColor(percent(total('avail'), total('total')))
+							color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 						}}>
 							Available Inventory
 						</Text>

@@ -79,11 +79,13 @@ export default class Station {
         var station = getGlobalStation();
         var avail = [];
         var total = [];
-        station.drinks.map(drink => {
-            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
-            total[item.key] = drink.quantity;
-            avail[avail.length] = item;
-        });
+        if (station.drinks != undefined){
+            station.drinks.map(drink => {
+                var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+                total[item.key] = drink.quantity;
+                avail[avail.length] = item;
+            });
+        }
         var sold = [];
         station.servers.map(server => {
             var items = [];
@@ -241,6 +243,8 @@ export default class Station {
         return [avail, sold, total];
     }
 
+
+    
 
     // Returns the number of returned items of station based on stationId.
     // Returns the total number of returned items if stationId is omitted.

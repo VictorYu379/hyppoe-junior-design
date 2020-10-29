@@ -108,7 +108,9 @@ export default function ManagerIndividualStationDataScreen({ route, navigation }
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory Detailed Data")}>
+			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Individual Station Inventory Detailed Data Screen", {
+				stationId: stationId,
+			})}>
 
 
 				<View style={{

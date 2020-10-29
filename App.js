@@ -69,7 +69,7 @@ export default function App() {
 							component={DummyScreen}/>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={RunnerDashBoardScreen}
+							component={ManagerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
@@ -166,14 +166,6 @@ export default function App() {
 						<Stack.Screen
 							name="Manager Individual Station Inventory"
 							component={ManagerIndivitualStationDataScreen}
-							options={{
-								header: ({ navigation, props }) => {
-									return <HyppoeHeader navigation={navigation} mode="full"/>;
-								}
-							}}/>
-						<Stack.Screen
-							name="Manager Individual Station Inventory Detailed Data"
-							component={IndividualStationInventoryDetailedDataScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
