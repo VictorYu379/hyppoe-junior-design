@@ -17,7 +17,7 @@ export default function ServerPendingInventoryScreen({ route, navigation }) {
 		setJobList(JobList);
 	}, [])
 
-	//console.log(JobList)
+	console.log(JobList)
 
 	const getstationKey = () => {
 		return getGlobalStation(stationId).key
@@ -26,7 +26,7 @@ export default function ServerPendingInventoryScreen({ route, navigation }) {
 	const filterStation = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.key == getstationKey() && (item.status == "Complete")){
+			if(item.stationKey == getstationKey() && (item.status == "Complete")){
 				StationJobList.push(item)
 			}
 		});
@@ -36,7 +36,7 @@ export default function ServerPendingInventoryScreen({ route, navigation }) {
 	const filterRunner = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.key == getstationKey() && (item.status == "Unstarted" || item.status == "In transit")){
+			if(item.stationKey == getstationKey() && (item.status == "Unstarted" || item.status == "In transit")){
 				StationJobList.push(item)
 			}
 		});
