@@ -161,29 +161,11 @@ class DBManager {
         return this.dbh.collection("DrinkType").doc(id).update(data);
     }
 
-    updateDrinkInStation(stationId, data) {
-        console.log("ok");
-        return this.dbh.collection("Station").doc(stationId).collection("drinks").get()
-            .then(snapshot => {
-                snapshot.forEach(snap => {
-                    console.log(data);
-                    if (snap.data().drinkType == data.drinkType) {
-                        data.quantity += snap.data().quantity;
-                        data.pack += snap.data().pack;
-                        console.log("FOUND:", data.drinkType);
-                        this.dbh.collection("Station")
-                        .doc(stationId)
-                        .collection("drinks")
-                        .doc(snap.id).update(data)
-                        .then(d => {console.log(d)})
-                        .catch(e => {console.log(e)});
-                    }
-                    console.log("snap id: ", snap.id, snap.data());
-                })
-            })
-            .catch(e => {
-                console.log(e);
-            })
+    async updateDrinkInStation(stationId, updated) {
+        var data = await this.getDrinksInStationHandle(stationId).where("drinkType", "==", updated.drinkType).get();
+        var id = data.docs[0].id;
+        console.log(id, updated);
+        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).update(updated);
     }
 
     updateDrinkInInventory(inventoryId, drinkId, data) {
@@ -263,6 +245,46 @@ class DBManager {
         for (let pairItem of pairItems) {
             await ref.collection("pairItems").add(pairItem);
         }
+        return id;
+    }
+
+    updateJob(drink, stationKey, status, runnerId) {
+        const baseRef = this.dbh.collection("Jobs");
+        baseRef.get()
+        .then(snapshot => {
+		    console.log("Drinks: ", snapshot.size);
+		    snapshot.forEach(snap => {
+                if (snap.data().stationKey === stationKey) {
+                    let found = false;
+                    let id = "";
+                    baseRef.doc(snap.id)
+                        .collection("drinks")
+                        .get()
+                        .then(snapshot => {
+                            snapshot.forEach(function(childSnapshot) {
+                                if (childSnapshot.data().drinkType == drink.drinkType) {
+                                    found = true;
+                                    id = childSnapshot.id;
+                                    console.log("Found: ", id);
+                                }
+                            });
+                        });
+                    if (found) {
+                        let newData = snap.data();
+                        if (status != null) {
+                            newData.status = status;
+                        }
+                        if (runnerId != null) {
+                            newData.runnderId = runnerId;
+                        }
+                        baseRef.doc(snap.id).update(newData);
+                        baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
+                    }
+                }
+		       	console.log("snap id: ", snap.id);
+		    })
+        })
+        .catch(e => {console.log(e)});
     }
 
     // return void

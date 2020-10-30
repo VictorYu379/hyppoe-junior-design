@@ -75,7 +75,7 @@ export default class ReturnInventoryModal extends React.Component {
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
-                TotalQuantity: 0,
+                TotalQuantity: drink.quantity,
                 CurrentQuantity: drink.quantity,
                 Price: drink.drinkType.pricePerUnit,
                 Details: drink.details,
@@ -476,8 +476,8 @@ export default class ReturnInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
+                                    console.log(this.state.drink);
                                     var newDrink = new Drink({
-                                        id: this.state.drink.id,
                                         drinkType: this.state.drink.drinkType,
                                         quantity: this.state.Item.AddedQuantity,
                                         pack: this.state.Item.Pack,

@@ -23,7 +23,7 @@ export default function InventoryTopBox(props) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <Text style={styles.boldText}>Inventory</Text>
+                        <Text style={styles.boldText}>{props.return ? "Stations" : "Inventory"}</Text>
                     </View>
                     <View style={{
                         width: '50%',
@@ -31,7 +31,7 @@ export default function InventoryTopBox(props) {
                         alignItems: 'center',
                         borderLeftWidth: 1
                     }}>
-                        <Text style={styles.boldText}>Stations</Text>
+                        <Text style={styles.boldText}>{props.return ? "Inventory" : "Stations"}</Text>
                     </View>
                 </View>
             </View>
