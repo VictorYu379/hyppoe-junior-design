@@ -366,8 +366,6 @@ export default class Station {
     }
 
     updateDrink(drink) {
-        let found = false;
-        let drinkId = drink.id;
         console.log(Drink.parseDrink(drink));
         dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
             console.log(e);

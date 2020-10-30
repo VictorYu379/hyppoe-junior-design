@@ -7,6 +7,7 @@ import InventoryTopBox from 'components/InventoryTopBox';
 import ReturnInventoryModal from 'components/ReturnInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
+import Job from 'model/Job';
 
 export default class ManagerReturnInventoryScreen extends React.Component {
     state = {
@@ -16,11 +17,12 @@ export default class ManagerReturnInventoryScreen extends React.Component {
         stationModalVisible: false,
         stations: {},
         drinks: [],
+        pairItems: [],
         availableDrinkType: [],
         curStation: null,
         stationSelected: null,
         totalValue: 0,
-        returnInventoryModalVisible: false
+        returnInventoryModalVisible: false,
     };
 
      _scrollView1 = React.createRef();
@@ -41,22 +43,21 @@ export default class ManagerReturnInventoryScreen extends React.Component {
     }
 
     onReturnInvModalSave(drink) {
-        var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
+        var selectedStation = this.state.stations[this.state.stationSelected];
+        var drinkToUpdate = selectedStation.drinks.find(drink => {
+            return drink.name === this.state.drinks[this.state.inventorySelected].name;
+        });
         drinkToUpdate.subtract(drink);
-        globalInventory.updateDrinkQuantity(drinkToUpdate);
-        Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
+        console.log(drinkToUpdate);
+        selectedStation.updateDrink(drinkToUpdate);
+        Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Return");
         this.setState({
-            assignInventoryModalVisible: false,
+            returnInventoryModalVisible: false,
             inventorySelected: null,
             stationSelected: null,
             availableDrinkType: [],
         });
         this.updateData();
-
-        this.setState({
-            returnInventoryModalVisible: false
-        });
-        this.state.curStation.updateDrink(drink);
     }
 
     updateData() {
@@ -139,7 +140,10 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                                     var selectedDrink = station.findDrinkWithDrinkType(this.state.drinks[index].name);
                                     console.log(selectedDrink);
                                     this.returnInventoryModal.inputDrinkAndStation(selectedDrink, station.name);
-                                    this.setState({ returnInventoryModalVisible: true, });
+                                    this.setState({
+                                        returnInventoryModalVisible: true,
+                                        inventorySelected: index
+                                    });
                                 };
                                 return (
                                     <DrinkBox
