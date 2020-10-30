@@ -9,8 +9,8 @@ import Manager from 'model/Manager';
 import Job from 'model/Job';
 
 export default function ManagerPendingInventoryScreen({ navigation }) {
-	const [confirmInventoryModal, setconfirmInventoryModal] = useState(false);
-	const [confirmInventoryModalVisible, setconfirmInventoryModalVisible] = useState(false);
+	const [confirmInventoryModal, setConfirmInventoryModal] = useState(false);
+	const [confirmInventoryModalVisible, setConfirmInventoryModalVisible] = useState(false);
 	const [taskSelected, setTaskSelected] = useState(null);
 	const [taskIndexSelected, setTaskIndexSelected] = useState(0);
 	const [isRunnerSelected, setIsRunnerSelected] = useState(false);
@@ -51,6 +51,10 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	const runnerJobs = filterRunner()
 
 	const onConfirmInvModalSave = (drink) => {
+		if (drink == null) {
+			setConfirmInventoryModalVisible(false);
+			return;
+		}
 		const curTask = taskSelected;
 		let curStatus = "";
 		if (taskSelected.status === "Completed") {
@@ -58,20 +62,20 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		} else {
 			curStatus = taskSelected.status;
 		}
-		Job.updateJob(drink, this.state.taskSelected.stationKey, curStatus, null);
+		Job.updateJob(drink, taskSelected.stationKey, curStatus, null);
 		curTask.drink = drink;
 		if (isRunnerSelected) {
 			runnerJobs[taskIndexSelected] = curTask;
 		} else {
 			StationJobsList[taskIndexSelected] = curTask;
 		}
-		setconfirmInventoryModalVisible = false;
+		setConfirmInventoryModalVisible(false);
 	}
 
 	const runnerList = runnerJobs.map((item, index) => {
 		return (
-			<ShadowedBox width={'40%'} height={100} key={inde} margin={5} touchable onPress={() => {
-				setconfirmInventoryModalVisible(true);
+			<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				setConfirmInventoryModalVisible(true);
 				setTaskSelected(runnerJobs[index]);
 				setTaskIndexSelected(index);
 				setIsRunnerSelected(true);
@@ -82,7 +86,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 					pairItems
 					);
 				confirmInventoryModal
-				.inputStatus(this.state.tasks[index].status);
+				.inputStatus(runnerJobs[index].status);
 			}}>
 
 				<View style={{
@@ -161,18 +165,17 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	const stationList = StationJobsList.map((item, index) => {
 		return (
 			<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
-				setconfirmInventoryModalVisible(true);
+				setConfirmInventoryModalVisible(true);
 				setTaskSelected(StationJobsList[index]);
 				setTaskIndexSelected(index);
 				setIsRunnerSelected(false);
-				confirmInventoryModal
-				.inputDrinkAndStation(
+				console.log(StationJobsList[index]);
+				confirmInventoryModal.inputDrinkAndStation(
 					StationJobsList[index].drink, 
 					StationJobsList[index].stationKey,
 					pairItems
 				);
-				confirmInventoryModal
-				.inputStatus(this.state.tasks[index].status);
+				confirmInventoryModal.inputStatus(StationJobsList[index].status);
 			}}>
 
 				<View style={{
@@ -227,8 +230,6 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						</Text>
 					</View>
 				</View>
-
-
 			</ShadowedBox>
 		);
 	});
@@ -238,7 +239,9 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<ConfirmInventoryModal
-				ref={m => {setconfirmInventoryModal(m)}}
+				ref={m => {setConfirmInventoryModal(m)}}
+				managerMode={true}
+				serverMode={true}
 				visible={confirmInventoryModalVisible}
 				onSave={(drink) => onConfirmInvModalSave(drink)}
 			/>

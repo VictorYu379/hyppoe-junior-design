@@ -124,7 +124,7 @@ export default class Job {
             if (job.runnerId != "") {
                 runner = "Runner " + job.runner.key;
             }
-            tasks.push({key: tasks.length, runner: runner, item: item, from: from, to: to, status: job.status});
+            tasks.push({key: tasks.length, runner: runner, drink: job.drinks[0], item: item, from: from, to: to, status: job.status});
         });
         tasks.sort((a, b) => {
             return (a.status <= b.status) ? 1 : -1;
