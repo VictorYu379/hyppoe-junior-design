@@ -161,9 +161,11 @@ class DBManager {
         return this.dbh.collection("DrinkType").doc(id).update(data);
     }
 
-    updateDrinkInStation(stationId, data) {
-        return this.getDrinksInStationHandle(stationId).where("drinkType", "==", data.drinkType)
-            .firestore.doc().update(data);
+    async updateDrinkInStation(stationId, updated) {
+        var data = await this.getDrinksInStationHandle(stationId).where("drinkType", "==", updated.drinkType).get();
+        var id = data.docs[0].id;
+        console.log(id, updated);
+        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).update(updated);
     }
 
     updateDrinkInInventory(inventoryId, drinkId, data) {

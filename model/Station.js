@@ -366,7 +366,6 @@ export default class Station {
     }
 
     updateDrink(drink) {
-        console.log(Drink.parseDrink(drink));
         dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
             console.log(e);
         });

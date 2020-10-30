@@ -48,7 +48,6 @@ export default class ManagerReturnInventoryScreen extends React.Component {
             return drink.name === this.state.drinks[this.state.inventorySelected].name;
         });
         drinkToUpdate.subtract(drink);
-        console.log(drinkToUpdate);
         selectedStation.updateDrink(drinkToUpdate);
         Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Return");
         this.setState({
