@@ -232,14 +232,11 @@ class DBManager {
         return this.dbh.collection("DrinkType").add(data);
     }
 
-    async createNewJob(job, drinks, pairItems) {
+    async createNewJob(job, pairItems) {
         const res = await this.dbh.collection("Jobs").add(job);
-        console.log(res.id);
+        // console.log(res.id);
         const id = res.id;
-        const ref = this.dbh.collection("Jobs").doc(id);
-        for (let drink of drinks) {
-            await ref.collection("drinks").add(drink);
-        }
+        const ref = this.getJobHandle(id);
         for (let pairItem of pairItems) {
             await ref.collection("pairItems").add(pairItem);
         }
@@ -273,7 +270,7 @@ class DBManager {
                             newData.status = status;
                         }
                         if (runnerId != null) {
-                            newData.runnderId = runnerId;
+                            newData.runnerId = runnerId;
                         }
                         baseRef.doc(snap.id).update(newData);
                         baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
