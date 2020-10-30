@@ -7,7 +7,7 @@ import InventoryTopBox from 'components/InventoryTopBox';
 import RequestInventoryModal from 'components/RequestInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
-import Job from '../model/Job';
+import Job from 'model/Job';
 
 export default class RunnerRequestInventoryScreen extends React.Component {
     state = {

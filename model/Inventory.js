@@ -141,23 +141,7 @@ export default class Inventory {
     }
 
     updateDrink(drink) {
-        return Promise.all([
-                dbManager.updateDrinkTypeInfo(drink.typeId, {
-                icon : drink.icon,
-                name : drink.name,
-                unitPerPack : drink.unit,
-                ouncePerUnit : drink.ouncePerUnit,
-                pricePerUnit : drink.pricePerUnit,
-                alert : drink.alert,
-                costPerUnit : drink.costPerUnit
-            }),
-            dbManager.updateDrinkInInventory(this.id, drink.id, {
-                details: drink.details || "",
-                drinkType: drink.typeId,
-                pack: drink.pack,
-                quantity: drink.quantity
-            })
-        ]);
+        return Promise.all([this.updateDrinkTypeInfo(drink), this.updateDrinkQuantity(drink)]);
     }
 
     addDrink(drink) {
@@ -178,6 +162,27 @@ export default class Inventory {
                 quantity: drink.quantity
             })
         ]);
+    }
+
+    updateDrinkTypeInfo(drink) {
+        return dbManager.updateDrinkTypeInfo(drink.typeId, {
+            icon : drink.icon,
+            name : drink.name,
+            unitPerPack : drink.unit,
+            ouncePerUnit : drink.ouncePerUnit,
+            pricePerUnit : drink.pricePerUnit,
+            alert : drink.alert,
+            costPerUnit : drink.costPerUnit
+        })
+    }
+
+    updateDrinkQuantity(drink) {
+        return dbManager.updateDrinkInInventory(this.id, drink.id, {
+            details: drink.details || "",
+            drinkType: drink.typeId,
+            pack: drink.pack,
+            quantity: drink.quantity
+        });
     }
 }
 
