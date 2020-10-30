@@ -253,7 +253,6 @@ export default class Job {
             type: typeName,
             stationKey: stationKey,
             status: "Unstarted",
-            runner: "",
             runnerId: "",
             details: ""
         };

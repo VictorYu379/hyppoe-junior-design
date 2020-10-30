@@ -7,6 +7,7 @@ import InventoryTopBox from 'components/InventoryTopBox';
 import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
+import Job from 'model/Job';
 
 export default class ManagerAssignInventoryScreen extends React.Component {
     state = {
@@ -16,6 +17,7 @@ export default class ManagerAssignInventoryScreen extends React.Component {
         stationModalVisible: false,
         stations: [],
         drinks: [],
+        pairItems: [],
         stationSelected: null,
         totalValue: 0,
         assignInventoryModalVisible: false
@@ -38,6 +40,15 @@ export default class ManagerAssignInventoryScreen extends React.Component {
         });
     }
 
+    onAssignModalSave(drink) {
+        Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
+        this.setState({
+            assignInventoryModalVisible: false,
+            inventorySelected: null,
+            stationSelected: null
+        });
+    }
+
     updateData() {
         var stations = getGlobalStations();
         var newStations = {};
@@ -49,7 +60,8 @@ export default class ManagerAssignInventoryScreen extends React.Component {
         this.setState({
             drinks: globalInventory.drinks,
             stations: newStations,
-            totalValue: newTotalValue
+            totalValue: newTotalValue,
+            pairItems: globalInventory.pairItems
         });
     }
 
@@ -61,10 +73,10 @@ export default class ManagerAssignInventoryScreen extends React.Component {
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
                 <ConfirmInventoryModal
-                    sourceImg={null} 
-                    drinkName={null}
+                    ref={m => {this.assignInventoryModal = m}}
+                    isAssign={true}
                     visible={this.state.assignInventoryModalVisible} 
-                    onSave={() => this.setState({assignInventoryModalVisible: false})} />
+                    onSave={this.onAssignModalSave.bind(this)} />
                 <InventoryTopBox inventory={"Assign"} />
                 <View style={styles.scrollsContainer}>
                     <View
@@ -107,8 +119,17 @@ export default class ManagerAssignInventoryScreen extends React.Component {
                                         totalValue={this.state.totalValue}
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
-                                        onAdd={() => this.setState({assignInventoryModalVisible: true})}
-                                        />
+                                        onAdd={() => {
+                                            this.setState({
+                                                assignInventoryModalVisible: true,
+                                                stationSelected: station.key
+                                            });
+                                            this.assignInventoryModal.inputDrinkAndStation(
+                                                this.state.drinks[this.state.inventorySelected],
+                                                station.name,
+                                                this.state.pairItems
+                                            )
+                                        }}/>
                                 );
                             })}
                         </ScrollView>
