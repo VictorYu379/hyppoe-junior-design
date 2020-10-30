@@ -8,7 +8,7 @@ import ReturnInventoryModal from 'components/ReturnInventoryModal';
 import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
 
-export default class RunnerReturnInventoryScreen extends React.Component{
+export default class ManagerReturnInventoryScreen extends React.Component {
     state = {
         inventorySelected: null,
         scrollViewHeight: 0,
@@ -16,8 +16,9 @@ export default class RunnerReturnInventoryScreen extends React.Component{
         stationModalVisible: false,
         stations: {},
         drinks: [],
-        stationSelected: null,
+        availableDrinkType: [],
         curStation: null,
+        stationSelected: null,
         totalValue: 0,
         returnInventoryModalVisible: false
     };
@@ -40,7 +41,21 @@ export default class RunnerReturnInventoryScreen extends React.Component{
     }
 
     onReturnInvModalSave(drink) {
-        this.setState({returnInventoryModalVisible: false});
+        var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
+        drinkToUpdate.subtract(drink);
+        globalInventory.updateDrinkQuantity(drinkToUpdate);
+        Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
+        this.setState({
+            assignInventoryModalVisible: false,
+            inventorySelected: null,
+            stationSelected: null,
+            availableDrinkType: [],
+        });
+        this.updateData();
+
+        this.setState({
+            returnInventoryModalVisible: false
+        });
         this.state.curStation.updateDrink(drink);
     }
 
@@ -65,34 +80,17 @@ export default class RunnerReturnInventoryScreen extends React.Component{
                 activeOpacity={1}
                 style={styles.container}
                 touchable
-                onPress={() => this.setState({inventorySelected: null})}>
+                onPress={() => this.setState({
+                    inventorySelected: null,
+                    stationSelected: null,
+                    availableDrinkType: [],
+                })}>
                 <ReturnInventoryModal
                     ref={m => {this.returnInventoryModal = m}}
                     visible={this.state.returnInventoryModalVisible} 
                     onSave={this.onReturnInvModalSave.bind(this)} />
                 <InventoryTopBox inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
                 <View style={styles.scrollsContainer}>
-                    <View
-                        style={{width: '50%'}}
-                        onLayout={(event) => this.setState({scrollViewHeight: event.nativeEvent.layout.height})}>
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{
-                                alignItems: 'center'
-                            }}
-                            ref={this._scrollView1}>
-                            {this.state.drinks.map((drink, index) => {
-                                return (
-                                    <DrinkBox
-                                        key={index}
-                                        onPress={this.onDrinkBoxPressed.bind(this, index)}
-                                        drink={drink}
-                                        greyed={this.state.inventorySelected !== null && this.state.inventorySelected !== index}
-                                        onLayout={this.onDrinkBoxLayout.bind(this)}/>
-                                );
-                            })}
-                        </ScrollView>
-                    </View>
                     <View style={{width: '50%'}}>
                         <ScrollView
                             showsVerticalScrollIndicator={false}
@@ -110,20 +108,46 @@ export default class RunnerReturnInventoryScreen extends React.Component{
                                         key={index}
                                         station={station}
                                         totalValue={this.state.totalValue}
-                                        inventorySelected={this.state.inventorySelected}
-                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
-                                        onAdd={() => {
-                                            console.log(station.name);	
-                                            this.setState({	
-                                                returnInventoryModalVisible: true,	
-                                                curStation: station	
-                                            });	
-                                            console.log("Selected: ", this.state.inventorySelected);	
-                                            this.returnInventoryModal.inputDrinkAndStation(	
-                                                this.state.drinks[this.state.inventorySelected],	
-                                                station.name);
+                                        inventorySelected={this.state.stationSelected === station.key ? this.state.stationSelected : null}
+                                        greyed={this.state.stationSelected !== null && this.state.stationSelected !== station.key}
+                                        onPressStats={() => {
+                                            this.setState({
+                                                stationSelected: station.key,
+                                                curStation: station,
+                                                availableDrinkType: station.drinks.map(drink => drink.name)
+                                            });
                                         }}
                                         />
+                                );
+                            })}
+                        </ScrollView>
+                    </View>
+                    <View
+                        style={{width: '50%'}}
+                        onLayout={(event) => this.setState({scrollViewHeight: event.nativeEvent.layout.height})}>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                                alignItems: 'center'
+                            }}
+                            ref={this._scrollView1}>
+                            {this.state.drinks.map((drink, index) => {
+                                var disabled = this.state.availableDrinkType.length == 0 || 
+                                                !this.state.availableDrinkType.includes(drink.name);
+                                var onPress = () => {
+                                    var station = this.state.stations[this.state.stationSelected];
+                                    var selectedDrink = station.findDrinkWithDrinkType(this.state.drinks[index].name);
+                                    console.log(selectedDrink);
+                                    this.returnInventoryModal.inputDrinkAndStation(selectedDrink, station.name);
+                                    this.setState({ returnInventoryModalVisible: true, });
+                                };
+                                return (
+                                    <DrinkBox
+                                        key={index}
+                                        onPress={disabled ? null : onPress}
+                                        drink={drink}
+                                        greyed={disabled}
+                                        onLayout={this.onDrinkBoxLayout.bind(this)}/>
                                 );
                             })}
                         </ScrollView>
