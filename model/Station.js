@@ -128,49 +128,55 @@ export default class Station {
     static getStationDrinksDataByID(ID) {
         var res = []
         var stations = getGlobalStations();
-        stations.map(station => {
-            if(station.id == ID) {
-                station.drinks.map(drink => {
-                    var item = {
-                        icon: drink.icon,
-                        name: drink.name,
-                        avail: drink.quantity,
-                        total: drink.quantity,
-                    }
-                    res.push(item)
-                })
+        station = stations.find(item => item.id == ID);
+        station.drinks.map(drink => {
+            var item = {
+                icon: drink.icon,
+                name: drink.name,
+                avail: drink.quantity,
+                total: drink.quantity,
             }
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    item.total += drink.quantity
+                })
+            })
+            res.push(item)
         })
         return res
     }
 
     static getStationInventoryDataByID(ID) {
-        var res = []
         var stations = getGlobalStations();
-        stations.map(station => {
-            if(station.id == ID) {
-                var stationTotal = 0
-                var stationAvail = 0
-                var stationValue = 0
-                station.drinks.map(drink => {
-                    stationTotal += drink.quantity
-                    stationAvail += drink.quantity
-                    stationValue += drink.quantity * drink.pricePerUnit
-                });
-                var item = {
-                    key: station.key, 
-                    name: station.name, 
-                    total: stationTotal, 
-                    avail: stationAvail, 
-                    value: stationValue, 
-                    id: station.id, 
-                    serverNum: station.servers.length,
-                    runnerNum: station.runners.length,
-                };
-                res.push(item)   
-            }  
+        station = stations.find(item => item.id == ID);
+ 
+        var stationTotal = 0
+        var stationAvail = 0
+        var stationValue = 0
+        station.drinks.map(drink => {
+            stationTotal += drink.quantity
+            stationAvail += drink.quantity
+            stationValue += drink.quantity * drink.pricePerUnit
         });
-        return res
+        station.servers.map(server =>{
+            server.soldDrinks.map(drink => {
+                stationTotal += drink.quantity
+                stationValue += drink.quantity * drink.pricePerUnit
+            })
+        })
+        var item = {
+            key: station.key, 
+            name: station.name, 
+            total: stationTotal, 
+            avail: stationAvail, 
+            value: stationValue, 
+            id: station.id, 
+            serverNum: station.servers.length,
+            runnerNum: station.runners.length,
+        };
+         
+
+        return item
     }
 
 
