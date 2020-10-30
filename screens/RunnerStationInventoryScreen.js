@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 
+
 export default function DummyScreen({ route, navigation }) {
 
 	const stationId = route.params['stationId'];

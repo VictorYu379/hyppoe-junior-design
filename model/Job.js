@@ -3,6 +3,7 @@ import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Runner from 'model/Runner';
 import { globalStations } from 'model/Station';
+import { globalEvent } from './Event';
 
 export default class Job {
     id;         // String
@@ -125,7 +126,7 @@ export default class Job {
             if (job.runnerId != "") {
                 runner = "Runner " + job.runner.key;
             }
-            tasks.push({key: tasks.length, runner: runner, item: item, from: from, to: to, status: job.status, stationKey: job.stationKey});
+            tasks.push({key: tasks.length, runner: runner, drink: job.drinks[0], type: job.type, item: item, from: from, to: to, status: job.status});
         });
         tasks.sort((a, b) => {
             return (a.status <= b.status) ? 1 : -1;
@@ -406,7 +407,6 @@ export default class Job {
             type: typeName,
             stationKey: stationKey,
             status: "Unstarted",
-            runner: "",
             runnerId: "",
             details: ""
         };
@@ -418,7 +418,14 @@ export default class Job {
             item.quantity = drink.quantity;
             return item;
         });
-        dbManager.createNewJob(job, drinks, items);
+        dbManager.createNewJob(job, drinks, items)
+            .then((id) => globalEvent.addJobToEvent(id))
+            .catch(e => console.log(e)); 
+    }
+
+    static updateJob(drink, stationKey, status, runnerId) {
+        drink = Drink.parseDrink(drink);
+        dbManager.updateJob(drink, stationKey, status, runnerId);
     }
 }
 

@@ -45,6 +45,7 @@ import StationRunnersScreen from './screens/StationRunnersScreen';
 
 import ReturnInventoryDetailedDataScreen from './screens/ReturnInventoryDetailedDataScreen';
 import StationAlertsScreen from './screens/StationAlertsScreen';
+import RunnerTaskScreen from './screens/RunnerTaskScreen';
 
 
 
@@ -156,7 +157,7 @@ export default function App() {
 							}}/>
 						<Stack.Screen
 							name="Runner Task Screen"
-							component={StationRunnersScreen}
+							component={RunnerTaskScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

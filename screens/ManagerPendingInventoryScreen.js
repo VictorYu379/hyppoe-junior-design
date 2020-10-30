@@ -1,19 +1,28 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
-import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
+import { globalInventory } from 'model/Inventory';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
 
 export default function ManagerPendingInventoryScreen({ navigation }) {
-	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [confirmInventoryModal, setConfirmInventoryModal] = useState(false);
+	const [confirmInventoryModalVisible, setConfirmInventoryModalVisible] = useState(false);
+	const [taskSelected, setTaskSelected] = useState(null);
+	const [taskIndexSelected, setTaskIndexSelected] = useState(0);
+	const [isRunnerSelected, setIsRunnerSelected] = useState(false);
 	const [JobList, setJobList] = useState([]);
+	const [pairItems, setPairItems] = useState([]);
 
 	useEffect(() => {
 		const JobList = Job.getJobs()
 		setJobList(JobList);
+
+		const pairItems = globalInventory.pairItems;
+		setPairItems(pairItems);
 	}, [])
 
 	//console.log(JobList)
@@ -41,9 +50,42 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 	const runnerJobs = filterRunner()
 
-	const runnerList = runnerJobs.map(item => {
+	const onConfirmInvModalSave = (drink) => {
+		if (drink == null) {
+			setConfirmInventoryModalVisible(false);
+			return;
+		}
+		const curTask = taskSelected;
+		let curStatus = "";
+		if (taskSelected.status === "Completed") {
+			curStatus = "Confirmed";
+		} else {
+			curStatus = taskSelected.status;
+		}
+		Job.updateJob(drink, taskSelected.type === "Return" ? taskSelected.from : taskSelected.to, curStatus, null);
+		curTask.drink = drink;
+		if (isRunnerSelected) {
+			runnerJobs[taskIndexSelected] = curTask;
+		} else {
+			StationJobsList[taskIndexSelected] = curTask;
+		}
+		setConfirmInventoryModalVisible(false);
+	}
+
+	const runnerList = runnerJobs.map((item, index) => {
 		return (
-			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				setConfirmInventoryModalVisible(true);
+				setTaskSelected(runnerJobs[index]);
+				setTaskIndexSelected(index);
+				setIsRunnerSelected(true);
+				confirmInventoryModal.inputDrinkAndStation(
+					runnerJobs[index].drink, 
+					runnerJobs[index].type === "Return" ? runnerJobs[index].from : runnerJobs[index].to,
+					pairItems
+				);
+				confirmInventoryModal.inputStatus(runnerJobs[index].status);
+			}}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -118,9 +160,22 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	const StationJobsList = filterStation()
 	//console.log(StationJobsList)
 
-	const stationList = StationJobsList.map(item => {
+	const stationList = StationJobsList.map((item, index) => {
 		return (
-			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				setConfirmInventoryModalVisible(true);
+				setTaskSelected(StationJobsList[index]);
+				setTaskIndexSelected(index);
+				setIsRunnerSelected(false);
+				console.log(StationJobsList[index]);
+				confirmInventoryModal.inputDrinkAndStation(
+					StationJobsList[index].drink, 
+					StationJobsList[index].type === "Return" ? StationJobsList[index].from : StationJobsList[index].to,
+					pairItems
+				);
+				confirmInventoryModal.inputStatus(StationJobsList[index].status);
+				confirmInventoryModal.inputJobType(StationJobsList[index].type);
+			}}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -174,8 +229,6 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						</Text>
 					</View>
 				</View>
-
-
 			</ShadowedBox>
 		);
 	});
@@ -184,38 +237,26 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ConfirmDeliveryModal
-				sourceImg={require('assets/event-logo.png')} 
-				drinkName={'BudLight'}
-				pairedItems={[
-					"12 ounce cup"
-				]}
-				visible={additionalInventoryModal} 
-				onSave={() => setAdditionalInventoryModal(false)}/>
+			<ConfirmInventoryModal
+				ref={m => {setConfirmInventoryModal(m)}}
+				managerMode={true}
+				serverMode={true}
+				visible={confirmInventoryModalVisible}
+				onSave={(drink) => onConfirmInvModalSave(drink)}
+			/>
 			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
-
-
-
-					<View style={{
-							marginVertical: 20,
-							width: '100%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'flex-start',
-							margin: 10
-					}}>
-							
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
-						
-						
-					</View>
-
-
-					
+				<View style={{
+						marginVertical: 20,
+						width: '100%',
+						height: '100%',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'flex-start',
+						margin: 10
+				}}>
+					<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
+				</View>
 			</ShadowedBox>
-
-
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',
