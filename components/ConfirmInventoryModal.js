@@ -29,6 +29,7 @@ export default class ConfirmInventoryModal extends React.Component {
             stationName: "",
             isDropOff: false,
             doConfirm: false,
+            isReturn: false,
             Item: {
                 Paired: [],
                 Name: "",
@@ -74,6 +75,14 @@ export default class ConfirmInventoryModal extends React.Component {
             this.setState({isDropOff: false});
         } else {
             this.setState({doConfirm: true});
+        }
+    }
+
+    inputJobType(type) {
+        if (type === "Return") {
+            this.setState({isReturn: true});
+        } else {
+            this.setState({isReturn: false});
         }
     }
 
@@ -223,7 +232,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Pick Up: Main Inventory
+                                Pick Up: { this.state.isReturn ? this.state.stationName : "Inventory"}
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -241,7 +250,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Drop Off: { this.state.stationName }
+                                Drop Off: { !this.state.isReturn ? this.state.stationName : "Inventory"}
                             </Text>
                         </View>
                         <View style={styles.rowView}>

@@ -78,7 +78,7 @@ export default class RunnerTaskScreen extends React.Component {
 			return (
 				<View key="index" style={styles.rowView}>
 					<View style={styles.rowView}>
-						<Text style={{fontSize: 16, color: 'gray', justifyContent: 'flex-start'}}> 
+						<Text style={{fontSize: 12, color: 'gray', justifyContent: 'flex-start'}}> 
 							Station { task.stationKey }
 						</Text>
 						<Text style={[task.status == "Complete"? styles.completedText : styles.pendingText]}>

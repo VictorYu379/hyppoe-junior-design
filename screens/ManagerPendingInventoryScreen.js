@@ -4,40 +4,86 @@ import ShadowedBox from 'components/ShadowedBox';
 import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
+import { globalInventory } from 'model/Inventory';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
 
 export default function ManagerPendingInventoryScreen({ navigation }) {
-	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [confirmInventoryModal, setconfirmInventoryModal] = useState(false);
+	const [confirmInventoryModalVisible, setconfirmInventoryModalVisible] = useState(false);
+	const [taskSelected, setTaskSelected] = useState(null);
+	const [taskIndexSelected, setTaskIndexSelected] = useState(0);
+	const [isRunnerSelected, setIsRunnerSelected] = useState(false);
+	const [JobList, setJobList] = useState([]);
+	const [pairItems, setPairItems] = useState([]);
 
-	const runnerTaskList = [
-		{runnerId: 1, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Pending", dropoff:"Pending"},
-		{runnerId: 2, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
-	]
+	useEffect(() => {
+		const JobList = Job.getJobs()
+		setJobList(JobList);
 
-	// get task by station
-	const stationTaskList = [
-		{status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
-	]
+		const pairItems = globalInventory.pairItems;
+		setPairItems(pairItems);
+	}, [])
 
-
-	const JobList = Job.getJobs()
-	console.log(JobList)
+	//console.log(JobList)
 
 
-	const filter = () => {
+	const filterStation = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.to !== "Inventory"){
+			if(item.status == "Complete" || item.status == "Confirmed"){
 				StationJobList.push(item)
 			}
 		});
 		return StationJobList
 	}
 
-	const runnerList = JobList.map(item => {
+	const filterRunner = () => {
+		let StationJobList = []
+		JobList.map(item => {
+			if(item.status == "Unstarted" || item.status == "In transit"){
+				StationJobList.push(item)
+			}
+		});
+		return StationJobList
+	}
+
+	const runnerJobs = filterRunner()
+
+	const onConfirmInvModalSave = (drink) => {
+		const curTask = taskSelected;
+		let curStatus = "";
+		if (taskSelected.status === "Completed") {
+			curStatus = "Confirmed";
+		} else {
+			curStatus = taskSelected.status;
+		}
+		Job.updateJob(drink, this.state.taskSelected.stationKey, curStatus, null);
+		curTask.drink = drink;
+		if (isRunnerSelected) {
+			runnerJobs[taskIndexSelected] = curTask;
+		} else {
+			StationJobsList[taskIndexSelected] = curTask;
+		}
+		setconfirmInventoryModalVisible = false;
+	}
+
+	const runnerList = runnerJobs.map((item, index) => {
 		return (
-			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100} key={inde} margin={5} touchable onPress={() => {
+				setconfirmInventoryModalVisible(true);
+				setTaskSelected(runnerJobs[index]);
+				setTaskIndexSelected(index);
+				setIsRunnerSelected(true);
+				confirmInventoryModal
+				.inputDrinkAndStation(
+					runnerJobs[index].drink, 
+					runnerJobs[index].stationKey,
+					pairItems
+					);
+				confirmInventoryModal
+				.inputStatus(this.state.tasks[index].status);
+			}}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -75,8 +121,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.from}
 						</Text>
-						<Text style={styles.completedText}>
-								{"Complete"}
+						<Text style={[item.status != "Unstarted"?styles.completedText : styles.pendingText]}>
+								{item.status != "Unstarted"? "Complete":"Pending"}
 						</Text>
 					</View>
 
@@ -90,8 +136,16 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.to}
 						</Text>
-						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
-								{item.status == "Complete"?"Complete":"Pending"}
+						<Text style={[item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								styles.completedText 
+								: styles.pendingText 
+							: styles.pendingText]}>
+								{item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								"Complete" 
+								: "Pending" 
+							: "Pending"}
 						</Text>
 					</View>
 				</View>
@@ -101,12 +155,25 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		);
 	});
 
-	const StationJobsList = filter()
-	console.log(StationJobsList)
+	const StationJobsList = filterStation()
+	//console.log(StationJobsList)
 
-	const stationList = StationJobsList.map(item => {
+	const stationList = StationJobsList.map((item, index) => {
 		return (
-			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+			<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				setconfirmInventoryModalVisible(true);
+				setTaskSelected(StationJobsList[index]);
+				setTaskIndexSelected(index);
+				setIsRunnerSelected(false);
+				confirmInventoryModal
+				.inputDrinkAndStation(
+					StationJobsList[index].drink, 
+					StationJobsList[index].stationKey,
+					pairItems
+				);
+				confirmInventoryModal
+				.inputStatus(this.state.tasks[index].status);
+			}}>
 
 				<View style={{
 					flexDirection: 'column',
@@ -132,13 +199,13 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-							Pick Up:
+							Drop off:
 						</Text>
 					</View>
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							Inventory
+							{item.from}
 						</Text>
 						<Text style={[styles.completedText]}>
 							Complete
@@ -147,7 +214,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-							Drop off:
+							Confirmed:
 						</Text>
 					</View>
 
@@ -155,8 +222,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.to}
 						</Text>
-						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
-							{item.status == "Complete"?"Complete":"Pending"}
+						<Text style={[item.status == "Confirmed"? styles.completedText:styles.pendingText]}>
+								{item.status == "Confirmed"? "Complete":"Pending"}
 						</Text>
 					</View>
 				</View>
@@ -171,25 +238,22 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<ConfirmInventoryModal
-				sourceImg={require('assets/event-logo.png')} 
-				drinkName={'BudLight'}
-				pairedItems={[
-					"12 ounce cup"
-				]}
-				visible={additionalInventoryModal} 
-				onSave={() => setAdditionalInventoryModal(false)}/>
+				ref={m => {setconfirmInventoryModal(m)}}
+				visible={confirmInventoryModalVisible}
+				onSave={(drink) => onConfirmInvModalSave(drink)}
+			/>
 			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
-					<View style={{
-							marginVertical: 20,
-							width: '100%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'flex-start',
-							margin: 10
-					}}>
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
-					</View>
+				<View style={{
+						marginVertical: 20,
+						width: '100%',
+						height: '100%',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'flex-start',
+						margin: 10
+				}}>
+					<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
+				</View>
 			</ShadowedBox>
 			<View style={{
 				flexWrap: 'wrap',

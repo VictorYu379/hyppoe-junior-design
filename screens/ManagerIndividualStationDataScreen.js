@@ -10,20 +10,12 @@ export default function ManagerIndividualStationDataScreen({ route, navigation }
 	//const stationId = navigation.state
 	const stationId = route.params['stationId'];
 	//const stationID = JSON.stringify(stationId)
+	console.log(Station.getStationDrinksDataByID(stationId))
 	
-	const stationData = Station.getStationInventoryDataByID(stationId)[0]
+	const stationData = Station.getStationInventoryDataByID(stationId)
 	
 	const drinksData = Station.getStationDrinksDataByID(stationId)
 	// console.log(drinksData)
-
-	const imageList = [
-		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
-		{img:require('assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
-		{img:require('assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
-	]
 
 	const textColor = (text) => {
 		let rate = Number(text);
