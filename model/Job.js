@@ -103,6 +103,7 @@ export default class Job {
     static getJobs() {
         var tasks = [];
         var jobs = getGlobalJobs();
+        console.log(getGlobalJobs().length)
         jobs.map(job => {
             var item = "";
             job.drinks.map(drink => {
@@ -239,6 +240,7 @@ export default class Job {
     // Returns the total number of unconfirmed jobs and their total qty/value if stationId is omitted.
     static getNumOfJobsPending(stationId) {
         var jobs = getGlobalJobs();
+        console.log(getGlobalJobs())
         var res = 0;
         var qty = 0;
         var val = 0;
@@ -255,6 +257,7 @@ export default class Job {
         } else {
             var station = globalStations[stationId];
             if (station != undefined) {
+                //console.log(station.key)
                 jobs.map(job => {
                     if (job.stationKey == station.key && job.status != "Confirmed") {
                         res += 1;
@@ -302,7 +305,6 @@ export default class Job {
         }
         return [res, qty, val];
     }
-
 
     static getPendingJobsDetailedData() {
         var returnListTotal = [];

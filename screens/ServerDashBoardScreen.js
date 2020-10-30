@@ -31,7 +31,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 		setstationInventorySummary(stationInventorySummary);
 		var pendingInventorySummary = Job.getNumOfJobsPending(stationId); 
 		setpendingInventorySummary(pendingInventorySummary);
-		console.log(Job.getNumOfJobsPending(stationId))
+		//console.log(Job.getNumOfJobsPending(stationId))
 		var returnInventorySummary = Job.getNumOfReturnItems(stationId); 
 		setreturnInventorySummary(returnInventorySummary);
 		var runnersSummary = Station.getNumOfRunners(stationId);
@@ -44,6 +44,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 		setserverrequestStat(serverrequestStat);
 		var alerts = Event.getNumOfAlerts();
 		setalerts(alerts);
+		//console.log(Job.getJobs())
 
 		// Station.getInstance().then(station => console.log(station.name));
 	}, [])
