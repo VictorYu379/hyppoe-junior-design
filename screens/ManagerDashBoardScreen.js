@@ -63,7 +63,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 		
 		var inventorySummary = Inventory.getInventorySummary();
 		setInventorySummary(inventorySummary);
-		var pendingInventorySummary = Job.getNumOfJobsInTransit();
+		var pendingInventorySummary = Job.getNumOfJobsPending();
 		setpendingInventorySummary(pendingInventorySummary);
 		var stationInventorySummary = Station.getStationInventorySummary();
 		setstationInventorySummary(stationInventorySummary);
@@ -289,7 +289,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 
 					<View style={{
 						flexDirection: 'row',
-						margin: 3,
+						margin: 2,
 						height: '40%',
 						alignItems: 'center',
 						// borderWidth: 1,

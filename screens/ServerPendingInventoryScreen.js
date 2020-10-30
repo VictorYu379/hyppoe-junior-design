@@ -26,7 +26,7 @@ export default function ServerPendingInventoryScreen({ route, navigation }) {
 	const filterStation = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.key == getstationKey() && (item.status == "Complete" || item.status == "Confirmed")){
+			if(item.key == getstationKey() && (item.status == "Complete")){
 				StationJobList.push(item)
 			}
 		});
