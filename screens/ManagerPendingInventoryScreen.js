@@ -62,7 +62,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		} else {
 			curStatus = taskSelected.status;
 		}
-		Job.updateJob(drink, taskSelected.stationKey, curStatus, null);
+		Job.updateJob(drink, taskSelected.type === "Return" ? taskSelected.from : taskSelected.to, curStatus, null);
 		curTask.drink = drink;
 		if (isRunnerSelected) {
 			runnerJobs[taskIndexSelected] = curTask;
@@ -79,14 +79,12 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 				setTaskSelected(runnerJobs[index]);
 				setTaskIndexSelected(index);
 				setIsRunnerSelected(true);
-				confirmInventoryModal
-				.inputDrinkAndStation(
+				confirmInventoryModal.inputDrinkAndStation(
 					runnerJobs[index].drink, 
-					runnerJobs[index].stationKey,
+					runnerJobs[index].type === "Return" ? runnerJobs[index].from : runnerJobs[index].to,
 					pairItems
-					);
-				confirmInventoryModal
-				.inputStatus(runnerJobs[index].status);
+				);
+				confirmInventoryModal.inputStatus(runnerJobs[index].status);
 			}}>
 
 				<View style={{
@@ -172,10 +170,11 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 				console.log(StationJobsList[index]);
 				confirmInventoryModal.inputDrinkAndStation(
 					StationJobsList[index].drink, 
-					StationJobsList[index].stationKey,
+					StationJobsList[index].type === "Return" ? StationJobsList[index].from : StationJobsList[index].to,
 					pairItems
 				);
 				confirmInventoryModal.inputStatus(StationJobsList[index].status);
+				confirmInventoryModal.inputJobType(StationJobsList[index].type);
 			}}>
 
 				<View style={{

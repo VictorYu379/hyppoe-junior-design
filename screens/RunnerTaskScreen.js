@@ -104,6 +104,8 @@ export default class RunnerTaskScreen extends React.Component {
 							 );
 						this.confirmInventoryModal
 							.inputStatus(this.state.tasks[index].status);
+						this.confirmInventoryModal
+							.inputJobType(this.state.tasks[index].type);
 					}}>
 					<View style={{
 						flexDirection: 'column',

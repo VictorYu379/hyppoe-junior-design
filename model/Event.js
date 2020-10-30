@@ -71,6 +71,12 @@ export default class Event {
         return res;
     }
 
+    addJobToEvent(job) {
+        return dbManager.getEventHandle(this.id).update({
+            jobs: this.jobs.concat(job.id)
+        })
+    }
+
     addStation(station) {
         return dbManager.getEventHandle(this.id).update({
             stations: this.stations.concat(station.id)

@@ -263,6 +263,7 @@ class DBManager {
         for (let pairItem of pairItems) {
             await ref.collection("pairItems").add(pairItem);
         }
+        return id;
     }
 
     updateJob(drink, stationKey, status, runnerId) {

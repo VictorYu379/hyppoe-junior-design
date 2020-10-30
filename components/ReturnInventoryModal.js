@@ -476,8 +476,8 @@ export default class ReturnInventoryModal extends React.Component {
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
+                                    console.log(this.state.drink);
                                     var newDrink = new Drink({
-                                        id: this.state.drink.id,
                                         drinkType: this.state.drink.drinkType,
                                         quantity: this.state.Item.AddedQuantity,
                                         pack: this.state.Item.Pack,
