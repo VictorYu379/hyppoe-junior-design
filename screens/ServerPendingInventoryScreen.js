@@ -1,21 +1,202 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
+import Station, {getGlobalStation} from 'model/Station';
+import Event, { globalEvent } from 'model/Event';
+import Manager from 'model/Manager';
+import Job from 'model/Job';
 
-export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+export default function ServerPendingInventoryScreen({ route, navigation }) {
+	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [JobList, setJobList] = useState([]);
+	const {stationId} = route.params;
 
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	useEffect(() => {
+		const JobList = Job.getJobs()
+		setJobList(JobList);
+	}, [])
+
+	//console.log(JobList)
+
+	const getstationKey = () => {
+		return getGlobalStation(stationId).key
+	}
+
+	const filterStation = () => {
+		let StationJobList = []
+		JobList.map(item => {
+			if(item.key == getstationKey() && (item.status == "Complete")){
+				StationJobList.push(item)
+			}
+		});
+		return StationJobList
+	}
+
+	const filterRunner = () => {
+		let StationJobList = []
+		JobList.map(item => {
+			if(item.key == getstationKey() && (item.status == "Unstarted" || item.status == "In transit")){
+				StationJobList.push(item)
+			}
+		});
+		return StationJobList
+	}
+
+	const runnerJobs = filterRunner()
+
+	const runnerList = runnerJobs.map(item => {
+		return (
+			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+
+				<View style={{
+					flexDirection: 'column',
+					margin: 3,
+					height: '90%',
+					width: '90%',
+					alignItems: 'flex-start',
+					//borderWidth: 1,
+				}}>
+
+					<View style={styles.sectionTitle}>
+						<View style={{...styles.rowView, width:'90%'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								{item.runner}:
+							</Text>
+							<Text style={{
+								fontSize: 10, 
+								color: 'gray', 
+								justifyContent: 'flex-start',
+							}}> 
+								{item.item < 16
+                					? `${item.item}`
+                					: `${item.item.substring(0, 15)}...`}
+							</Text>
+						</View>
+					</View>
+						
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Pick Up:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							{item.from}
+						</Text>
+						<Text style={[item.status != "Unstarted"?styles.completedText : styles.pendingText]}>
+								{item.status != "Unstarted"? "Complete":"Pending"}
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Drop off:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							{item.to}
+						</Text>
+						<Text style={[item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								styles.completedText 
+								: styles.pendingText 
+							: styles.pendingText]}>
+								{item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								"Complete" 
+								: "Pending" 
+							: "Pending"}
+						</Text>
+					</View>
+				</View>
+
+
+			</ShadowedBox>
+		);
+	});
+
+	const StationJobsList = filterStation()
+	//console.log(StationJobsList)
+
+	const stationList = StationJobsList.map(item => {
+		return (
+			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
+
+				<View style={{
+					flexDirection: 'column',
+					margin: 3,
+					height: '90%',
+					width: '90%',
+					alignItems: 'flex-start',
+					//borderWidth: 1,
+				}}>
+
+					<View style={styles.sectionTitle}>
+						<View style={{...styles.rowView, width:'90%'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								{item.to}:
+							</Text>
+							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+								{item.item < 16
+                					? `${item.item}`
+                					: `${item.item.substring(0, 15)}...`}		
+							</Text>
+						</View>
+					</View>
+						
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Drop off:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							{item.from}
+						</Text>
+						<Text style={[styles.completedText]}>
+							Complete
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Confirmed:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							{item.to}
+						</Text>
+						<Text style={[item.status == "Confirmed"? styles.completedText:styles.pendingText]}>
+								{item.status == "Confirmed"? "Complete":"Pending"}
+						</Text>
+					</View>
+				</View>
+
+
+			</ShadowedBox>
+		);
+	});
+
+
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox 
-				width={'80%'} 
-				height={'10%'} 
-				margin={10}
-				touchable
-				onPress={() => {navigation.navigate("Server Pending Inventory History");}}
-			>
+			<ConfirmInventoryModal
+				sourceImg={require('assets/event-logo.png')} 
+				drinkName={'BudLight'}
+				pairedItems={[
+					"12 ounce cup"
+				]}
+				visible={additionalInventoryModal} 
+				onSave={() => setAdditionalInventoryModal(false)}/>
+			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 
 
@@ -42,124 +223,24 @@ export default function DummyScreen({ navigation }) {
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				width: '100%',
 				//height: '60%',
-				paddingLeft: '2%'
+				paddingLeft: '2%',
+				marginLeft:50,
 			}}>
-				
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
-
-					<View style={{
-						flexDirection: 'column',
-						margin: 3,
-						height: '90%',
-						width: '90%',
-						alignItems: 'flex-start',
-						//borderWidth: 1,
-					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Runner 1:
-								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
-								</Text>
-							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-					</View>
-
-
-				</ShadowedBox>
-
-				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
-
-					<View style={{
-						flexDirection: 'column',
-						margin: 3,
-						height: '90%',
-						width: '90%',
-						alignItems: 'flex-start',
-						//borderWidth: 1,
-					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Station 1:
-								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
-								</Text>
-							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'green'}}>
-									Completed
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
-									Pending
-							</Text>
-						</View>
-					</View>
-
-
-				</ShadowedBox>
-
+				{runnerList}
+			</View>
+			<View style={{
+				flexWrap: 'wrap',
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				width: '100%',
+				//height: '60%',
+				paddingLeft: '2%',
+				marginLeft:50,
+			}}>
+				{stationList}
 			</View>
 		</View>
 	);

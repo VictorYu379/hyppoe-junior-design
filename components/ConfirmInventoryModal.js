@@ -28,6 +28,8 @@ export default class ConfirmInventoryModal extends React.Component {
             drink: new Drink(),
             stationName: "",
             isDropOff: false,
+            doConfirm: false,
+            isReturn: false,
             Item: {
                 Paired: [],
                 Name: "",
@@ -56,7 +58,7 @@ export default class ConfirmInventoryModal extends React.Component {
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
-                TotalQuantity: 0,
+                TotalQuantity: drink.quantity,
                 CurrentQuantity: drink.quantity,
                 Price: drink.drinkType.pricePerUnit,
                 Details: drink.details,
@@ -66,8 +68,22 @@ export default class ConfirmInventoryModal extends React.Component {
         console.log(this.props.serverMode);
     }
 
-    inputDropOffPickUp(isDropOff) {
-        this.setState({isDropOff: isDropOff});
+    inputStatus(status) {
+        if (status === "In transit") {
+            this.setState({isDropOff: true});
+        } else if (status === "Unstarted") {
+            this.setState({isDropOff: false});
+        } else {
+            this.setState({doConfirm: true});
+        }
+    }
+
+    inputJobType(type) {
+        if (type === "Return") {
+            this.setState({isReturn: true});
+        } else {
+            this.setState({isReturn: false});
+        }
     }
 
     getPairedItemList(itemList) {
@@ -216,7 +232,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Pick Up: Main Inventory
+                                Pick Up: { this.state.isReturn ? this.state.stationName : "Inventory"}
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -234,7 +250,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Drop Off: { this.state.stationName }
+                                Drop Off: { !this.state.isReturn ? this.state.stationName : "Inventory"}
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -450,7 +466,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                         this.props.onSave(newDrink); 
                                     }}>
                                     <Text style={styles.textStyle}>
-                                        { !this.props.isAssign ? (!this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm") : "Assign" }
+                                        { !this.props.isAssign ? ((!this.props.serverMode && !this.state.doConfim) ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm") : "Assign" }
                                     </Text>
                                 </TouchableHighlight>
                                 { (this.props.managerMode) ?

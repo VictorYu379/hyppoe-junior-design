@@ -11,6 +11,7 @@ import Runner, { globalRunner } from '../model/Runner';
 export default class RunnerTaskScreen extends React.Component {
 	state = {
 		confirmInventoryModalVisible: false,
+		taskIndexSelected: 0,
 		taskSelected: null,
 		tasks: [],
 		runnerId: "",
@@ -52,52 +53,48 @@ export default class RunnerTaskScreen extends React.Component {
 	}
 
 	onConfirmInvModalSave(drink) {
-		this.setState({confirmInventoryModalVisible: false});
+		let curTask = this.state.taskSelected;
 		if (this.state.taskSelected.status === "Unstarted") {
 			Job.updateJob(drink, this.state.taskSelected.stationKey, "In transit", this.state.runnerId);
+			curTask.status = "In transit";
+			curTask.drink = drink;
+			curTask.runnerId = this.state.runnerName;
 		} else if (this.state.taskSelected.status === "In transit") {
 			Job.updateJob(drink, this.state.taskSelected.stationKey, "Completed", null);
+			curTask.status = "Completed";
+			curTask.drink = drink;
 		}
+		const tasks = this.state.tasks;
+		tasks[this.state.taskIndexSelected] = curTask;
+		console.log(tasks.length);
+		this.setState({
+			tasks: tasks,
+			confirmInventoryModalVisible: false
+		});
     }
 
 	render() {
-		/*const displayJobList = this.state.displayJobs.map((task, index) => {
+		const displayJobList = this.state.displayJobs.map((task, index) => {
 			return (
-				<View key="task."style={styles.rowView}>
-					<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
-						<Text style={{fontSize: 12, color: 'grey'}}>
-							Station {task.station}
+				<View key="index" style={styles.rowView}>
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 12, color: 'gray', justifyContent: 'flex-start'}}> 
+							Station { task.stationKey }
 						</Text>
-						{
-							(task.status === "Unstarted") ? 
-							<Text style={{
-								fontSize: 12, 
-								fontWeight: 'bold', 
-								color: 'green', 
-								margin:8
-							}}>
-								Pending
-							</Text>
-							:  <Text style={{
-								fontSize: 12, 
-								fontWeight: 'bold', 
-								color: 'gold', 
-								margin:8
-							}}>
-								Complete
-							</Text>
-						}
+						<Text style={[task.status == "Complete"? styles.completedText : styles.pendingText]}>
+								{task.status == "Complete"?"Complete":"Pending"}
+						</Text>
 					</View>
 				</View>
 			)
-		})*/
+		})
 		const taskList = this.state.tasks.map((task, index) => {
 			return (
-				<ShadowedBox key={index} width={170} square margin={5}>
-					<TouchableOpacity key={index} onPress={() => {
+				<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
 						this.setState({
 							confirmInventoryModalVisible: true,
 							taskSelected: this.state.tasks[index],
+							taskIndexSelected: index
 						});
 						this.confirmInventoryModal
 							.inputDrinkAndStation(
@@ -106,98 +103,66 @@ export default class RunnerTaskScreen extends React.Component {
 								this.state.pairItems
 							 );
 						this.confirmInventoryModal
-							.inputDropOffPickUp(this.state.tasks[index].status==="In transit");
+							.inputStatus(this.state.tasks[index].status);
+						this.confirmInventoryModal
+							.inputJobType(this.state.tasks[index].type);
 					}}>
-						
-						<View>
-							<Text style={{fontSize: 13, fontWeight:"bold", margin:4, marginLeft:12}}>
-								Runner: {task.runnerId}
+					<View style={{
+						flexDirection: 'column',
+						margin: 3,
+						height: '90%',
+						width: '90%',
+						alignItems: 'flex-start',
+						//borderWidth: 1,
+					}}>
+					<View style={styles.sectionTitle}>
+						<View style={{...styles.rowView, width:'90%'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+								{ task.runnerId }:
 							</Text>
-							<Text style={{fontSize: 13, fontWeight:"bold", margin:4, marginLeft:12}}>
-								Drink: {task.drink.drinkType.name}
+							<Text style={{
+								fontSize: 10, 
+								color: 'gray', 
+								justifyContent: 'flex-start',
+							}}> 
+								{ task.drink.drinkType.name.length < 16
+                					? `${task.drink.drinkType.name}`
+                					: `${task.drink.drinkType.name.substring(0, 15)}...`}
 							</Text>
-							<View style={styles.rowView}>
-								<Image
-									style={{
-										...StyleSheet.absoluteFill,
-									}}
-									source={require('assets/Seperator.png')}
-								/>
-							</View>
 						</View>
-						<View style={styles.rowView}>
-							<View style={{...styles.rowViewclose,width:'60%',margin:5}}>
-								<Text style={{fontSize: 12, color: 'gray'}}>
-									Pick Up: Inventory
-								</Text>
-								<Text style={{
-									fontSize: 12, 
-									fontWeight: 'bold', 
-									color: 'gray', 
-									marginLeft:0}}>
-									
-								</Text>
-							</View>
-							<View>
-							{
-								(task.status === "Unstarted") ? 
-									<Text style={{
-										fontSize: 12, 
-										fontWeight: 'bold', 
-										color: 'green', 
-										margin:8
-									}}>
-										Pending
-									</Text>
-									:  <Text style={{
-										fontSize: 12, 
-										fontWeight: 'bold', 
-										color: 'gold', 
-										margin:8
-									}}>
-										Complete
-									</Text>
-							}
-							</View>
-							
-						</View>
-			
-						<View style={styles.rowView}>
-							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
-								<Text style={{fontSize: 12, color: 'gray'}}>
-									Drop off:
-								</Text>
-								<Text style={{
-									fontSize: 12, 
-									fontWeight: 'bold', 
-									color: 'gray', 
-									marginLeft:0}}>
-									{ task.stationKey }
-								</Text>
-							</View>
-							{
-								(task.status === "Unstarted" || this.status === "In transit") ? 
-									<Text style={{
-										fontSize: 12, 
-										fontWeight: 'bold', 
-										color: 'gold', 
-										margin:8
-									}}>
-										Pending
-									</Text>
-									:  <Text style={{
-										fontSize: 12, 
-										fontWeight: 'bold', 
-										color: 'gold', 
-										margin:8
-									}}>
-										Complete
-									</Text>
-							}
-						</View>
+					</View>
 						
-					</TouchableOpacity>
-				</ShadowedBox>
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Pick Up:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Inventory
+						</Text>
+						<Text style={styles.completedText}>
+								{"Complete"}
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							Drop off:
+						</Text>
+					</View>
+
+					<View style={styles.rowView}>
+						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
+							Station { task.stationKey }
+						</Text>
+						<Text style={[task.status == "Complete"? styles.completedText : styles.pendingText]}>
+								{task.status == "Complete"?"Complete":"Pending"}
+						</Text>
+					</View>
+				</View>
+			</ShadowedBox>
 			)
 		});
 		return (
@@ -224,7 +189,7 @@ export default class RunnerTaskScreen extends React.Component {
 							</Text>
 						</View>
 					</View>
-					
+					{displayJobList}
 				</ShadowedBox>
 
 				<View style={{

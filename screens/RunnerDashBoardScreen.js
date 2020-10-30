@@ -6,15 +6,19 @@ import Station from 'model/Station';
 import Job from 'model/Job';
 import Event from 'model/Event';
 
-export default function RunnerDashBoardScreen({ navigation }) {
+export default function RunnerDashBoardScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 	const stationId = "P7HFuidmDgcaRRovoRjK"
+	const runnerId = "GsvETNQP29tOOH9iwBRA"
 
 	// Reading runner from global storage
 	// const [runner, setRunner] = useState();
 	const [stationInventorySummary, setstationInventorySummary] = useState([]);
 	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
+	const [runnerTasks, setrunnerTasks] = useState([]);
+	const [requestStat, setrequestStat] = useState([]);
+	const [runnerHistorySummary, setrunnerHistorySummary] = useState([]);
 	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
@@ -26,6 +30,12 @@ export default function RunnerDashBoardScreen({ navigation }) {
 		setstationInventorySummary(stationInventorySummary);
 		var returnInventorySummary = Job.getNumOfReturnItems(stationId); 
 		setreturnInventorySummary(returnInventorySummary);
+		var runnerTasks = Job.getNumOfRunnerJobsPending(stationId);
+		setrunnerTasks(runnerTasks);
+		var requestStat = Job.getNumOfRequests(stationId);
+		setrequestStat(requestStat);
+		var runnerHistorySummary = Job.getRunnerHistorySummary(runnerId);
+		setrunnerHistorySummary(runnerHistorySummary);
 		var alerts = Event.getNumOfAlerts();
 		setalerts(alerts);
 		// Station.getInstance().then(station => console.log(station.name));
@@ -124,7 +134,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									Qty:19032
+									Qty:{runnerTasks[1]}
 								</Text>
 							</View>
 						</View>
@@ -136,7 +146,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'red', justifyContent: 'center'}}> 
-								2
+								{runnerTasks[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'red'}}> 
 								Pending
@@ -150,7 +160,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 					height={'23%'}  
 					margin={5} 
 					touchable
-					onPress={() => navigation.navigate("Runner Station Inventory", {
+					onPress={() => navigation.navigate("Manager Individual Station Inventory", {
 						stationId: stationId,
 				})}>
 					<View style={{
@@ -256,7 +266,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									Qty:2400
+									Qty:{requestStat[1]}
 								</Text>
 							</View>
 						</View>
@@ -268,7 +278,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								2
+								{requestStat[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Request
@@ -429,7 +439,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									Pending:2
+									Pending:{runnerHistorySummary[1]}
 								</Text>
 							</View>
 						</View>
@@ -441,7 +451,7 @@ export default function RunnerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								1
+								{runnerHistorySummary[0]}	
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Total

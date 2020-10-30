@@ -19,7 +19,7 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 	useEffect(() => {
 		var stationInventorySummary = Station.getStationInventorySummary();
 		setstationInventorySummary(stationInventorySummary);
-		//console.log(Station.getDetailedData())
+		console.log(Station.getStationInventoryData())
 		
 	}, [])
 
@@ -31,46 +31,6 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 			return '#E8BD38';
 		}
         return '#1CD338';
-	}
-
-	const total = (text) => {
-		let res = 0;
-		if (text == 'total') {
-			totalItems.map(num => res += num);
-		} else if (text == 'avail') {
-			availItems.map(item => res += item.avail);
-		} else if (text == 'sold') {
-			soldItems.map(station => {
-				station.sold.map(item => res += item.sold);
-			});
-		} else {
-			soldItems.map(station => {
-				if (station.stationKey == text) {
-					station.sold.map(item => res += item.sold);
-				}
-			});
-		}
-		return res;
-	}
-
-	const totalValue = (text) => {
-		let res = 0;
-		if (text == 'total') {
-			availItems.map(item => res += total[item.key] * item.price);
-		} else if (text == 'avail') {
-			availItems.map(item => res += item.avail * item.price);
-		} else if (text == 'sold') {
-			soldItems.map(station => {
-				station.sold.map(item => res += item.sold * item.price);
-			});
-		} else {
-			soldItems.map(station => {
-				if (station.stationKey == text) {
-					station.sold.map(item => res += item.sold * item.price);
-				}
-			});
-		}
-		return res;
 	}
 
 	const percent = (a, b) => {

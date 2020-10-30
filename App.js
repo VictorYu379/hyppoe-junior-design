@@ -204,6 +204,14 @@ export default function App() {
 								}
 							}}/>
 						<Stack.Screen
+							name="Server Pending Inventory History"
+							component={ServerPendingInventoryHistory}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Station Runners Screen"
 							component={StationRunnersScreen}
 							options={{
