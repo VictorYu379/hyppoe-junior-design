@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
-import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
@@ -168,7 +168,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ConfirmDeliveryModal
+			<ConfirmInventoryModal
 				sourceImg={require('assets/event-logo.png')} 
 				drinkName={'BudLight'}
 				pairedItems={[
@@ -177,9 +177,6 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 				visible={additionalInventoryModal} 
 				onSave={() => setAdditionalInventoryModal(false)}/>
 			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
-
-
-
 					<View style={{
 							marginVertical: 20,
 							width: '100%',
@@ -189,17 +186,9 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 							alignItems: 'flex-start',
 							margin: 10
 					}}>
-							
 						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
-						
-						
 					</View>
-
-
-					
 			</ShadowedBox>
-
-
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',

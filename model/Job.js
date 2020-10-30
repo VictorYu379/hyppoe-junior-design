@@ -267,6 +267,11 @@ export default class Job {
         });
         dbManager.createNewJob(job, drinks, items);
     }
+
+    static updateJob(drink, stationKey, status, runnerId) {
+        drink = Drink.parseDrink(drink);
+        dbManager.updateJob(drink, stationKey, status, runnerId);
+    }
 }
 
 async function update(data) {

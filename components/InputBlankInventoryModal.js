@@ -32,7 +32,7 @@ export default class InputBlankInventoryModal extends React.Component {
                 Pack: 0,
                 Quantity: 0,
                 CurrentQuantity: 0,
-                TotalQuantity: 100,
+                TotalQuantity: 0,
                 AddedQuantity: 0,
                 Ounces: 0,
                 Price: 0,

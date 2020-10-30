@@ -75,7 +75,7 @@ export default class ReturnInventoryModal extends React.Component {
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
-                TotalQuantity: 0,
+                TotalQuantity: drink.quantity,
                 CurrentQuantity: drink.quantity,
                 Price: drink.drinkType.pricePerUnit,
                 Details: drink.details,

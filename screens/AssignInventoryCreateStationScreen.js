@@ -7,7 +7,7 @@ import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import BottomBlueButton from 'components/BottomBlueButton';
 import StationModal from 'components/StationModal';
-import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import update from 'immutability-helper';
 import { globalInventory } from 'model/Inventory';
 import { getGlobalStations } from 'model/Station';
@@ -87,13 +87,10 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                 onPress={() => {
                     this.setState({ inventorySelected: null });
                 }}>
-                <ConfirmDeliveryModal
+                <ConfirmInventoryModal
                     drink={this.state.drinks[this.state.inventorySelected]}
-                    pairedItems={[
-                        "12 ounce cup"
-                    ]}
                     visible={this.state.assignInventoryModalVisible}
-                    ref={m => {this.confirmDeliveryModal = m}}
+                    ref={m => {this.ConfirmInventoryModal = m}}
                     onSave={this.onConfirmDelivery.bind(this)}/>
                 <BottomBlueButton
                     text={"Finish Stations"}
@@ -146,7 +143,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                                         inventorySelected={this.state.inventorySelected}
                                         onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
                                         onAdd={() => {
-                                            this.confirmDeliveryModal.inputDrinkAndStation(
+                                            this.ConfirmInventoryModal.inputDrinkAndStation(
                                                 this.state.drinks[this.state.inventorySelected],
                                                 this.state.stations[station.key]
                                             );
