@@ -67,4 +67,11 @@ export default class Drink {
         }
         return obj;
     }
+
+    subtract(drink) {
+        if (this.typeId !== drink.typeId) {
+            console.log("Mismatched drink type");
+        }
+        this.quantity -= drink.quantity;
+    }
 }

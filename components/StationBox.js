@@ -16,7 +16,8 @@ export default function StationBox(props) {
         <ShadowedBox
             width={'80%'}
             square
-            margin={5}>
+            margin={5}
+            greyed={props.greyed}>
             {props.inventorySelected !== null &&
                 <TouchableOpacity style={styles.addToStationBox} onPress={props.onAdd}>
                     <Text style={{ fontSize: 20 }}>{props.verb}</Text>

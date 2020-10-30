@@ -41,12 +41,16 @@ export default class ManagerAssignInventoryScreen extends React.Component {
     }
 
     onAssignModalSave(drink) {
+        var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
+        drinkToUpdate.subtract(drink);
+        globalInventory.updateDrinkQuantity(drinkToUpdate);
         Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
         this.setState({
             assignInventoryModalVisible: false,
             inventorySelected: null,
-            stationSelected: null
+            stationSelected: null,
         });
+        this.updateData()
     }
 
     updateData() {

@@ -318,15 +318,6 @@ export default class Station {
         return getGlobalStations().length;
     }
 
-    updateDrink(drink) {
-        let found = false;
-        let drinkId = drink.id;
-        console.log(Drink.parseDrink(drink));
-        dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
-            console.log(e);
-        });
-    }
-
     static createNewStation(data) {
         var newStation = new Station(data);
         return dbManager.getStationCollectionHandle().add({
@@ -372,6 +363,19 @@ export default class Station {
             });
         }
         return totalValue;
+    }
+
+    updateDrink(drink) {
+        let found = false;
+        let drinkId = drink.id;
+        console.log(Drink.parseDrink(drink));
+        dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
+            console.log(e);
+        });
+    }
+
+    findDrinkWithDrinkType(drinkTypeName) {
+        return this.drinks.find(drink => drink.name === drinkTypeName);
     }
 }
 
