@@ -6,7 +6,7 @@ import Station from 'model/Station';
 import Event from 'model/Event';
 import Job from 'model/Job';
 
-export default function ServerDashBoardScreen({ navigation }) {
+export default function ServerDashBoardScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
@@ -17,6 +17,9 @@ export default function ServerDashBoardScreen({ navigation }) {
 	const [pendingInventorySummary, setpendingInventorySummary] = useState([]);
 	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
 	const [runnersSummary, setrunnersSummary] = useState([]);
+	const [serverDashboardHeaderStat, setserverDashboardHeaderStat] = useState([]);
+	const [serverConfirmInventoryStat, setserverConfirmInventoryStat] = useState([]);
+	const [serverrequestStat, setserverrequestStat] = useState([]);
 	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
@@ -32,8 +35,15 @@ export default function ServerDashBoardScreen({ navigation }) {
 		setreturnInventorySummary(returnInventorySummary);
 		var runnersSummary = Station.getNumOfRunners(stationId);
 		setrunnersSummary(runnersSummary);
+		var serverDashboardHeaderStat = Station.getServerDashboardHeaderData(stationId);
+		setserverDashboardHeaderStat(serverDashboardHeaderStat);
+		var serverConfirmInventoryStat = Job.getNumOfJobsPendingConfirmation(stationId);
+		setserverConfirmInventoryStat(serverConfirmInventoryStat);
+		var serverrequestStat = Job.getNumOfRequests(stationId);
+		setserverrequestStat(serverrequestStat);
 		var alerts = Event.getNumOfAlerts();
 		setalerts(alerts);
+
 		// Station.getInstance().then(station => console.log(station.name));
 	}, [])
 	// console.log(server);
@@ -77,9 +87,15 @@ export default function ServerDashBoardScreen({ navigation }) {
 							margin: 10
 					}}>
 							
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:10, marginLeft:20}}>Server DashBoard</Text>
-						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Station 1:Big Tent</Text>
-						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Server Tablet: 1</Text>
+						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:10, marginLeft:20}}>
+							Server DashBoard
+						</Text>
+						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>
+							Station {serverDashboardHeaderStat[1]}:{serverDashboardHeaderStat[2]}
+						</Text>
+						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>
+							Server Tablet: {serverDashboardHeaderStat[0]}
+						</Text>
 					</View>
 
 
@@ -167,7 +183,9 @@ export default function ServerDashBoardScreen({ navigation }) {
 					height={'19%'}  
 					margin={5} 
 					touchable
-					onPress={() => {navigation.navigate("Server Pending Inventory Screen");}}
+					onPress={() => {navigation.navigate("Server Pending Inventory Screen", {
+						stationId: stationId,
+					});}}
 				>
 
 					<View style={{
@@ -241,7 +259,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => navigation.navigate("Server Station Inventory Screen", {
+					onPress={() => navigation.navigate("Manager Individual Station Inventory", {
 						stationId: stationId,
 					})}>
 
@@ -441,10 +459,10 @@ export default function ServerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400Qty
+									{serverConfirmInventoryStat[1]}Qty
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									28800$
+									{serverConfirmInventoryStat[2]}$
 								</Text>
 							</View>
 						</View>
@@ -458,7 +476,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'red', justifyContent: 'center'}}> 
-								1
+								{serverConfirmInventoryStat[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'red',fontSize:5}}> 
 								Need Confirmation
@@ -581,10 +599,10 @@ export default function ServerDashBoardScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400 Qty
+									{serverrequestStat[1]} Qty
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									10802$
+									{serverrequestStat[2]}$
 								</Text>
 							</View>
 						</View>
@@ -598,7 +616,7 @@ export default function ServerDashBoardScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								1
+								{serverrequestStat[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Request Pending

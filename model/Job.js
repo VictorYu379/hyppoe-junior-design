@@ -152,6 +152,75 @@ export default class Job {
 
     }
 
+    // Returns the number of Completed yet not confirmed jobs from/to station and their total qty/value based on stationId.
+    // Returns the total number of Completed yet not confirmed jobs and their total qty/value if stationId is omitted.
+    static getNumOfJobsPendingConfirmation(stationId) {
+        var jobs = getGlobalJobs();
+        var res = 0;
+        var qty = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            jobs.map(job => {
+                if (job.status == "Complete") {
+                    res += 1;
+                    job.drinks.map(drink => {
+                        qty += drink.quantity;
+                        val += drink.quantity * drink.pricePerUnit;
+                    });
+                }
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                jobs.map(job => {
+                    if (job.stationKey == station.key && job.status == "Complete") {
+                        res += 1;
+                        job.drinks.map(drink => {
+                            qty += drink.quantity;
+                            val += drink.quantity * drink.pricePerUnit;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, qty, val];
+    }
+
+    // Returns the number of unstarted jobs from/to station and their total qty/value based on stationId.
+    // Returns the total number of unstarted jobs and their total qty/value if stationId is omitted.
+    static getNumOfRequests(stationId) {
+        var jobs = getGlobalJobs();
+        var res = 0;
+        var qty = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            jobs.map(job => {
+                if (job.status == "Unstarted") {
+                    res += 1;
+                    job.drinks.map(drink => {
+                        qty += drink.quantity;
+                        val += drink.quantity * drink.pricePerUnit;
+                    });
+                }
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                jobs.map(job => {
+                    if (job.stationKey == station.key && job.status == "Unstarted") {
+                        res += 1;
+                        job.drinks.map(drink => {
+                            qty += drink.quantity;
+                            val += drink.quantity * drink.pricePerUnit;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, qty, val];
+    }
+
+
     static getPendingJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];

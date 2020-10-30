@@ -68,7 +68,7 @@ export default function App() {
 							component={DummyScreen}/>
 						<Stack.Screen
 							name="Manager Dashboard"
-							component={ManagerDashBoardScreen}
+							component={ServerDashBoardScreen}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;
@@ -197,6 +197,14 @@ export default function App() {
 						<Stack.Screen
 							name="Server Station Inventory Screen"
 							component={ServerStationInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Pending Inventory History"
+							component={ServerPendingInventoryHistory}
 							options={{
 								header: ({ navigation, props }) => {
 									return <HyppoeHeader navigation={navigation} mode="full"/>;

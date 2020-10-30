@@ -274,6 +274,20 @@ export default class Station {
         return res;
     }
 
+    static getServerDashboardHeaderData(stationId) {
+        var res = 0;
+        var key = 0;
+        var name = "";
+        var station = globalStations[stationId];
+        if (station != undefined) {
+            res = station.servers.length;
+            key = station.key;
+            name = station.name;
+        }
+        
+        return [res, key, name];
+    }
+
     // Returns the station inventory details (avail of total qty, total available percentage) based on stationId.
     // Returns the all stations' inventory details if stationId is omitted.
     static getStationInventorySummary(stationId) {
