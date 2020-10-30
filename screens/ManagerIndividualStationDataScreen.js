@@ -2,11 +2,19 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
+import Station, {getGlobalStations}from 'model/Station';
 
-export default function ManagerIndividualStationDataScreen({ navigation }) {
+export default function ManagerIndividualStationDataScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	//const stationId = navigation.state
+	const stationId = route.params['stationId'];
+	//const stationID = JSON.stringify(stationId)
+	
+	const stationData = Station.getStationInventoryDataByID(stationId)[0]
+	
+	const drinksData = Station.getStationDrinksDataByID(stationId)
+	// console.log(drinksData)
 
 	const imageList = [
 		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
@@ -16,7 +24,25 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 		{img:require('assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
 		{img:require('assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
-	const iconList = imageList.map(item => {
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const iconList = drinksData.map(item => {
 		return (
 			<ShadowedBox 
 				width={'43%'}  
@@ -33,7 +59,7 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 				}}>
 
 					<Image 
-						source={item.img}
+						source={{uri: item.icon}}
 						style={{
 							width: '60%',
 							height: '100%',
@@ -55,14 +81,22 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
-						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
-						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
-							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
+						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
+							{item.name}
+						</Text>
+						<View style={{
+							...styles.sectionTitle,
+							justifyContent: 'center', 
+							alignItems: 'center',
+						}}>
+							<Text style={{
+								...styles.percentageSmallboxTextSize, 
+								color: textColor(percent(item.avail, item.total)),
+							}}>
+								{percent(item.avail, item.total)}%
+							</Text>
 						</View>
-						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
+						<Text style={{fontSize: 6, color: 'gray'}}> {item.avail} of {item.total}</Text>
 					</View>
 					
 				</View>
@@ -74,7 +108,9 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory Detailed Data")}>
+			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Individual Station Inventory Detailed Data Screen", {
+				stationId: stationId,
+			})}>
 
 
 				<View style={{
@@ -101,10 +137,10 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 							alignItems: 'flex-start',
 						}}>
 							<View  style={styles.sectionTitle}>
-							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
+							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station {stationData.key}:</Text>
 							</View>
-							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
-							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationStats.value}</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>{stationData.avail} of {stationData.total}</Text>
+							<Text style={{fontSize: 10, color: 'gray'}}>Qty ${stationData.value}</Text>
 						</View>
 
 
@@ -115,8 +151,8 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 							justifyContent: 'center',
 							alignItems: 'flex-start',
 						}}>
-							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationStats.server}</Text>
-							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationData.serverNum}</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationData.runnerNum}</Text>
 						</View>
 					</View>
 
@@ -136,16 +172,16 @@ export default function ManagerIndividualStationDataScreen({ navigation }) {
 							marginRight: 20,
 							color: 'dodgerblue'
 					}}>
-						<Text style={[styles.percentageHeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
-							? styles.thirtyText : styles.criticalText]}>
-							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
+						<Text style={{
+							...styles.percentageHeaderBoxTextSize, 
+							color: textColor(percent(stationData.avail, stationData.total))
+						}}>
+							{percent(stationData.avail, stationData.total)}%
 						</Text>
-						<Text style={[styles.HeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.26 
-							? styles.thirtyText : styles.criticalText]}>
+						<Text style={{
+							...styles.HeaderBoxTextSize, 
+							color: textColor(percent(stationData.avail, stationData.total))
+						}}>
 								Available Inventory
 						</Text>
 					</View>

@@ -6,7 +6,7 @@ import Station from "model/Station"
 import MyCheckBox from "components/MyCheckBox"
 
 // Both pick up and drop off template, pass parameter to get either drop off or pick up.
-export default class ConfirmDeliveryModal extends React.Component {
+export default class ConfirmInventoryModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
 		const { params = {} } = navigation.state
         return {
@@ -25,9 +25,9 @@ export default class ConfirmDeliveryModal extends React.Component {
         //     paired.set(item, true);
         // }
         this.state = {
-            modalVisible: false,
             drink: new Drink(),
-            station: new Station(),
+            stationName: "",
+            isDropOff: false,
             Item: {
                 Paired: [],
                 Name: "",
@@ -43,27 +43,31 @@ export default class ConfirmDeliveryModal extends React.Component {
                 Details: "",
             }
         }
-        // this.pairdItemList = this.getPairedItemList(this.props.pairedItems)
-        this.pairdItemList = [];
     }
 
-    inputDrinkAndStation(drink, station) {
+    inputDrinkAndStation(drink, stationName, pairItems) {
         this.setState({
-            station,
-            drink,
+            stationName: stationName,
+            drink: drink,
             Item: {
                 Name: drink.name,
                 Unit: drink.unit,
-                Pack: drink.pack,
+                Pack: drink.pack === undefined ? 0 : drink.pack,
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
                 TotalQuantity: 0,
                 CurrentQuantity: drink.quantity,
                 Price: drink.drinkType.pricePerUnit,
-                Details: drink.details
+                Details: drink.details,
             }
         });
+        this.pairItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
+        console.log(this.props.serverMode);
+    }
+
+    inputDropOffPickUp(isDropOff) {
+        this.setState({isDropOff: isDropOff});
     }
 
     getPairedItemList(itemList) {
@@ -76,16 +80,11 @@ export default class ConfirmDeliveryModal extends React.Component {
                     <MyCheckBox
                         checkedImage={require('assets/checked.png')}
                         uncheckedImage={require('assets/unchecked.png')}
-                        checked={this.state.Item.Paired.get(item)}
-                        handlePress={(() => this.updatePiaredItem(item, !this.state.Item.Paired.get(item))).bind(this)}
+                        checked={true}
                         />
                 </View>
             );
         });
-    }
-     
-    setModalVisible(val) {
-        this.setState({modalVisible: val});
     }
 
     updateItem(key, val) {
@@ -161,24 +160,21 @@ export default class ConfirmDeliveryModal extends React.Component {
                                         overflow: 'hidden',
                                         resizeMode: 'contain'
                                     }}
-                                    source={this.props.sourceImg}
+                                    source={{ uri: this.state.drink.icon }}
                                 />
                             </View>
                             <View style={{
                                 flexDirection:"column",
                                 width:100
                             }}>
-                                <TextInput
+                                <Text
                                 style={{
                                     ...styles.sectionTitle,
                                     width: 100,
                                     fontSize: 20,
                                     lineHeight: 20,
                                 }}
-                                multiline={true}
-                                onChangeText={text => this.updateItem("Name", text)}
-                                value={this.props.drinkName}
-                                />
+                                >{this.state.Item.Name}</Text>
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        
@@ -238,7 +234,7 @@ export default class ConfirmDeliveryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Drop Off: Station 1 - Big Tent
+                                Drop Off: { this.state.stationName }
                             </Text>
                         </View>
                         <View style={styles.rowView}>
@@ -444,22 +440,24 @@ export default class ConfirmDeliveryModal extends React.Component {
                                 <TouchableHighlight
                                     style={styles.openButton}
                                     onPress={() => {
-                                        this.setModalVisible(this.props.onSave());
+                                        var newDrink = new Drink({
+                                            id: this.state.drink.id,
+                                            drinkType: this.state.drink.drinkType,
+                                            quantity: this.state.Item.ConfirmQuantity,
+                                            pack: this.state.Item.Pack,
+                                            details: this.state.Item.Details
+                                        })
+                                        this.props.onSave(newDrink); 
                                     }}>
                                     <Text style={styles.textStyle}>
-                                        { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
+                                        { !this.props.isAssign ? (!this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm") : "Assign" }
                                     </Text>
                                 </TouchableHighlight>
                                 { (this.props.managerMode) ?
                                     <TouchableHighlight
                                         style={styles.openButton}
                                         onPress={() => {
-                                            console.log(this.state.Item.ConfirmQuantity);
-                                            if (this.state.Item.ConfirmQuantity == 0) {
-                                                Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                            } else {
-                                                this.props.onSave(); 
-                                            } 
+                                            this.props.onSave(null);
                                         }}>
                                         <Text style={styles.textStyle}> Deny </Text>
                                     </TouchableHighlight> :

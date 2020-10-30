@@ -2,11 +2,12 @@ import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Runner from 'model/Runner';
+import { globalStations } from 'model/Station';
 
 export default class Job {
     id;         // String
     type;       // enum: { "Transfer", "Return" }
-    status;     // enum: { "Unstarted", "In transit", "Complete" }
+    status;     // enum: { "Unstarted", "In transit", "Complete", "Confirmed" }
     runner;     // runner
     runnerId;   // String
     details;    // String
@@ -116,12 +117,82 @@ export default class Job {
         return tasks;
     }
 
+    // Returns the number of in-transit jobs from/to station and their total qty/value based on stationId.
+    // Returns the total number of in-transit jobs and their total qty/value if stationId is omitted.
+    static getNumOfJobsInTransit(stationId) {
+        var jobs = getGlobalJobs();
+        var res = 0;
+        var qty = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            jobs.map(job => {
+                if (job.status == "In transit") {
+                    res += 1;
+                    job.drinks.map(drink => {
+                        qty += drink.quantity;
+                        val += drink.quantity * drink.pricePerUnit;
+                    });
+                }
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                jobs.map(job => {
+                    if (job.stationKey == station.key && job.status == "In transit") {
+                        res += 1;
+                        job.drinks.map(drink => {
+                            qty += drink.quantity;
+                            val += drink.quantity * drink.pricePerUnit;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, qty, val];
+
+    }
+
+    static getPendingJobsDetailedData() {
+        var returnListTotal = [];
+        var returnList = [];
+        var jobs = getGlobalJobs();
+        var count = 0;
+        jobs.map(job => {
+            if (job.status !== 'Complete') {
+                count = count + 1;
+                job.drinks.map(drink => {
+                    var index = returnListTotal.findIndex(item => item.name == drink.name);
+                    if (index == -1) {
+                        returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                    } else {
+                        returnListTotal[index].count += drink.quantity;
+                    }
+                    index = returnList.findIndex(item => item.name == job.stationKey);
+                    if (index == -1) {
+                        var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
+                        returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
+                    } else {
+                        var drinks = [...returnList[index].items];
+                        var drinkIndex = drinks.findIndex(item => item.name == drink.name);
+                        if (drinkIndex == -1) {
+                            drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                        } else {
+                            drinks[drinkIndex].count += drink.quantity;
+                        }
+                        returnList[index] = {...returnList[index], items: drinks};
+                    }
+                });
+            }
+        })
+        return [returnListTotal, count];
+    }
+
     static getReturnJobsDetailedData() {
         var returnListTotal = [];
         var returnList = [];
         var jobs = getGlobalJobs();
         jobs.map(job => {
-            if (job.type == 'Return' && job.status == 'Complete') {
+            if (job.type == 'Return' && (job.status == 'Complete' || job.status == 'Confirmed')) {
                 job.drinks.map(drink => {
                     var index = returnListTotal.findIndex(item => item.name == drink.name);
                     if (index == -1) {
@@ -147,6 +218,58 @@ export default class Job {
             }
         })
         return [returnListTotal, returnList];
+    }
+
+    // Returns the number of returned items and their total value of station based on stationId.
+    // Returns the total number of returned items and their total value if stationId is omitted.
+    static getNumOfReturnItems(stationId) {
+        var [returnListTotal, returnList] = this.getReturnJobsDetailedData();
+        var res = 0;
+        var val = 0;
+        if (stationId === undefined) {
+            returnListTotal.map(item => { 
+                res += item.count;
+                val += item.count * item.price;
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                var stationKey = station.key;
+                returnList.map(station => {
+                    if (station.name == stationKey) {
+                        station.items.map(item => {
+                            res += item.count;
+                            val += item.count * item.price;
+                        });
+                    }
+                });
+            }
+        }
+        return [res, val];
+    }
+
+    static createNewJob(drink, stationKey, pairItems, typeName) {
+        const job = {
+            type: typeName,
+            stationKey: stationKey,
+            status: "Unstarted",
+            runnerId: "",
+            details: ""
+        };
+        drinks = [];
+        drinks.push(Drink.parseDrink(drink));
+        console.log(pairItems);
+        items = pairItems.map(item => {
+            item = PairItem.parsePairItem(item);
+            item.quantity = drink.quantity;
+            return item;
+        });
+        dbManager.createNewJob(job, drinks, items);
+    }
+
+    static updateJob(drink, stationKey, status, runnerId) {
+        drink = Drink.parseDrink(drink);
+        dbManager.updateJob(drink, stationKey, status, runnerId);
     }
 }
 

@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function DummyScreen({ route, navigation }) {
+
+	const stationId = route.params['stationId'];
+	
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
@@ -74,8 +77,16 @@ export default function DummyScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
+			
 
+			<ShadowedBox 
+				width={'80%'} 
+				height={'20%'}  
+				margin={10}
+				touchable
+				onPress={() => navigation.navigate("Individual Station Inventory Detailed Data Screen", {
+					stationId: stationId,
+			})}>
 
 				<View style={{
 							flexDirection: 'row',

@@ -2,43 +2,125 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { NavigationContainer } from '@react-navigation/native';
+import Accordion from 'react-native-collapsible/Accordion';
+import Station from 'model/Station';
+import Inventory from 'model/Inventory';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
+import Job from 'model/Job';  
 
-export default function DummyScreen({ navigation }) {
+
+
+export default function ManagerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = { stationCapacity: 40080, currentValue: 28055, value: 43286, server: 4, runners: 2 }
 
-	// Reading event and manager from global storage
-	// const [event, setEvent] = useState();
-	// const [manager, setManager] = useState();
+	const [inventorySummary, setInventorySummary] = useState([]);
+	const [pendingInventorySummary, setpendingInventorySummary] = useState([]);
+	const [stationInventorySummary, setstationInventorySummary] = useState([]);
+	const [stationNum, setstationNum] = useState([]);
+	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
+	const [assignInventorySummary, setassignInventorySummary] = useState([]);
+	const [runnersSummary, setrunnersSummary] = useState([]);
+	const [alertsSummary, setalertsSummary] = useState([]);
+
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
-	// useEffect(() => {
-	// 	// Event.getInstance().then(event => { setEvent(event); });
-	// 	// Manager.getInstance().then(manager => { setManager(manager); });
-	// 	// console.log(globalEvent);
-	// }, [])
-	// console.log(event);
-	// console.log(manager);
+	useEffect(() => {
+		// Get inventory details (avail of total qty, total available percentage, total value)
+		//console.log(Inventory.getInventorySummary()); all stations
+
+		// Get station inventory details (avail of total qty, total available percentage)
+		// console.log(Station.getStationInventorySummary()); // All stations
+		// console.log(Station.getStationInventorySummary("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getStationInventorySummary("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of stations;
+		// console.log(Station.getNumOfStations()); 
+
+		// Get number of stations below inventory;
+		// console.log(Station.getNumOfStationBelowInventory());
+
+		// Get [number of pending jobs, total qty, total value]
+		//console.log(Job.getNumOfJobsInTransit()); // All stations
+
+		// console.log(Job.getNumOfJobsInTransit("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfJobsInTransit("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get [number of returned items, total value]
+		// console.log(Job.getNumOfReturnItems()); // All stations
+		// console.log(Job.getNumOfReturnItems("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Job.getNumOfReturnItems("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of runners
+		// console.log(Station.getNumOfRunners()); // All stations
+		// console.log(Station.getNumOfRunners("P7HFuidmDgcaRRovoRjK")); // Station 1
+		// console.log(Station.getNumOfRunners("eloF9YmvIfMXKvUZDa9m")); // Station 2
+
+		// Get number of set alerts;
+		// console.log(Event.getNumOfAlerts()); 	
+		
+		
+		var inventorySummary = Inventory.getInventorySummary();
+		setInventorySummary(inventorySummary);
+		var pendingInventorySummary = Job.getNumOfJobsInTransit();
+		setpendingInventorySummary(pendingInventorySummary);
+		var stationInventorySummary = Station.getStationInventorySummary();
+		setstationInventorySummary(stationInventorySummary);
+		var stationNum = Station.getNumOfStations();
+		setstationNum(stationNum);
+		var returnInventorySummary = Job.getNumOfReturnItems();
+		setreturnInventorySummary(returnInventorySummary);
+		var assignInventorySummary = Station.getNumOfStationBelowInventory();
+		setassignInventorySummary(assignInventorySummary);
+		var runnersSummary = Station.getNumOfRunners();
+		setrunnersSummary(runnersSummary);
+		var alertsSummary = Event.getNumOfAlerts();
+		setalertsSummary(alertsSummary);
+
+		//console.log(Inventory.getDrinksSummary())
+
+	}, [])
+
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const formatNum = (num) => {
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	}
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'19%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
 
 				<View style={{
 					marginVertical: 20,
 					width: '100%',
 					height: '100%',
 					flexDirection: 'column',
-					justifyContent: 'flex-start',
+					justifyContent: 'center',
 					alignItems: 'flex-start',
 					margin: 10
 				}}>
 
 					<Text style={{ fontSize: 16, fontWeight: "bold", margin: 10, marginTop: 10, marginLeft: 20 }}>Manager DashBoard</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Station 1:Big Tent</Text>
-					<Text style={{ fontSize: 12, color: 'gray', margin: 10, marginTop: 5, marginLeft: 20 }}>Server Tablet: 1</Text>
 				</View>
 
 
@@ -94,18 +176,18 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
-							</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize, 
+									color: textColor(percent(inventorySummary[0], inventorySummary[1])),
+								}}>
+									{percent(inventorySummary[0], inventorySummary[1])}%
+								</Text>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(inventorySummary[0], inventorySummary[1])),
+									}}>
 									Total Available
-							</Text>
+								</Text>
 							</View>
 
 						</View>
@@ -127,11 +209,99 @@ export default function DummyScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{formatNum(inventorySummary[0])} of
 						</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{formatNum(inventorySummary[1])} Qty
 						</Text>
+						</View>
+
+						<View style={{
+							...styles.sectionTitle,
+							width: '40%',
+							flexDirection: 'column',
+							justifyContent: 'center',
+						}}>
+							<Text style={{ 
+								fontSize: 12, 
+								color: 'gray',
+							}}>
+								{formatNum(inventorySummary[3])}$
+							</Text>
+						</View>
+
+					</View>
+
+
+				</ShadowedBox>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate('Manager Pending Inventory')}>
+
+					<View style={{
+						flexDirection: 'row',
+						margin: 3,
+						height: '40%',
+						alignItems: 'center',
+						// borderWidth: 1,
+					}}>
+
+
+						<View style={{
+							width: '60%',
+							height: '100%',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+									Pending
+								</Text>
+								<Text style={{ fontSize: 14, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
+									Inventory
+								</Text>
+							</View>
+							<View style={{
+								width: '60%',
+								height: '100%',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
+									{pendingInventorySummary[0]}
+								</Text>
+								<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
+									Total Pending
+								</Text>
+							</View>
+
+						</View>
+
+
+
+
+					</View>
+
+					<View style={{
+						flexDirection: 'row',
+						margin: 3,
+						height: '40%',
+						alignItems: 'center',
+						// borderWidth: 1,
+					}}>
+						<View style={{
+							width: '50%',
+							marginLeft: 10,
+						}}>
+							
+							<Text style={{ fontSize: 12, color: 'gray' }}>
+								{formatNum(pendingInventorySummary[1])} Qty
+							</Text>
 						</View>
 
 						<View style={{
@@ -139,77 +309,9 @@ export default function DummyScreen({ navigation }) {
 							width: '40%',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{"  "}{stationStats.value}$
+								{formatNum(pendingInventorySummary[2])}$
 						</Text>
 						</View>
-
-					</View>
-
-
-				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Manager Pending Inventory")}>
-
-					<View style={{
-						flexDirection: 'row',
-						margin: 3,
-						height: '100%',
-						alignItems: 'center',
-						// borderWidth: 1,
-					}}>
-
-
-						<View style={{
-							width: '50%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-							<View style={{
-								width: '100%',
-								height: '50%',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
-									Pending
-								</Text>
-								<Text style={{ fontSize: 15, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start' }}>
-									Inventory
-								</Text>
-							</View>
-
-							<View style={{
-								width: '100%',
-								height: '50%',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									2400 Qty
-								</Text>
-								<Text style={{ fontSize: 9, color: 'gray' }}>
-									86400$
-								</Text>
-							</View>
-						</View>
-
-
-						<View style={{
-							width: '50%',
-							height: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-							<Text style={{ fontSize: 20, color: 'gold', fontWeight: 'bold', justifyContent: 'center' }}>
-								2
-							</Text>
-							<Text style={{ ...styles.HeaderBoxTextSize, color: 'gold' }}>
-								Total Pending
-							</Text>
-						</View>
-
 
 					</View>
 
@@ -253,16 +355,16 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
-									{(stationStats.currentValue * 100 / stationStats.stationCapacity).toFixed(0)}%
+								<Text style={{
+									...styles.percentageHeaderBoxTextSize,
+									color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
+								}}>
+									{percent(stationInventorySummary[0], stationInventorySummary[1])}%
 								</Text>
-								<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue / stationStats.stationCapacity == 1
-									? styles.maxCapacityText : stationStats.currentValue / stationStats.stationCapacity >= 0.6
-										? styles.sixtyText : stationStats.currentValue / stationStats.stationCapacity >= 0.3
-											? styles.thirtyText : styles.criticalText]}>
+								<Text style={{
+									...styles.HeaderBoxTextSize, 
+									color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
+								}}>
 									Total Available
 								</Text>
 							</View>
@@ -286,10 +388,10 @@ export default function DummyScreen({ navigation }) {
 							marginLeft: 10,
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.currentValue} of
+								{formatNum(stationInventorySummary[0])} of
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								{stationStats.stationCapacity} Qty
+								{formatNum(stationInventorySummary[1])} Qty
 							</Text>
 						</View>
 
@@ -299,7 +401,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
-								2
+								{formatNum(stationNum)}
 							</Text>
 							<Text style={{ fontSize: 12, color: 'gray' }}>
 								Stations
@@ -350,7 +452,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 9, color: 'gray' }}>
-									1200$
+									{formatNum(returnInventorySummary[1])}$
 								</Text>
 							</View>
 						</View>
@@ -364,7 +466,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								100
+								{formatNum(returnInventorySummary[0])}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total Returned
@@ -423,7 +525,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red', justifyContent: 'center' }}>
-								1
+								{formatNum(assignInventorySummary)}
 							</Text>
 							<Text style={{
 								...styles.HeaderBoxTextSize,
@@ -484,7 +586,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{ fontSize: 9, color: 'gray' }}>
-									Pending Tasks:2
+									Pending Tasks:{formatNum(pendingInventorySummary[0])}
 								</Text>
 							</View>
 						</View>
@@ -498,7 +600,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								2
+								{formatNum(runnersSummary)}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total Runners
@@ -566,7 +668,7 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Alerts")}>
+				<ShadowedBox width={'40%'} height={'19%'} margin={5} touchable onPress={() => navigation.navigate("Station Alerts Screen")}>
 
 					<View style={{
 						flexDirection: 'row',
@@ -598,7 +700,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center' }}>
-								6
+								{formatNum(alertsSummary)}
 							</Text>
 							<Text style={{ ...styles.HeaderBoxTextSize, color: 'dodgerblue' }}>
 								Total

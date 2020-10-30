@@ -2,9 +2,9 @@ import React from "react"
 import { Alert, StyleSheet, Text, View, TouchableHighlight, Modal, Image, TouchableOpacity} from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { CheckBox } from 'react-native-elements'
-import Drink from "model/Drink"
 import Station from "model/Station"
 import MyCheckBox from './MyCheckBox'
+import Drink from "../model/Drink"
 
 export default class ReturnInventoryModal extends React.Component {
 
@@ -22,7 +22,7 @@ export default class ReturnInventoryModal extends React.Component {
         this.state = {
             modalVisible: false,
             drink: new Drink(),
-            station: new Station(),
+            stationName: "",
             Item: {
                 Paired: [],
                 Name: "",
@@ -46,10 +46,28 @@ export default class ReturnInventoryModal extends React.Component {
         };
     }
 
-    inputDrinkAndStation(drink, station) {
+    makeDetailString() {
+        let result = "";  
+        if (this.state.Item.Damaged) {
+            result += "Damaged, ";
+        }
+        if (this.state.Item.Unhappy) {
+            result += "Unhappy, ";
+        }
+        if (this.state.Item.Misorder) {
+            result += "Misorder, ";
+        }
+        if (this.state.Item.Spilled) {
+            result += "Spilled, ";
+        }
+        return result;
+    }
+    
+
+    inputDrinkAndStation(drink, stationName) {
         this.setState({
-            station,
-            drink,
+            stationName: stationName,
+            drink: drink,
             Item: {
                 Name: drink.name,
                 Unit: drink.unit,
@@ -57,10 +75,11 @@ export default class ReturnInventoryModal extends React.Component {
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
-                TotalQuantity: 0,
+                TotalQuantity: drink.quantity,
                 CurrentQuantity: drink.quantity,
                 Price: drink.drinkType.pricePerUnit,
-                Details: drink.details
+                Details: drink.details,
+                AddedQuantity: 0
             }
         });
     }
@@ -132,7 +151,7 @@ export default class ReturnInventoryModal extends React.Component {
                                         overflow: 'hidden',
                                         resizeMode: 'contain'
                                     }}
-                                    source={this.props.sourceImg}
+                                    source={{ uri: this.state.drink.icon }}
                                 />
                             </View>
                             <View style={{
@@ -146,7 +165,7 @@ export default class ReturnInventoryModal extends React.Component {
                                     fontSize: 20,
                                     lineHeight: 20,
                                 }}
-                                >{this.props.drinkName}</Text>
+                                >{this.state.Item.Name}</Text>
                                 <Text style={{
                                     fontSize: 12
                                 }}>                        
@@ -206,11 +225,9 @@ export default class ReturnInventoryModal extends React.Component {
                                     textAlign: "left",
                                     flex: 1
                                 }}> 
-                                Station 1 - Main Tent - Tablet1
+                                { this.state.stationName }
                             </Text>
                         </View>
-                        
-                        
 
                         <View style={styles.rowView}>
                             <Image
@@ -452,19 +469,21 @@ export default class ReturnInventoryModal extends React.Component {
                                 fontSize: 14
                             }}
                             multiline={true}
-                            onChangeText={text => this.updateItem("OtherReasons", text)}
+                            onChangeText={text => this.setState({Item: {...this.state.Item, OtherReasons: text}})}
                             placeholder="Notes ..."
                             value={this.state.Item.OtherReasons}
                             />
-                            
                             <TouchableHighlight
                                 style={styles.openButton}
                                 onPress={() => {
-                                    // if (this.state.Item.AddedQuantity == 0) {
-                                    //     Alert.alert("Please enter unit-pack pair or quantity to continue!")
-                                    // } else {
-                                        this.props.onSave(); 
-                                    // } 
+                                    var newDrink = new Drink({
+                                        id: this.state.drink.id,
+                                        drinkType: this.state.drink.drinkType,
+                                        quantity: this.state.Item.AddedQuantity,
+                                        pack: this.state.Item.Pack,
+                                        details: this.makeDetailString() + this.state.Item.OtherReasons
+                                    })
+                                    this.props.onSave(newDrink); 
                                 }}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableHighlight>

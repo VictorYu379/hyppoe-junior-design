@@ -40,9 +40,11 @@ export default class Event {
 
     static getAlerts() {
         var alerts = [];
-        Object.entries(globalEvent.alerts).map(([key, value]) => {
-            alerts[alerts.length] = {key: alerts.length, name: key, type: 'Push Notification', rate: value};
-        });
+        if (globalEvent.alerts != undefined){
+            Object.entries(globalEvent.alerts).map(([key, value]) => {
+                alerts[alerts.length] = {key: alerts.length, name: key, type: 'Push Notification', rate: value};
+            });
+        }
         alerts.sort((a, b) => {
             if (a.rate == 'OFF' && b.rate == 'OFF') {
                 return (a.key <= b.key) ? -1 : 1;
@@ -56,6 +58,17 @@ export default class Event {
             return (a.key <= b.key) ? -1 : 1;
         });
         return alerts;
+    }
+
+    static getNumOfAlerts() {
+        var alerts = this.getAlerts();
+        var res = 0;
+        alerts.map(alert => {
+            if (alert.rate != 'OFF') {
+                res += 1;
+            }
+        });
+        return res;
     }
 
     addStation(station) {

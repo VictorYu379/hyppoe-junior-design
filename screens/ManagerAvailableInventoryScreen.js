@@ -1,27 +1,92 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmDeliveryModal from 'components/ConfirmDeliveryModal';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
+import Station from 'model/Station';
+import Event, { globalEvent } from 'model/Event';
+import Manager from 'model/Manager';
+import Job from 'model/Job';
+import Inventory from 'model/Inventory';
+
 
 export default function ManagerAvailableInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
 	const [imageSelected, setImageSelected] = useState(null);
 	const [drinkSelected, setDrinkSelected] = useState(null);
+	const [stations, setStations] = useState([]);
 	const [inputBlkUpdateModalVisible, setInputBlkUpdateModalVisible] = useState(false);
+	//const [availItems, setAvail] = useState([]);
+	//const [soldItems, setSold] = useState([]);
+	//const [totalItems, setTotal] = useState([]);
+	const [manager, setManager] = useState([]);
+	const [drinkList, setdrinkList] = useState([]);
+	const [inventorySummary, setinventorySummary] = useState([]);
 
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	
 
-	const imageList = [
-		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
-		{img:require('assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
-		{img:require('assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
-	]
-	const iconList = imageList.map((item, index) => {
+	useEffect(() => {
+		// print out list of drinks in Inventory which has field{icon, name, total, available}
+		//console.log(Inventory.getDrinksSummary())
+		var drinkList = Inventory.getDrinksSummary();
+		setdrinkList(drinkList);
+		var inventorySummary = Inventory.getInventorySummary();
+		setinventorySummary(inventorySummary);
+	}, [])
+	
+	const [availItems,soldItems,totalItems] = Station.getTotalAvailableInventoryData()
+	//console.log(availItems)
+	
+
+	
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const total = (text) => {
+		let res = 0;
+		if (text == 'total') {
+			totalItems.map(num => res += num);
+		} else if (text == 'avail') {
+			availItems.map(item => res += item.avail);
+		} else if (text == 'sold') {
+			soldItems.map(station => {
+				station.sold.map(item => res += item.sold);
+			});
+		} else {
+			soldItems.map(station => {
+				if (station.stationKey == text) {
+					station.sold.map(item => res += item.sold);
+				}
+			});
+		}
+		return res;
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const formatNum = (num) => {
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	}
+
+	
+
+	const iconList = drinkList.map((item, index) => {
 		return (
 			<ShadowedBox 
 				key={index}
@@ -30,7 +95,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 				margin={5}
                 touchable
 				onPress={() => {
-					setImageSelected(item.img);
+					setImageSelected({uri: item.icon});
 					setDrinkSelected(item.name);
 					setAdditionalInventoryModal(true);
 				}}>
@@ -44,7 +109,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 				}}>
 
 					<Image 
-						source={item.img}
+						source={{uri: item.icon}}
 						style={{
 							width: '60%',
 							height: '100%',
@@ -68,12 +133,14 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 					}}>
 						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
 						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
-						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
-							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
+							<Text style={{
+								...styles.percentageSmallboxTextSize, 
+								color: textColor(percent(item.avail, item.total))
+							}}>
+								{percent(item.avail, item.total)}%
+							</Text>
 						</View>
-						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
+						<Text style={{fontSize: 6, color: 'gray'}}> {item.avail} of {item.total}</Text>
 					</View>
 					
 				</View>
@@ -90,7 +157,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 				onSave={() => setInputBlkUpdateModalVisible(false)}
 			>
 			</InputBlankInventoryModal>
-			<ConfirmDeliveryModal
+			<ConfirmInventoryModal
                 sourceImg={imageSelected} 
                 drinkName={drinkSelected}
                 pairedItems={[
@@ -118,11 +185,11 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 							marginRight: 20,
 							color: 'dodgerblue'
 					}}>
-						<Text style={[styles.percentageHeaderBoxTextSize, (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) == 1 
-							? styles.maxCapacityText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.7 
-							? styles.sixtyText : (stationStats.currentValue/stationStats.stationCapacity).toFixed(2) >= 0.25 
-							? styles.thirtyText : styles.criticalText]}>
-							{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
+						<Text style={{
+							...styles.percentageHeaderBoxTextSize, 
+							color: textColor(percent(inventorySummary[0],inventorySummary[1])),
+						}}>
+							{percent(inventorySummary[0],inventorySummary[1])}%
 						</Text>
 					</View>
 				</View>

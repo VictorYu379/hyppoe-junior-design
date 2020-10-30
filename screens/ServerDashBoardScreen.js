@@ -3,23 +3,63 @@ import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import Server from 'model/Server';
 import Station from 'model/Station';
+import Event from 'model/Event';
+import Job from 'model/Job';
 
-export default function DummyScreen({ navigation }) {
+export default function ServerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
-
+	const stationId = "P7HFuidmDgcaRRovoRjK"
 	// Reading server from global storage
-	const [server, setServer] = useState();
+	// const [server, setServer] = useState();
+	const [stationInventorySummary, setstationInventorySummary] = useState([]);
+	const [pendingInventorySummary, setpendingInventorySummary] = useState([]);
+	const [returnInventorySummary, setreturnInventorySummary] = useState([]);
+	const [runnersSummary, setrunnersSummary] = useState([]);
+	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
-		Server.getInstance().then(server => { 
-			setServer(server);
-			Station.setInstance(server.stationId);
-		});
+		// Server.getInstance().then(server => { 
+		// 	setServer(server);
+		// 	Station.setInstance(server.stationId);
+		// });
+		var stationInventorySummary = Station.getStationInventorySummary(stationId);
+		setstationInventorySummary(stationInventorySummary);
+		var pendingInventorySummary = Job.getNumOfJobsInTransit(stationId); 
+		setpendingInventorySummary(pendingInventorySummary);
+		var returnInventorySummary = Job.getNumOfReturnItems(stationId); 
+		setreturnInventorySummary(returnInventorySummary);
+		var runnersSummary = Station.getNumOfRunners(stationId);
+		setrunnersSummary(runnersSummary);
+		var alerts = Event.getNumOfAlerts();
+		setalerts(alerts);
 		// Station.getInstance().then(station => console.log(station.name));
 	}, [])
 	// console.log(server);
+
+	const textColor = (text) => {
+		let rate = Number(text);
+        if (rate < 26) {
+			return '#F71E0C';
+		} else if (rate < 70) {
+			return '#E8BD38';
+		}
+        return '#1CD338';
+	}
+
+	const percent = (a, b) => {
+		if (Number(b) == 0) {
+			return 0
+		}
+		return  Math.round(a * 100 / b);
+	}
+
+	const formatNum = (num) => {
+		if (num != null) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	}
 
 	return (
 		<View style={styles.container}>
@@ -96,7 +136,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									19032 Users
+									2 Users
 								</Text>
 							</View>
 						</View>
@@ -122,7 +162,13 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5} 
+					touchable
+					onPress={() => {navigation.navigate("Server Pending Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -161,10 +207,10 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400 Qty
+									{pendingInventorySummary[1]} Qty
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									86400$
+									{pendingInventorySummary[2]}$
 								</Text>
 							</View>
 						</View>
@@ -178,7 +224,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, color: 'gold',fontWeight: 'bold', justifyContent: 'center'}}> 
-								2
+								{pendingInventorySummary[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'gold'}}> 
 								Total Pending
@@ -190,11 +236,15 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox
-					width={'40%'}
-					height={'19%'}
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
 					margin={5}
-					touchable>
+					touchable
+					onPress={() => navigation.navigate("Server Station Inventory Screen", {
+						stationId: stationId,
+					})}>
+
 
 					<View style={{
 						flexDirection: 'row',
@@ -236,7 +286,7 @@ export default function DummyScreen({ navigation }) {
 									Qty:
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									{stationStats.currentValue} of {stationStats.stationCapacity}
+									{stationInventorySummary[0]} of {stationInventorySummary[1]}
 								</Text>
 							</View>
 						</View>
@@ -249,16 +299,16 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'center',
 							alignItems: 'center',
 						}}>
-							<Text style={[styles.percentageHeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
-							? styles.thirtyText : styles.criticalText]}>
-								{(stationStats.currentValue*100/stationStats.stationCapacity).toFixed(0)}%
+							<Text style={{
+								...styles.percentageHeaderBoxTextSize, 
+								color: textColor(percent(stationInventorySummary[0],stationInventorySummary[1]))
+							}}>
+								{percent(stationInventorySummary[0],stationInventorySummary[1])}%
 							</Text>
-							<Text style={[styles.HeaderBoxTextSize, stationStats.currentValue/stationStats.stationCapacity == 1 
-							? styles.maxCapacityText : stationStats.currentValue/stationStats.stationCapacity >= 0.6 
-							? styles.sixtyText : stationStats.currentValue/stationStats.stationCapacity >= 0.3 
-							? styles.thirtyText : styles.criticalText]}>
+							<Text style={{
+								...styles.HeaderBoxTextSize, 
+								color:  textColor(percent(stationInventorySummary[0],stationInventorySummary[1]))
+							}}>
 								Total Available
 							</Text>
 						</View>
@@ -269,12 +319,14 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox
-					width={'40%'}
-					height={'19%'} 
-					margin={5} 
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
 					touchable
-					onPress={() => navigation.navigate("Server Return Inventory")}>
+					onPress={() => {navigation.navigate("Server Return Inventory Screen");}}
+				>
+
 
 					<View style={{
 						flexDirection: 'row',
@@ -313,7 +365,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									1200$
+									{returnInventorySummary[1]}$
 								</Text>
 							</View>
 						</View>
@@ -327,7 +379,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								100
+								{returnInventorySummary[0]}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Total Returned
@@ -343,12 +395,14 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox
-					width={'40%'}
-					height={'19%'}
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => navigation.navigate("Server Confirm Inventory")}>
+					onPress={() => {navigation.navigate("Server Confirm Inventory Screen");}}
+				>
+
 
 					<View style={{
 						flexDirection: 'row',
@@ -416,7 +470,13 @@ export default function DummyScreen({ navigation }) {
 
 
 				</ShadowedBox>
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Station Runners Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -452,7 +512,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									Pending Tasks:2
+									Pending Tasks:{pendingInventorySummary[0]}
 								</Text>
 							</View>
 						</View>
@@ -466,7 +526,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								2
+								{runnersSummary}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Total Runners
@@ -479,12 +539,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox
-					width={'40%'}
-					height={'19%'}
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => navigation.navigate("Server Request Inventory")}>
+					onPress={() => {navigation.navigate("Server Request Inventory Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -550,7 +611,13 @@ export default function DummyScreen({ navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox width={'40%'} height={'19%'}  margin={5} touchable>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'19%'}  
+					margin={5}
+					touchable
+					onPress={() => {navigation.navigate("Station Alerts Screen");}}
+				>
 
 					<View style={{
 						flexDirection: 'row',
@@ -582,7 +649,7 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'center',
 						}}>
 							<Text style={{fontSize: 20, fontWeight: 'bold', color: 'dodgerblue', justifyContent: 'center'}}> 
-								6
+								{alerts}
 							</Text>
 							<Text style={{...styles.HeaderBoxTextSize, color: 'dodgerblue'}}> 
 								Total

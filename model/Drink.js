@@ -57,4 +57,14 @@ export default class Drink {
     get costPerUnit() {
         return this.drinkType.costPerUnit;
     }
+
+    static parseDrink(drink) {
+        const obj = {
+            details: drink.details === undefined ? "" : drink.details,
+            drinkType: drink.typeId,
+            pack: drink.pack, 
+            quantity: drink.quantity
+        }
+        return obj;
+    }
 }

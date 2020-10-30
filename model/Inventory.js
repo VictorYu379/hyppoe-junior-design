@@ -1,6 +1,7 @@
 import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
+import { getGlobalStations } from 'model/Station';
 
 export default class Inventory {
     id;         // String
@@ -16,10 +17,11 @@ export default class Inventory {
         dbManager.getInventoryHandle(id).collection("pairItems").onSnapshot(updatePairItemsInInventory);
     }
 
-    static getDetailedData(inventory, stations) {
+    static getDetailedData() {
+        var stations = getGlobalStations();
         var avail = [];
         var total = [];
-        inventory.drinks.forEach((drink, index) => {
+        globalInventory.drinks.forEach((drink, index) => {
             var item = {key: index, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
             total.push(drink.quantity);
             avail.push(item);
@@ -47,8 +49,69 @@ export default class Inventory {
         return [avail, assign, total];
     }
 
+    // Returns the inventory details (avail of total qty, total available percentage, avail value;).
+    static getInventorySummary() {
+        var avail = 0;
+        var total = 0;
+        var value = 0;
+        var stations = getGlobalStations();
+        if (globalInventory.drinks != undefined){
+            globalInventory.drinks.map(drink => {
+                avail += drink.quantity;
+                total += drink.quantity;
+                value += drink.quantity * drink.pricePerUnit;
+            })
+        }
+        stations.map(station => {
+            station.drinks.map(drink => {
+                total += drink.quantity;
+            });
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    total += drink.quantity;
+                })
+            })
+        });
+        var percent = (total == 0) ? 0 : Math.round(avail * 100 / total);
+        return [avail, total, percent + "%", value];
+    }
+
     constructor(id) {
         this.id = id;
+    }
+
+    static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        if (globalInventory.drinks != undefined){
+            globalInventory.drinks.map(drink => {
+                var item = {
+                    icon: drink.icon, 
+                    name:drink.name, 
+                    avail:drink.quantity, 
+                    total:drink.quantity
+                }
+                res.push(item)
+            })
+        } 
+        console.log(res)
+        stations.map(station => { 
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
     }
 
     async getData() {

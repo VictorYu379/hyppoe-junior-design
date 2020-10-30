@@ -5,7 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
 import Station, { getGlobalStation } from 'model/Station';
 
-export default function IndividualStationInventoryDetailedDataScreen({ navigation }) {
+export default function IndividualStationInventoryDetailedDataScreen({ route, navigation }) {
+
+	const stationId = route.params['stationId'];
 
 	const [station, setStation] = useState(" ");
 	const [activeSections, setSections] = useState([0]);
@@ -21,9 +23,9 @@ export default function IndividualStationInventoryDetailedDataScreen({ navigatio
 	}
 
 	useEffect(() => {
-		var station = getGlobalStation();
+		var station = getGlobalStation(stationId);
 		setStation(station.key);
-		var [avail, sold, total] = Station.getDetailedData();
+		var [avail, sold, total] = Station.getDetailedData(stationId);
 		setAvail(avail);
 		setSold(sold);
 		setTotal(total);

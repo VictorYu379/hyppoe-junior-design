@@ -2,6 +2,7 @@ import { dbManager } from 'model/DBManager';
 import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Server from 'model/Server';
+import { globalEvent } from 'model/Event';
 
 const STATION_KEY = "@station"
 
@@ -24,17 +25,17 @@ export default class Station {
         return Promise.all(promises);
     }
 
-    static async setInstance(id) {
-        dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
-        stationID = id;
-    }
+    // deprecated functions
+    // static async setInstance(id) {
+    //     dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
+    // }
 
     // To be deprecated, use getGlobalStation() instead
-    static async getInstance() {
-        var stationID = await dbManager.getStorage(STATION_KEY);
-        var station = new Station({ id: stationID });
-        return await station.init();
-    }
+    // static async getInstance() {
+    //     var stationID = await dbManager.getStorage(STATION_KEY);
+    //     var station = new Station({ id: stationID });
+    //     return await station.init();
+    // }
 
     static setStations(ids) {
         ids.map(id => {
@@ -42,16 +43,49 @@ export default class Station {
         })
     }
 
+        static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        globalInventory.drinks.map(drink => {
+            item = {
+                icon: drink.icon, 
+                name:drink.name, 
+                avail:drink.quantity, 
+                total:drink.quantity
+            }
+            res.push(item)
+        })
+        stations.map(station => {
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
+    }
+
     // Returns the needed data for individual station detailed data screen
-    static getDetailedData() {
-        var station = getGlobalStation();
+    static getDetailedData(stationId) {
+        var station = getGlobalStation(stationId);
         var avail = [];
         var total = [];
-        station.drinks.map(drink => {
-            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
-            total[item.key] = drink.quantity;
-            avail[avail.length] = item;
-        });
+        if (station.drinks != undefined){
+            station.drinks.map(drink => {
+                var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+                total[item.key] = drink.quantity;
+                avail[avail.length] = item;
+            });
+        }
         var sold = [];
         station.servers.map(server => {
             var items = [];
@@ -66,6 +100,112 @@ export default class Station {
         return [avail, sold, total];
     }
 
+
+    static getStationInventoryData() {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            var stationTotal = 0
+            var stationAvail = 0
+            var stationValue = 0
+            station.drinks.map(drink => {
+                stationTotal += drink.quantity
+                stationAvail += drink.quantity
+                stationValue += drink.quantity * drink.pricePerUnit
+            });
+            var item = {key: station.key, name: station.name, total: stationTotal, avail: stationAvail, value: stationValue, id: station.id};
+            res.push(item)     
+        });
+        return res
+    }
+
+    static getStationDrinksDataByID(ID) {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            if(station.id == ID) {
+                station.drinks.map(drink => {
+                    var item = {
+                        icon: drink.icon,
+                        name: drink.name,
+                        avail: drink.quantity,
+                        total: drink.quantity,
+                    }
+                    res.push(item)
+                })
+            }
+        })
+        return res
+    }
+
+    static getStationInventoryDataByID(ID) {
+        var res = []
+        var stations = getGlobalStations();
+        stations.map(station => {
+            if(station.id == ID) {
+                var stationTotal = 0
+                var stationAvail = 0
+                var stationValue = 0
+                station.drinks.map(drink => {
+                    stationTotal += drink.quantity
+                    stationAvail += drink.quantity
+                    stationValue += drink.quantity * drink.pricePerUnit
+                });
+                var item = {
+                    key: station.key, 
+                    name: station.name, 
+                    total: stationTotal, 
+                    avail: stationAvail, 
+                    value: stationValue, 
+                    id: station.id, 
+                    serverNum: station.servers.length,
+                    runnerNum: station.runners.length,
+                };
+                res.push(item)   
+            }  
+        });
+        return res
+    }
+
+
+    static getTotalAvailableInventoryData() {
+        var avail = [];
+        var total = [];
+        var stations = getGlobalStations();
+        stations.map(station => {
+            station.drinks.map(drink => {
+                var index = avail.findIndex(item => item.name == drink.name);
+                if (index == -1) {
+                    var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit, icon: drink.icon};
+                    total[item.key] = drink.quantity;
+                    avail[avail.length] = item;
+                } else {
+                    avail[index].avail += drink.quantity;
+                    total[index] += drink.quantity;
+                }
+            });
+        });
+        var sold = [];
+        stations.map(station => {
+            var items = [];
+            station.servers.map(server => {
+                server.soldDrinks.map(drink => {
+                    var index = avail.findIndex(item => item.name == drink.name);
+                    total[index] += drink.quantity;
+                    if (items[index] == undefined) {
+                        items[index] = {key: index, name: drink.name, sold: drink.quantity, price: drink.pricePerUnit};
+                    } else {
+                        items[index].sold += drink.quantity;
+                    }
+                })
+            })
+            sold[sold.length] = {stationKey: station.key, sold: items};
+        });
+        return [avail, sold, total];
+    }
+    
+
+    
     // Returns the needed data for total stations detailed data screen
     static getTotalDetailedData() {
         var avail = [];
@@ -101,6 +241,90 @@ export default class Station {
             sold[sold.length] = {stationKey: station.key, sold: items};
         });
         return [avail, sold, total];
+    }
+
+
+    
+
+    // Returns the number of returned items of station based on stationId.
+    // Returns the total number of returned items if stationId is omitted.
+    static getNumOfRunners(stationId) {
+        var res = 0;
+        if (stationId === undefined) {
+            var stations = getGlobalStations();
+            stations.map(station => { res += station.runners.length });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                res = station.runners.length;
+            }
+        }
+        return res;
+    }
+
+    // Returns the station inventory details (avail of total qty, total available percentage) based on stationId.
+    // Returns the all stations' inventory details if stationId is omitted.
+    static getStationInventorySummary(stationId) {
+        var avail = 0;
+        var total = 0;
+        if (stationId === undefined) {
+            var stations = getGlobalStations();
+            stations.map(station => {
+                station.drinks.map(drink => {
+                    avail += drink.quantity;
+                    total += drink.quantity;
+                });
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        total += drink.quantity;
+                    })
+                })
+            });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                station.drinks.map(drink => {
+                    avail += drink.quantity;
+                    total += drink.quantity;
+                });
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        total += drink.quantity;
+                    })
+                })
+            }
+        }
+        var percent = (total == 0) ? 0 : Math.round(avail * 100 / total);
+        return [avail, total, percent + "%"];
+    }
+
+    static getNumOfStationBelowInventory() {
+        var rate = globalEvent.alerts["Station Total Remaining"];
+        if (rate == 'OFF') {
+            return 0;
+        }
+        var res = 0;
+        rate = parseFloat(rate);
+        for (var id in globalStations) {
+            var percent = parseFloat(this.getStationInventorySummary(id)[2]);
+            if (percent < rate) {
+                res += 1;
+            }
+        }
+        return res;
+    }
+
+    static getNumOfStations() {
+        return getGlobalStations().length;
+    }
+
+    updateDrink(drink) {
+        let found = false;
+        let drinkId = drink.id;
+        console.log(Drink.parseDrink(drink));
+        dbManager.updateDrinkInStation(this.id, Drink.parseDrink(drink)).catch(e => {
+            console.log(e);
+        });
     }
 
     static createNewStation(data) {
@@ -168,8 +392,8 @@ async function update(data) {
     globalStations[station.id] = station;
 }
 
-export function getGlobalStation() {
-    return globalStations[stationID];
+export function getGlobalStation(stationId) {
+    return globalStations[stationId];
 }
 
 export function getGlobalStations() {
@@ -181,4 +405,3 @@ export function getGlobalStations() {
 }
 
 export var globalStations = {};
-var stationID = "";

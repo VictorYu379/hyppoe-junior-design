@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from 'react-native-collapsible/Accordion';
-import { getGlobalStations } from 'model/Station';
-import Inventory, { globalInventory } from 'model/Inventory';
+import Inventory from 'model/Inventory';
 
 export default function ManagerAvailableInventoryDetailedDataScreen({ navigation }) {
 
@@ -21,8 +20,7 @@ export default function ManagerAvailableInventoryDetailedDataScreen({ navigation
 	}
 
 	useEffect(() => {
-		var stations = getGlobalStations();
-		var [avail, assign, total] = Inventory.getDetailedData(globalInventory, stations);
+		var [avail, assign, total] = Inventory.getDetailedData(); 
 		setAvail(avail);
 		setAssigned(assign);
 		setTotal(total);
@@ -287,7 +285,7 @@ export default function ManagerAvailableInventoryDetailedDataScreen({ navigation
                     justifyContent: "space-between",
 					alignItems: "flex-start",
 				}}>
-					<Text style={styles.sectionTitle}>Station Inventory:</Text>
+					<Text style={styles.sectionTitle}>Available Inventory:</Text>
 					<View style={{
 						flexDirection: "column",
 						justifyContent: "flex-end",
