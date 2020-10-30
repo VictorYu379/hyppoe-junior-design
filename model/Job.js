@@ -13,39 +13,11 @@ export default class Job {
     runnerId;   // String
     details;    // String
     stationKey;    // String
-    drinks;     // List<Drinks>
+    drink;     // Drink
     pairItems;  // List<PairItems>
 
     constructor(id) {
         this.id = id;
-    }
-
-    async init() {
-        var job = await dbManager.getJob(this.id);
-        Object.assign(this, job.data());
-        var [drinks, pairItems] = await Promise.all([
-            dbManager.getDrinksInJob(this.id),
-            dbManager.getPairItemsInJob(this.id)
-        ]);
-        this.drinks = drinks.docs.map(drink => new Drink({
-            ...drink.data(),
-            id: drink.id
-        }));
-        this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-        await Promise.all(this.drinks.map(drink => drink.init()));
-        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
-        this.runner = new Runner(runnerId);
-        await this.runner.init();
-        return this;
-    }
-
-    // Can be deprecated as now we have direct access to globalJobs of an Event
-    static getJobs(ids) {
-        var promises = ids.map(id => {
-            var job = new Job(id);
-            return job.init();
-        });
-        return Promise.all(promises);
     }
 
     static setJobs(ids) {
@@ -59,15 +31,6 @@ export default class Job {
         var jobs = getGlobalJobs();
         jobs.map(job => {
             if (job.runnerId == runnerId) {
-                var item = "";
-                job.drinks.map(drink => {
-                    item = item.concat(", ", drink.name);
-                })
-                item = item.substr(2);
-                if (item.length > 28) {
-                    item = item.substr(0, 23);
-                    item = item + "...";
-                }
                 var [from, to] = ["", ""];
                 if (job.type == "Transfer") {
                     from = "Inventory";
@@ -76,7 +39,7 @@ export default class Job {
                     from = "Station " + job.stationKey;
                     to = "Inventory";
                 }
-                runnerTasks.push({key: runnerTasks.length, item: item, from: from, to: to, status: job.status});
+                runnerTasks.push({key: runnerTasks.length, jobId: job.id, item: job.drink.name, from: from, to: to, status: job.status});
             }
         });
         runnerTasks.sort((a, b) => {
@@ -103,17 +66,7 @@ export default class Job {
     static getJobs() {
         var tasks = [];
         var jobs = getGlobalJobs();
-        console.log(getGlobalJobs().length)
         jobs.map(job => {
-            var item = "";
-            job.drinks.map(drink => {
-                item = item.concat(", ", drink.name);
-            })
-            item = item.substr(2);
-            if (item.length > 28) {
-                item = item.substr(0, 23);
-                item = item + "...";
-            }
             var [from, to] = ["", ""];
             if (job.type == "Transfer") {
                 from = "Inventory";
@@ -126,7 +79,7 @@ export default class Job {
             if (job.runnerId != "") {
                 runner = "Runner " + job.runner.key;
             }
-            tasks.push({key: tasks.length, runner: runner, drink: job.drinks[0], type: job.type, item: item, from: from, to: to, status: job.status});
+            tasks.push({key: tasks.length, jobId: job.id, runner: runner, drink: job.drink, type: job.type, item: job.drink.name, from: from, to: to, status: job.status});
         });
         tasks.sort((a, b) => {
             return (a.status <= b.status) ? 1 : -1;
@@ -145,10 +98,8 @@ export default class Job {
             jobs.map(job => {
                 if (job.status == "In transit") {
                     res += 1;
-                    job.drinks.map(drink => {
-                        qty += drink.quantity;
-                        val += drink.quantity * drink.pricePerUnit;
-                    });
+                    qty += job.drink.quantity;
+                    val += job.drink.quantity * job.drink.pricePerUnit;
                 }
             });
         } else {
@@ -157,10 +108,8 @@ export default class Job {
                 jobs.map(job => {
                     if (job.stationKey == station.key && job.status == "In transit") {
                         res += 1;
-                        job.drinks.map(drink => {
-                            qty += drink.quantity;
-                            val += drink.quantity * drink.pricePerUnit;
-                        });
+                        qty += job.drink.quantity;
+                        val += job.drink.quantity * job.drink.pricePerUnit;
                     }
                 });
             }
@@ -179,10 +128,8 @@ export default class Job {
             jobs.map(job => {
                 if (job.status == "In transit" || job.status == "Unstarted") {
                     res += 1;
-                    job.drinks.map(drink => {
-                        qty += drink.quantity;
-                        val += drink.quantity * drink.pricePerUnit;
-                    });
+                    qty += job.drink.quantity;
+                    val += job.drink.quantity * job.drink.pricePerUnit;
                 }
             });
         } else {
@@ -191,10 +138,8 @@ export default class Job {
                 jobs.map(job => {
                     if (job.stationKey == station.key && (job.status == "In transit" || job.status == "Unstarted")) {
                         res += 1;
-                        job.drinks.map(drink => {
-                            qty += drink.quantity;
-                            val += drink.quantity * drink.pricePerUnit;
-                        });
+                        qty += job.drink.quantity;
+                        val += job.drink.quantity * job.drink.pricePerUnit;
                     }
                 });
             }
@@ -213,10 +158,8 @@ export default class Job {
             jobs.map(job => {
                 if (job.status == "Complete") {
                     res += 1;
-                    job.drinks.map(drink => {
-                        qty += drink.quantity;
-                        val += drink.quantity * drink.pricePerUnit;
-                    });
+                    qty += job.drink.quantity;
+                    val += job.drink.quantity * job.drink.pricePerUnit;
                 }
             });
         } else {
@@ -225,10 +168,8 @@ export default class Job {
                 jobs.map(job => {
                     if (job.stationKey == station.key && job.status == "Complete") {
                         res += 1;
-                        job.drinks.map(drink => {
-                            qty += drink.quantity;
-                            val += drink.quantity * drink.pricePerUnit;
-                        });
+                        qty += job.drink.quantity;
+                        val += job.drink.quantity * job.drink.pricePerUnit;
                     }
                 });
             }
@@ -240,7 +181,6 @@ export default class Job {
     // Returns the total number of unconfirmed jobs and their total qty/value if stationId is omitted.
     static getNumOfJobsPending(stationId) {
         var jobs = getGlobalJobs();
-        console.log(getGlobalJobs())
         var res = 0;
         var qty = 0;
         var val = 0;
@@ -248,10 +188,8 @@ export default class Job {
             jobs.map(job => {
                 if (job.status != "Confirmed") {
                     res += 1;
-                    job.drinks.map(drink => {
-                        qty += drink.quantity;
-                        val += drink.quantity * drink.pricePerUnit;
-                    });
+                    qty += job.drink.quantity;
+                    val += job.drink.quantity * job.drink.pricePerUnit;
                 }
             });
         } else {
@@ -261,10 +199,8 @@ export default class Job {
                 jobs.map(job => {
                     if (job.stationKey == station.key && job.status != "Confirmed") {
                         res += 1;
-                        job.drinks.map(drink => {
-                            qty += drink.quantity;
-                            val += drink.quantity * drink.pricePerUnit;
-                        });
+                        qty += job.drink.quantity;
+                        val += job.drink.quantity * job.drink.pricePerUnit;
                     }
                 });
             }
@@ -283,10 +219,8 @@ export default class Job {
             jobs.map(job => {
                 if (job.status == "Unstarted") {
                     res += 1;
-                    job.drinks.map(drink => {
-                        qty += drink.quantity;
-                        val += drink.quantity * drink.pricePerUnit;
-                    });
+                    qty += job.drink.quantity;
+                    val += job.drink.quantity * job.drink.pricePerUnit;
                 }
             });
         } else {
@@ -295,10 +229,8 @@ export default class Job {
                 jobs.map(job => {
                     if (job.stationKey == station.key && job.status == "Unstarted") {
                         res += 1;
-                        job.drinks.map(drink => {
-                            qty += drink.quantity;
-                            val += drink.quantity * drink.pricePerUnit;
-                        });
+                        qty += job.drink.quantity;
+                        val += job.drink.quantity * job.drink.pricePerUnit;
                     }
                 });
             }
@@ -312,30 +244,29 @@ export default class Job {
         var jobs = getGlobalJobs();
         var count = 0;
         jobs.map(job => {
-            if (job.status !== 'Complete') {
+            if (job.status == 'Unstarted' || job.status == 'In transit') {
                 count = count + 1;
-                job.drinks.map(drink => {
-                    var index = returnListTotal.findIndex(item => item.name == drink.name);
-                    if (index == -1) {
-                        returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                var drink = job.drink;
+                var index = returnListTotal.findIndex(item => item.name == drink.name);
+                if (index == -1) {
+                    returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                } else {
+                    returnListTotal[index].count += drink.quantity;
+                }
+                index = returnList.findIndex(item => item.name == job.stationKey);
+                if (index == -1) {
+                    var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
+                    returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
+                } else {
+                    var drinks = [...returnList[index].items];
+                    var drinkIndex = drinks.findIndex(item => item.name == drink.name);
+                    if (drinkIndex == -1) {
+                        drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
                     } else {
-                        returnListTotal[index].count += drink.quantity;
+                        drinks[drinkIndex].count += drink.quantity;
                     }
-                    index = returnList.findIndex(item => item.name == job.stationKey);
-                    if (index == -1) {
-                        var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
-                        returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
-                    } else {
-                        var drinks = [...returnList[index].items];
-                        var drinkIndex = drinks.findIndex(item => item.name == drink.name);
-                        if (drinkIndex == -1) {
-                            drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
-                        } else {
-                            drinks[drinkIndex].count += drink.quantity;
-                        }
-                        returnList[index] = {...returnList[index], items: drinks};
-                    }
-                });
+                    returnList[index] = {...returnList[index], items: drinks};
+                }
             }
         })
         return [returnListTotal, count];
@@ -347,28 +278,27 @@ export default class Job {
         var jobs = getGlobalJobs();
         jobs.map(job => {
             if (job.type == 'Return' && (job.status == 'Complete' || job.status == 'Confirmed')) {
-                job.drinks.map(drink => {
-                    var index = returnListTotal.findIndex(item => item.name == drink.name);
-                    if (index == -1) {
-                        returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                var drink = job.drink;
+                var index = returnListTotal.findIndex(item => item.name == drink.name);
+                if (index == -1) {
+                    returnListTotal[returnListTotal.length] = {key: returnListTotal.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
+                } else {
+                    returnListTotal[index].count += drink.quantity;
+                }
+                index = returnList.findIndex(item => item.name == job.stationKey);
+                if (index == -1) {
+                    var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
+                    returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
+                } else {
+                    var drinks = [...returnList[index].items];
+                    var drinkIndex = drinks.findIndex(item => item.name == drink.name);
+                    if (drinkIndex == -1) {
+                        drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
                     } else {
-                        returnListTotal[index].count += drink.quantity;
+                        drinks[drinkIndex].count += drink.quantity;
                     }
-                    index = returnList.findIndex(item => item.name == job.stationKey);
-                    if (index == -1) {
-                        var drinks = [{key: 0, name: drink.name, count: drink.quantity, price: drink.pricePerUnit}];
-                        returnList[returnList.length] = {key: returnList.length, name: job.stationKey, items: drinks};
-                    } else {
-                        var drinks = [...returnList[index].items];
-                        var drinkIndex = drinks.findIndex(item => item.name == drink.name);
-                        if (drinkIndex == -1) {
-                            drinks[drinks.length] = {key: drinks.length, name: drink.name, count: drink.quantity, price: drink.pricePerUnit};
-                        } else {
-                            drinks[drinkIndex].count += drink.quantity;
-                        }
-                        returnList[index] = {...returnList[index], items: drinks};
-                    }
-                });
+                    returnList[index] = {...returnList[index], items: drinks};
+                }
             }
         })
         return [returnListTotal, returnList];
@@ -407,17 +337,16 @@ export default class Job {
             type: typeName,
             stationKey: stationKey,
             status: "Unstarted",
+            drink: Drink.parseDrink(drink),
             runnerId: "",
             details: ""
         };
-        drinks = [];
-        drinks.push(Drink.parseDrink(drink));
         items = pairItems.map(item => {
             item = PairItem.parsePairItem(item);
             item.quantity = drink.quantity;
             return item;
         });
-        dbManager.createNewJob(job, drinks, items)
+        dbManager.createNewJob(job, items)
             .then((id) => globalEvent.addJobToEvent(id))
             .catch(e => console.log(e)); 
     }
@@ -431,10 +360,8 @@ export default class Job {
 async function update(data) {
     var job = new Job(data.id);
     Object.assign(job, data.data());
-    dbManager.getDrinksInJobHandle(job.id).onSnapshot(async (drinks) => {
-        job.drinks = drinks.docs.map(drink => new Drink(drink.data()));
-        await Promise.all(job.drinks.map(drink => drink.init()));
-    });
+    job.drink = new Drink(job.drink);
+    await job.drink.init();
     dbManager.getPairItemsInJobHandle(job.id).onSnapshot(async (pairItems) => {
         job.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
         await Promise.all(job.pairItems.map(pairItem => pairItem.init()));
