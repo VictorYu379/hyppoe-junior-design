@@ -163,9 +163,7 @@ class DBManager {
 
     async updateDrinkInStation(stationId, updated) {
         var data = await this.getDrinksInStationHandle(stationId).where("drinkType", "==", updated.drinkType).get();
-        var id = data.docs[0].id;
-        console.log(id, updated);
-        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).update(updated);
+        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).set(updated);
     }
 
     updateDrinkInInventory(inventoryId, drinkId, data) {

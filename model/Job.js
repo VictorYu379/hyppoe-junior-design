@@ -410,7 +410,6 @@ export default class Job {
         };
         drinks = [];
         drinks.push(Drink.parseDrink(drink));
-        console.log(pairItems);
         items = pairItems.map(item => {
             item = PairItem.parsePairItem(item);
             item.quantity = drink.quantity;
