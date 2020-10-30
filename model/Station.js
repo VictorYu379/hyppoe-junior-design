@@ -113,6 +113,12 @@ export default class Station {
                 stationAvail += drink.quantity
                 stationValue += drink.quantity * drink.pricePerUnit
             });
+            station.servers.map(server =>{
+                server.soldDrinks.map(drink => {
+                    stationTotal += drink.quantity
+                    stationValue += drink.quantity * drink.pricePerUnit
+                })
+            })
             var item = {key: station.key, name: station.name, total: stationTotal, avail: stationAvail, value: stationValue, id: station.id};
             res.push(item)     
         });
