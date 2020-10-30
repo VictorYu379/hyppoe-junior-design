@@ -177,9 +177,6 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 				visible={additionalInventoryModal} 
 				onSave={() => setAdditionalInventoryModal(false)}/>
 			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
-
-
-
 					<View style={{
 							marginVertical: 20,
 							width: '100%',
@@ -189,17 +186,9 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 							alignItems: 'flex-start',
 							margin: 10
 					}}>
-							
 						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
-						
-						
 					</View>
-
-
-					
 			</ShadowedBox>
-
-
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',

@@ -271,20 +271,21 @@ class DBManager {
         .then(snapshot => {
 		    console.log("Drinks: ", snapshot.size);
 		    snapshot.forEach(snap => {
-                console.log(data);
                 if (snap.data().stationKey === stationKey) {
                     let found = false;
                     let id = "";
                     baseRef.doc(snap.id)
                         .collection("drinks")
-                        .once('value', function(snapshot) {
+                        .get()
+                        .then(snapshot => {
                             snapshot.forEach(function(childSnapshot) {
                                 if (childSnapshot.data().drinkType == drink.drinkType) {
                                     found = true;
                                     id = childSnapshot.id;
+                                    console.log("Found: ", id);
                                 }
                             });
-                    });
+                        });
                     if (found) {
                         let newData = snap.data();
                         newData.status == status;
@@ -292,7 +293,7 @@ class DBManager {
                         baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
                     }
                 }
-		       	console.log("snap id: ", snap.id, snap.data());
+		       	console.log("snap id: ", snap.id);
 		    })
         })
         .catch(e => {console.log(e)});

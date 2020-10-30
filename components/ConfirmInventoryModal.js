@@ -62,6 +62,7 @@ export default class ConfirmInventoryModal extends React.Component {
             }
         });
         this.pairItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
+        console.log(this.props.serverMode);
     }
 
     getPairedItemList(itemList) {
@@ -444,7 +445,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                         this.props.onSave(newDrink); 
                                     }}>
                                     <Text style={styles.textStyle}>
-                                        { this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
+                                        { !this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
                                     </Text>
                                 </TouchableHighlight>
                                 { (this.props.managerMode) ?

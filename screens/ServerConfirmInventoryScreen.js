@@ -42,7 +42,7 @@ export default class ServerConfirmInventoryScreen extends React.Component {
     onConfirmInvModalSave(drink) {
         this.setState({confirmInventoryModalVisible: false});
         Job.updateJobStaus(drink, this.state.curStation.key, this.state.pairItems, "Confirmed");
-        curStation.updateDrink(drink);
+        this.state.curStation.updateDrink(drink);
         // update status of job
         // update inventory of station
     }
@@ -70,7 +70,7 @@ export default class ServerConfirmInventoryScreen extends React.Component {
                 style={styles.container}
                 touchable
                 onPress={() => this.setState({inventorySelected: null})}>
-                <confirmInventoryModal
+                <ConfirmInventoryModal
                     ref={m => {this.confirmInventoryModal = m}}
                     serverMode={true}
                     visible={this.state.confirmInventoryModalVisible} 

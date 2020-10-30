@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
-	const [stationModalVisible, setStationModalVisible] = useState(false);
+export default function RunnerTaskScreen({ navigation }) {
+	const [ConfirmModalVisible, setConfirmModalVisible] = useState(false);
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	
+
 
 	return (
 		<View style={styles.container}>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
-
-
-
 					<View style={{
 							marginVertical: 20,
 							width: '100%',
@@ -20,8 +20,7 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 							margin: 10
-					}}>
-							
+					}}>	
 						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Runner 1:</Text>
 						<View style={styles.rowView}>
 							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
@@ -32,13 +31,10 @@ export default function DummyScreen({ navigation }) {
 									Big Tent
 								</Text>
 							</View>
-
-
 							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
 									Pending
 							</Text>
 						</View>
-
 						<View style={styles.rowView}>
 							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
 								<Text style={{fontSize: 12, color: 'gray'}}>
@@ -48,16 +44,11 @@ export default function DummyScreen({ navigation }) {
 									Small Tent
 								</Text>
 							</View>
-
-
 							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
 									Pending
 							</Text>
 						</View>
 					</View>
-
-
-					
 			</ShadowedBox>
 
 
@@ -69,9 +60,7 @@ export default function DummyScreen({ navigation }) {
 				//height: '60%',
 				paddingLeft: '2%'
 			}}>
-				
 				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
-
 					<View style={{
 						flexDirection: 'column',
 						margin: 3,
@@ -80,7 +69,6 @@ export default function DummyScreen({ navigation }) {
 						alignItems: 'flex-start',
 						//borderWidth: 1,
 					}}>
-
 						<View style={styles.sectionTitle}>
 							<View style={{...styles.rowView, width:'90%'}}>
 								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
@@ -122,8 +110,6 @@ export default function DummyScreen({ navigation }) {
 							</Text>
 						</View>
 					</View>
-
-
 				</ShadowedBox>
 
 				<ShadowedBox width={'40%'} height={'40%'}  margin={5} touchable>
@@ -178,10 +164,7 @@ export default function DummyScreen({ navigation }) {
 							</Text>
 						</View>
 					</View>
-
-
 				</ShadowedBox>
-
 			</View>
 		</View>
 	);
