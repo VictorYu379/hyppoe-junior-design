@@ -89,7 +89,7 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                     ref={m => {this.returnInventoryModal = m}}
                     visible={this.state.returnInventoryModalVisible} 
                     onSave={this.onReturnInvModalSave.bind(this)} />
-                <InventoryTopBox inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
+                <InventoryTopBox return inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
                 <View style={styles.scrollsContainer}>
                     <View style={{width: '50%'}}>
                         <ScrollView
@@ -104,7 +104,7 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                                 }
                                 return (
                                     <StationBox
-                                        verb={"Return to"}
+                                        verb={"Return from"}
                                         key={index}
                                         station={station}
                                         totalValue={this.state.totalValue}
