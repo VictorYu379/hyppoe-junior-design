@@ -129,16 +129,18 @@ export default class Station {
         var res = []
         var stations = getGlobalStations();
         station = stations.find(item => item.id == ID);
-        station.drinks.map(drink => {
+        station.drinks.map(drink1 => {
             var item = {
-                icon: drink.icon,
-                name: drink.name,
-                avail: drink.quantity,
-                total: drink.quantity,
+                icon: drink1.icon,
+                name: drink1.name,
+                avail: drink1.quantity,
+                total: drink1.quantity,
             }
             station.servers.map(server => {
-                server.soldDrinks.map(drink => {
-                    item.total += drink.quantity
+                server.soldDrinks.map(drink2 => {
+                    if (drink1.name == drink2.name) {
+                        item.total += drink2.quantity
+                    }
                 })
             })
             res.push(item)
@@ -325,7 +327,10 @@ export default class Station {
     }
 
     static getNumOfStationBelowInventory() {
-        var rate = globalEvent.alerts["Station Total Remaining"];
+        var rate = "OFF"
+        if (globalEvent.alerts != undefined) {
+            rate = globalEvent.alerts["Station Total Remaining"];
+        }
         if (rate == 'OFF') {
             return 0;
         }
@@ -427,6 +432,7 @@ export function getGlobalStations() {
     for (var id in globalStations) {
         res.push(globalStations[id]);
     }
+    res.sort((a, b) => a.key - b.key);
     return res;
 }
 
