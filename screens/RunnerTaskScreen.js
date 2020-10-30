@@ -54,9 +54,9 @@ export default class RunnerTaskScreen extends React.Component {
 	onConfirmInvModalSave(drink) {
 		this.setState({confirmInventoryModalVisible: false});
 		if (this.state.taskSelected.status === "Unstarted") {
-			Job.updateJob(drink, this.state.curStation.key, "In transit", this.state.runnerId);
+			Job.updateJob(drink, this.state.taskSelected.stationKey, "In transit", this.state.runnerId);
 		} else if (this.state.taskSelected.status === "In transit") {
-			Job.updateJob(drink, this.state.curStation.key, "Completed", null);
+			Job.updateJob(drink, this.state.taskSelected.stationKey, "Completed", null);
 		}
     }
 
@@ -94,13 +94,11 @@ export default class RunnerTaskScreen extends React.Component {
 		const taskList = this.state.tasks.map((task, index) => {
 			return (
 				<ShadowedBox key={index} width={170} square margin={5}>
-					<TouchableOpacity key={task.id} onPress={() => {
+					<TouchableOpacity key={index} onPress={() => {
 						this.setState({
-							inputInvUpdateModalVisible: true,
+							confirmInventoryModalVisible: true,
 							taskSelected: this.state.tasks[index],
-							taskId: task.id
 						});
-						console.log("TASKID: ", task.id);
 						this.confirmInventoryModal
 							.inputDrinkAndStation(
 								this.state.tasks[index].drink, 
@@ -209,7 +207,6 @@ export default class RunnerTaskScreen extends React.Component {
 				style={styles.container}
 				onPress={() => this.setState({taskSelected: null})}>
 				<ConfirmInventoryModal
-					key={this.state.taskId}
 					ref={m => {this.confirmInventoryModal = m}}
 					visible={this.state.confirmInventoryModalVisible}
 					onSave={this.onConfirmInvModalSave.bind(this)}
