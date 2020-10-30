@@ -20,11 +20,7 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
-<<<<<<< HEAD
 				onPress={() => navigation.navigate('Manager Dashboard')}>
-=======
-				onPress={() => navigation.navigate('Manager Return Inventory')}>
->>>>>>> master
 				<Text>Open up App.js to start working on your app!</Text>
 			</TouchableOpacity>
 			<StatusBar style="auto" />
