@@ -42,7 +42,7 @@ export default class ManagerReturnInventoryScreen extends React.Component {
 
     onReturnInvModalSave(drink) {
         var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
-        drinkToUpdate.subtract(drink);
+        //drinkToUpdate.subtract(drink);
         globalInventory.updateDrinkQuantity(drinkToUpdate);
         Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
         this.setState({
