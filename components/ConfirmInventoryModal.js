@@ -450,7 +450,7 @@ export default class ConfirmInventoryModal extends React.Component {
                                         this.props.onSave(newDrink); 
                                     }}>
                                     <Text style={styles.textStyle}>
-                                        { !this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm" }
+                                        { !this.props.isAssign ? (!this.props.serverMode ? (this.props.pickUp ? "Pick Up" : "Drop Off"): "Confirm") : "Assign" }
                                     </Text>
                                 </TouchableHighlight>
                                 { (this.props.managerMode) ?
