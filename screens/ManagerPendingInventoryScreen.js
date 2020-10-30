@@ -9,31 +9,39 @@ import Job from 'model/Job';
 
 export default function ManagerPendingInventoryScreen({ navigation }) {
 	const [additionalInventoryModal, setAdditionalInventoryModal] = useState(false);
+	const [JobList, setJobList] = useState([]);
 
-	const runnerTaskList = [
-		{runnerId: 1, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Pending", dropoff:"Pending"},
-		{runnerId: 2, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
-	]
-	const stationTaskList = [
-		{status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
-	]
+	useEffect(() => {
+		const JobList = Job.getJobs()
+		setJobList(JobList);
+	}, [])
 
-
-	const JobList = Job.getJobs()
-	console.log(JobList)
+	//console.log(JobList)
 
 
-	const filter = () => {
+	const filterStation = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.to !== "Inventory"){
+			if(item.status == "Complete" || item.status == "Confirmed"){
 				StationJobList.push(item)
 			}
 		});
 		return StationJobList
 	}
 
-	const runnerList = JobList.map(item => {
+	const filterRunner = () => {
+		let StationJobList = []
+		JobList.map(item => {
+			if(item.status == "Unstarted" || item.status == "In transit"){
+				StationJobList.push(item)
+			}
+		});
+		return StationJobList
+	}
+
+	const runnerJobs = filterRunner()
+
+	const runnerList = runnerJobs.map(item => {
 		return (
 			<ShadowedBox width={'40%'} height={100}  margin={5} touchable onPress={() => setAdditionalInventoryModal(true)}>
 
@@ -73,8 +81,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.from}
 						</Text>
-						<Text style={styles.completedText}>
-								{"Complete"}
+						<Text style={[item.status != "Unstarted"?styles.completedText : styles.pendingText]}>
+								{item.status != "Unstarted"? "Complete":"Pending"}
 						</Text>
 					</View>
 
@@ -88,8 +96,16 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.to}
 						</Text>
-						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
-								{item.status == "Complete"?"Complete":"Pending"}
+						<Text style={[item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								styles.completedText 
+								: styles.pendingText 
+							: styles.pendingText]}>
+								{item.status != "Unstarted"? 
+							item.status != "In transit"? 
+								"Complete" 
+								: "Pending" 
+							: "Pending"}
 						</Text>
 					</View>
 				</View>
@@ -99,8 +115,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		);
 	});
 
-	const StationJobsList = filter()
-	console.log(StationJobsList)
+	const StationJobsList = filterStation()
+	//console.log(StationJobsList)
 
 	const stationList = StationJobsList.map(item => {
 		return (
@@ -130,13 +146,13 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-							Pick Up:
+							Drop off:
 						</Text>
 					</View>
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							Inventory
+							{item.from}
 						</Text>
 						<Text style={[styles.completedText]}>
 							Complete
@@ -145,7 +161,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-							Drop off:
+							Confirmed:
 						</Text>
 					</View>
 
@@ -153,8 +169,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							{item.to}
 						</Text>
-						<Text style={[item.status == "Complete"? styles.completedText : styles.pendingText]}>
-							{item.status == "Complete"?"Complete":"Pending"}
+						<Text style={[item.status == "Confirmed"? styles.completedText:styles.pendingText]}>
+								{item.status == "Confirmed"? "Complete":"Pending"}
 						</Text>
 					</View>
 				</View>
