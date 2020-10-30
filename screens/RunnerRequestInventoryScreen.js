@@ -5,9 +5,9 @@ import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import RequestInventoryModal from 'components/RequestInventoryModal';
-import { getGlobalStations } from 'model/Station';
+import Station, { getGlobalStations, getGlobalStation } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
-import Job from 'model/Job';
+import Job from '../model/Job';
 
 export default class RunnerRequestInventoryScreen extends React.Component {
     state = {
@@ -15,9 +15,9 @@ export default class RunnerRequestInventoryScreen extends React.Component {
         scrollViewHeight: 0,
         elementHeight: 0,
         stationModalVisible: false,
-        stations: {},
+        station: new Station(),
         drinks: [],
-        stationSelected: null,
+        pairItems: [],
         totalValue: 0,
         requestInventoryModalVisible: false
     };
@@ -40,8 +40,14 @@ export default class RunnerRequestInventoryScreen extends React.Component {
     }
 
     onRequestInvModalSave(drink) {
-        this.setState({requestInventoryModalVisible: false});
-        Job.createNewJob(drink, this.state.curStation.key, this.state.pairItems, "Transfer");
+        var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
+        drinkToUpdate.subtract(drink);
+        globalInventory.updateDrinkQuantity(drinkToUpdate);
+        Job.createNewJob(drink, this.state.station.key, this.state.pairItems, "Transfer");
+        this.setState({
+            requestInventoryModalVisible: false,
+            inventorySelected: null,
+        });
     }
 
     updateData() {
@@ -53,9 +59,8 @@ export default class RunnerRequestInventoryScreen extends React.Component {
             newStations[station.key] = station;
         });
         this.setState({
+            station: getGlobalStation(this.props.route.params.stationId),
             drinks: globalInventory.drinks,
-            pairItems: globalInventory.pairItems,
-            stations: newStations,
             totalValue: newTotalValue
         });
     }
@@ -100,33 +105,27 @@ export default class RunnerRequestInventoryScreen extends React.Component {
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {Object.keys(this.state.stations).map((stationId, index) => {
-                                var station = this.state.stations[stationId];
-                                if (station.deleted === true) {
-                                    return;
-                                }
-                                return (
-                                    <StationBox
-                                        verb={"Request to"}
-                                        key={index}
-                                        station={station}
-                                        totalValue={this.state.totalValue}
-                                        inventorySelected={this.state.inventorySelected}
-                                        onPressStats={() => this.props.navigation.navigate("Total Inventory Station Overview", { stationId: station.id })}
-                                        onAdd={() => {
-                                            this.setState({
-                                                requestInventoryModalVisible: true,
-                                                curStation: station
-                                            });
-                                            this.requestInventoryModal.inputDrinkAndStation(
-                                                this.state.drinks[this.state.inventorySelected],
-                                                station.name,
-                                                this.state.pairItems
-                                            );
-                                        }}
-                                    />
-                                );
-                            })}
+                            <StationBox
+                                verb={"Request for"}
+                                station={this.state.station}
+                                totalValue={this.state.totalValue}
+                                inventorySelected={this.state.inventorySelected}
+                                onPressStats={() => {
+                                    this.setState({
+                                        availableDrinkType: this.state.station.drinks.map(drink => drink.name)
+                                    });
+                                }}
+                                onAdd={() => {
+                                    this.setState({
+                                        requestInventoryModalVisible: true,
+                                    });
+                                    this.requestInventoryModal.inputDrinkAndStation(
+                                        this.state.drinks[this.state.inventorySelected],
+                                        this.state.station.name,
+                                        this.state.pairItems
+                                    )
+                                }}
+                                />
                         </ScrollView>
                     </View>
                 </View>
