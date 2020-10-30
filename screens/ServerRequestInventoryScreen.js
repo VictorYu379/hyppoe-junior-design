@@ -43,7 +43,7 @@ export default class ServerRequestInventoryScreen extends React.Component {
         var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
         drinkToUpdate.subtract(drink);
         globalInventory.updateDrinkQuantity(drinkToUpdate);
-        Job.createNewJob(drink, this.state.curStation.key, this.state.pairItems, "Transfer");
+        Job.createNewJob(drink, this.state.station.key, this.state.pairItems, "Transfer");
         this.setState({
             requestInventoryModalVisible: false,
             inventorySelected: null,
