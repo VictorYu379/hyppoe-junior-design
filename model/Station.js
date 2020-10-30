@@ -25,17 +25,17 @@ export default class Station {
         return Promise.all(promises);
     }
 
-    static async setInstance(id) {
-        dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
-        stationID = id;
-    }
+    // deprecated functions
+    // static async setInstance(id) {
+    //     dbManager.setStorage(STATION_KEY, id); // Not really used now that listeners are setup, to be deprecated
+    // }
 
     // To be deprecated, use getGlobalStation() instead
-    static async getInstance() {
-        var stationID = await dbManager.getStorage(STATION_KEY);
-        var station = new Station({ id: stationID });
-        return await station.init();
-    }
+    // static async getInstance() {
+    //     var stationID = await dbManager.getStorage(STATION_KEY);
+    //     var station = new Station({ id: stationID });
+    //     return await station.init();
+    // }
 
     static setStations(ids) {
         ids.map(id => {
@@ -43,17 +43,49 @@ export default class Station {
         })
     }
 
+        static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        globalInventory.drinks.map(drink => {
+            item = {
+                icon: drink.icon, 
+                name:drink.name, 
+                avail:drink.quantity, 
+                total:drink.quantity
+            }
+            res.push(item)
+        })
+        stations.map(station => {
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
+    }
 
     // Returns the needed data for individual station detailed data screen
-    static getDetailedData() {
-        var station = getGlobalStation();
+    static getDetailedData(stationId) {
+        var station = getGlobalStation(stationId);
         var avail = [];
         var total = [];
-        station.drinks.map(drink => {
-            var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
-            total[item.key] = drink.quantity;
-            avail[avail.length] = item;
-        });
+        if (station.drinks != undefined){
+            station.drinks.map(drink => {
+                var item = {key: avail.length, name: drink.name, avail: drink.quantity, price: drink.pricePerUnit};
+                total[item.key] = drink.quantity;
+                avail[avail.length] = item;
+            });
+        }
         var sold = [];
         station.servers.map(server => {
             var items = [];
@@ -212,6 +244,8 @@ export default class Station {
     }
 
 
+    
+
     // Returns the number of returned items of station based on stationId.
     // Returns the total number of returned items if stationId is omitted.
     static getNumOfRunners(stationId) {
@@ -358,8 +392,8 @@ async function update(data) {
     globalStations[station.id] = station;
 }
 
-export function getGlobalStation() {
-    return globalStations[stationID];
+export function getGlobalStation(stationId) {
+    return globalStations[stationId];
 }
 
 export function getGlobalStations() {
@@ -371,4 +405,3 @@ export function getGlobalStations() {
 }
 
 export var globalStations = {};
-var stationID = "";

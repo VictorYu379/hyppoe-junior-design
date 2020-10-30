@@ -40,9 +40,11 @@ export default class Event {
 
     static getAlerts() {
         var alerts = [];
-        Object.entries(globalEvent.alerts).map(([key, value]) => {
-            alerts[alerts.length] = {key: alerts.length, name: key, type: 'Push Notification', rate: value};
-        });
+        if (globalEvent.alerts != undefined){
+            Object.entries(globalEvent.alerts).map(([key, value]) => {
+                alerts[alerts.length] = {key: alerts.length, name: key, type: 'Push Notification', rate: value};
+            });
+        }
         alerts.sort((a, b) => {
             if (a.rate == 'OFF' && b.rate == 'OFF') {
                 return (a.key <= b.key) ? -1 : 1;

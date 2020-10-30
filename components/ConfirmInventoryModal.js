@@ -27,6 +27,7 @@ export default class ConfirmInventoryModal extends React.Component {
         this.state = {
             drink: new Drink(),
             stationName: "",
+            isDropOff: false,
             Item: {
                 Paired: [],
                 Name: "",
@@ -51,7 +52,7 @@ export default class ConfirmInventoryModal extends React.Component {
             Item: {
                 Name: drink.name,
                 Unit: drink.unit,
-                Pack: drink.pack,
+                Pack: drink.pack === undefined ? 0 : drink.pack,
                 Quantity: 0,
                 AssignedQuantity: drink.quantity,
                 ConfirmQuantity: drink.quantity,
@@ -63,6 +64,10 @@ export default class ConfirmInventoryModal extends React.Component {
         });
         this.pairItemList = this.getPairedItemList(pairItems.map(item => item.pairItemType.name));
         console.log(this.props.serverMode);
+    }
+
+    inputDropOffPickUp(isDropOff) {
+        this.setState({isDropOff: isDropOff});
     }
 
     getPairedItemList(itemList) {

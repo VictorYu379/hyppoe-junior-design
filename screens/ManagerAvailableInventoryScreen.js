@@ -8,6 +8,7 @@ import Station from 'model/Station';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
+import Inventory from 'model/Inventory';
 
 
 export default function ManagerAvailableInventoryScreen({ navigation }) {
@@ -20,35 +21,23 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 	//const [soldItems, setSold] = useState([]);
 	//const [totalItems, setTotal] = useState([]);
 	const [manager, setManager] = useState([]);
+	const [drinkList, setdrinkList] = useState([]);
+	const [inventorySummary, setinventorySummary] = useState([]);
 
 	
 
 	useEffect(() => {
-		Event.getInstance().then(event => Station.getStations(event.stations))
-		Manager.getInstance().then(manager => { setManager(manager); });
-		// Event.getInstance().then(event => { setEvent(event); });
-		// Manager.getInstance().then(manager => { setManager(manager); });
+		// print out list of drinks in Inventory which has field{icon, name, total, available}
+		//console.log(Inventory.getDrinksSummary())
+		var drinkList = Inventory.getDrinksSummary();
+		setdrinkList(drinkList);
+		var inventorySummary = Inventory.getInventorySummary();
+		setinventorySummary(inventorySummary);
 	}, [])
 	
 	const [availItems,soldItems,totalItems] = Station.getTotalAvailableInventoryData()
 	//console.log(availItems)
-
-	const data = availItems.map(function(e, i) {
-		e.total = totalItems[i];
-		return e
-	  });
-
-	console.log(data)
-
-
-	const imageList = [
-		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
-		{img:require('assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
-		{img:require('assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
-	]
+	
 
 	
 
@@ -97,7 +86,7 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 
 	
 
-	const iconList = data.map((item, index) => {
+	const iconList = drinkList.map((item, index) => {
 		return (
 			<ShadowedBox 
 				key={index}
@@ -198,9 +187,9 @@ export default function ManagerAvailableInventoryScreen({ navigation }) {
 					}}>
 						<Text style={{
 							...styles.percentageHeaderBoxTextSize, 
-							color: textColor(percent(total('avail'), total('total'))),
+							color: textColor(percent(inventorySummary[0],inventorySummary[1])),
 						}}>
-							{percent(total('avail'), total('total'))}%
+							{percent(inventorySummary[0],inventorySummary[1])}%
 						</Text>
 					</View>
 				</View>

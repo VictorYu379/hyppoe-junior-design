@@ -7,7 +7,7 @@ import { globalStations } from 'model/Station';
 export default class Job {
     id;         // String
     type;       // enum: { "Transfer", "Return" }
-    status;     // enum: { "Unstarted", "In transit", "Complete" }
+    status;     // enum: { "Unstarted", "In transit", "Complete", "Confirmed" }
     runner;     // runner
     runnerId;   // String
     details;    // String
@@ -192,7 +192,7 @@ export default class Job {
         var returnList = [];
         var jobs = getGlobalJobs();
         jobs.map(job => {
-            if (job.type == 'Return' && job.status == 'Complete') {
+            if (job.type == 'Return' && (job.status == 'Complete' || job.status == 'Confirmed')) {
                 job.drinks.map(drink => {
                     var index = returnListTotal.findIndex(item => item.name == drink.name);
                     if (index == -1) {
@@ -268,14 +268,9 @@ export default class Job {
         dbManager.createNewJob(job, drinks, items);
     }
 
-    static updateJobStaus(drink, stationKey, pairItems, status) {
+    static updateJob(drink, stationKey, status, runnerId) {
         drink = Drink.parseDrink(drink);
-        items = pairItems.map(item => {
-            item = PairItem.parsePairItem(item);
-            item.quantity = drink.quantity;
-            return item;
-        });
-        dbManager.updateJobStatus(drink, stationKey, pairItems, status);
+        dbManager.updateJob(drink, stationKey, status, runnerId);
     }
 }
 

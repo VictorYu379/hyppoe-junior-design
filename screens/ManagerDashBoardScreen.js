@@ -7,7 +7,8 @@ import Station from 'model/Station';
 import Inventory from 'model/Inventory';
 import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
-import Job from 'model/Job';
+import Job from 'model/Job';  
+
 
 
 export default function ManagerDashBoardScreen({ navigation }) {
@@ -57,7 +58,9 @@ export default function ManagerDashBoardScreen({ navigation }) {
 		// console.log(Station.getNumOfRunners("eloF9YmvIfMXKvUZDa9m")); // Station 2
 
 		// Get number of set alerts;
-		// console.log(Event.getNumOfAlerts()); 		
+		// console.log(Event.getNumOfAlerts()); 	
+		
+		
 		var inventorySummary = Inventory.getInventorySummary();
 		setInventorySummary(inventorySummary);
 		var pendingInventorySummary = Job.getNumOfJobsInTransit();
@@ -75,7 +78,7 @@ export default function ManagerDashBoardScreen({ navigation }) {
 		var alertsSummary = Event.getNumOfAlerts();
 		setalertsSummary(alertsSummary);
 
-
+		//console.log(Inventory.getDrinksSummary())
 
 	}, [])
 

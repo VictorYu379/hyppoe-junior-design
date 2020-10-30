@@ -265,7 +265,7 @@ class DBManager {
         }
     }
 
-    updateJobStatus(drink, stationKey, pairItems, status) {
+    updateJob(drink, stationKey, status, runnerId) {
         const baseRef = this.dbh.collection("Jobs");
         baseRef.get()
         .then(snapshot => {
@@ -288,7 +288,12 @@ class DBManager {
                         });
                     if (found) {
                         let newData = snap.data();
-                        newData.status == status;
+                        if (status != null) {
+                            newData.status = status;
+                        }
+                        if (runnerId != null) {
+                            newData.runnderId = runnerId;
+                        }
                         baseRef.doc(snap.id).update(newData);
                         baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
                     }

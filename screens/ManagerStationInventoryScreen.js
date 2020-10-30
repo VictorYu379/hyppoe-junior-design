@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from 'components/ShadowedBox';
 import Station, {getGlobalStations}from 'model/Station';
@@ -11,10 +11,17 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 
 	// TODO: When clicking on the box and navigate to Individual Station Inventory, 
 	// the stationID of the directed station need to be set as below.
-	//Station.setInstance("P7HFuidmDgcaRRovoRjK"); // substitute the literal string with stationID towards the target station
 	//console.log(getGlobalStations())
 	const StationDataList = Station.getStationInventoryData()
 	const [availItems,soldItems,totalItems] = Station.getTotalDetailedData()
+	const [stationInventorySummary, setstationInventorySummary] = useState([]);
+
+	useEffect(() => {
+		var stationInventorySummary = Station.getStationInventorySummary();
+		setstationInventorySummary(stationInventorySummary);
+		//console.log(Station.getDetailedData())
+		
+	}, [])
 
 	const textColor = (text) => {
 		let rate = Number(text);
@@ -208,13 +215,13 @@ export default function ManagerStationInventoryScreen({ route, navigation }) {
 					}}>
 						<Text style={{
 							...styles.percentageHeaderBoxTextSize,
-							color: textColor(percent(total('avail'), total('total'))),
+							color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 						}}>
-							{percent(total('avail'), total('total'))}%
+							{percent(stationInventorySummary[0], stationInventorySummary[1])}%
 						</Text>
 						<Text style={{
 							...styles.HeaderBoxTextSize, 
-							color: textColor(percent(total('avail'), total('total')))
+							color: textColor(percent(stationInventorySummary[0], stationInventorySummary[1])),
 						}}>
 							Available Inventory
 						</Text>

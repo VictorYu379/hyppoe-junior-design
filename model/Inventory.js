@@ -55,11 +55,13 @@ export default class Inventory {
         var total = 0;
         var value = 0;
         var stations = getGlobalStations();
-        globalInventory.drinks.map(drink => {
-            avail += drink.quantity;
-            total += drink.quantity;
-            value += drink.quantity * drink.pricePerUnit;
-        })
+        if (globalInventory.drinks != undefined){
+            globalInventory.drinks.map(drink => {
+                avail += drink.quantity;
+                total += drink.quantity;
+                value += drink.quantity * drink.pricePerUnit;
+            })
+        }
         stations.map(station => {
             station.drinks.map(drink => {
                 total += drink.quantity;
@@ -76,6 +78,40 @@ export default class Inventory {
 
     constructor(id) {
         this.id = id;
+    }
+
+    static getDrinksSummary(){
+        var stations = getGlobalStations();
+        var res = []
+        if (globalInventory.drinks != undefined){
+            globalInventory.drinks.map(drink => {
+                var item = {
+                    icon: drink.icon, 
+                    name:drink.name, 
+                    avail:drink.quantity, 
+                    total:drink.quantity
+                }
+                res.push(item)
+            })
+        } 
+        console.log(res)
+        stations.map(station => { 
+            res.map(item => {
+                station.drinks.map(drink => {
+                    if(item.name == drink.name){
+                        item.total += drink.quantity;
+                    }
+                })
+                station.servers.map(server => {
+                    server.soldDrinks.map(drink => {
+                        if(item.name == drink.name){
+                            item.total += drink.quantity;
+                        }
+                    })
+                })
+            })
+        })
+        return res
     }
 
     async getData() {

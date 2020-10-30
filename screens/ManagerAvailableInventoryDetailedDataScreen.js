@@ -20,7 +20,7 @@ export default function ManagerAvailableInventoryDetailedDataScreen({ navigation
 	}
 
 	useEffect(() => {
-		var [avail, assign, total] = Inventory.getDetailedData();
+		var [avail, assign, total] = Inventory.getDetailedData(); 
 		setAvail(avail);
 		setAssigned(assign);
 		setTotal(total);
@@ -285,7 +285,7 @@ export default function ManagerAvailableInventoryDetailedDataScreen({ navigation
                     justifyContent: "space-between",
 					alignItems: "flex-start",
 				}}>
-					<Text style={styles.sectionTitle}>Station Inventory:</Text>
+					<Text style={styles.sectionTitle}>Available Inventory:</Text>
 					<View style={{
 						flexDirection: "column",
 						justifyContent: "flex-end",

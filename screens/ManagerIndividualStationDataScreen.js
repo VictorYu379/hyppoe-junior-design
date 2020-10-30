@@ -8,13 +8,13 @@ export default function ManagerIndividualStationDataScreen({ route, navigation }
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	//const stationId = navigation.state
-	const {stationId} = route.params
+	const stationId = route.params['stationId'];
 	//const stationID = JSON.stringify(stationId)
 	
 	const stationData = Station.getStationInventoryDataByID(stationId)[0]
 	
 	const drinksData = Station.getStationDrinksDataByID(stationId)
-	console.log(drinksData)
+	// console.log(drinksData)
 
 	const imageList = [
 		{img:require('assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
@@ -108,7 +108,9 @@ export default function ManagerIndividualStationDataScreen({ route, navigation }
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Manager Individual Station Inventory Detailed Data")}>
+			<ShadowedBox width={'80%'} height={'20%'} margin={10} touchable onPress={() => navigation.navigate("Individual Station Inventory Detailed Data Screen", {
+				stationId: stationId,
+			})}>
 
 
 				<View style={{
