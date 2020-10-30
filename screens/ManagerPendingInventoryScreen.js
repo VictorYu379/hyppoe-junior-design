@@ -14,6 +14,8 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 		{runnerId: 1, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Pending", dropoff:"Pending"},
 		{runnerId: 2, status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
 	]
+
+	// get task by station
 	const stationTaskList = [
 		{status: 0, stationId: 1, drinkName: "Bud Light", pickup: "Completed", dropoff:"Pending"}
 	]
