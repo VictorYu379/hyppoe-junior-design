@@ -98,7 +98,7 @@ export default function ServerPickYourStation({route, navigation }) {
 	
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -111,25 +111,21 @@ export default function ServerPickYourStation({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
+			<ScrollView style={{
+				width:'100%',
+				maxHeight:'100%',
+				marginLeft:'16%'
 			}}>
-				<ScrollView style={{
-					width:'100%',
-					maxHeight:'100%',
+				<View style={{
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					width: '100%',
+					//height: '60%',
+					paddingLeft: '2%',
 				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						//height: '60%',
-						paddingLeft: '2%',
-					}}>
-					{stationList}
-						
-					</View>
-				</ScrollView>
-			</View>
+					{stationList}	
+				</View>
+			</ScrollView>
 		</View>
 	);
 }

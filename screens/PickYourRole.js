@@ -33,7 +33,7 @@ export default function PickYourRole({ navigation }) {
 	
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -46,201 +46,198 @@ export default function PickYourRole({ navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
+			<ScrollView style={{
+				width:'100%',
+				maxHeight:'100%',
+				marginLeft:'16%'
 			}}>
-				<ScrollView style={{
-					width:'100%',
-					maxHeight:'100%',
+				<View style={{
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					width: '100%',
+					//height: '60%',
+					paddingLeft: '2%',
 				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						//height: '60%',
-						paddingLeft: '2%',
-					}}>
-						
-						<ShadowedBox 
-							width={140} 
-							height={110}
-							//square 
-							margin={5}
-							touchable
-							onPress={() => navigation.navigate('Server Pick Your Station')}>
+					
+					<ShadowedBox 
+						width={140} 
+						height={110}
+						//square 
+						margin={5}
+						touchable
+						onPress={() => navigation.navigate('Server Pick Your Station')}>
+						<View style={{
+							width: '100%',
+							aspectRatio: 1,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}>
+							<Image
+								source={require('assets/Server.png')}
+								style={{
+									width: '50%',
+									height: '50%',
+									overflow: 'hidden',
+									resizeMode: 'contain',
+									margin: 5
+								}} />
+							
 							<View style={{
-								width: '100%',
+								width: '40%',
 								aspectRatio: 1,
-								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center'
 							}}>
-								<Image
-									source={require('assets/Server.png')}
-									style={{
-										width: '50%',
-										height: '50%',
-										overflow: 'hidden',
-										resizeMode: 'contain',
-										margin: 5
-									}} />
-								
 								<View style={{
-									width: '40%',
+									width: '100%',
 									aspectRatio: 1,
 									alignItems: 'center',
-									justifyContent: 'center'
+									justifyContent: 'space-around',
+									flexWrap: 'wrap',
+									flexDirection: 'column',
 								}}>
-									<View style={{
-										width: '100%',
-										aspectRatio: 1,
-										alignItems: 'center',
-										justifyContent: 'space-around',
-										flexWrap: 'wrap',
-										flexDirection: 'column',
+									<Text style={{
+										fontSize: 11, 
+										fontWeight: 'bold',
+										marginBottom: 10,
 									}}>
-										<Text style={{
-											fontSize: 11, 
-											fontWeight: 'bold',
-											marginBottom: 10,
-										}}>
-											Server
-										</Text>
+										Server
+									</Text>
 
-										<View style={styles.sectionTitle}>
-											<Text style={{
-												fontSize: 10, 
-											}}>
-												Servers: {serverCount}
-											</Text>
-										</View>
+									<View style={styles.sectionTitle}>
+										<Text style={{
+											fontSize: 10, 
+										}}>
+											Servers: {serverCount}
+										</Text>
 									</View>
 								</View>
-								
 							</View>
-						</ShadowedBox>
+							
+						</View>
+					</ShadowedBox>
 
-						<ShadowedBox 
-							width={140} 
-							height={110}
-							//square 
-							margin={5}
-							touchable
-							onPress={() => navigation.navigate('Runner Pick Your Station')}>
+					<ShadowedBox 
+						width={140} 
+						height={110}
+						//square 
+						margin={5}
+						touchable
+						onPress={() => navigation.navigate('Runner Pick Your Station')}>
+						<View style={{
+							width: '100%',
+							aspectRatio: 1,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}>
+							<Image
+								source={require('assets/Runner.png')}
+								style={{
+									width: '50%',
+									height: '50%',
+									overflow: 'hidden',
+									resizeMode: 'contain',
+									margin: 5
+								}} />
+							
 							<View style={{
-								width: '100%',
+								width: '40%',
 								aspectRatio: 1,
-								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center'
 							}}>
-								<Image
-									source={require('assets/Runner.png')}
-									style={{
-										width: '50%',
-										height: '50%',
-										overflow: 'hidden',
-										resizeMode: 'contain',
-										margin: 5
-									}} />
-								
 								<View style={{
-									width: '40%',
+									width: '100%',
 									aspectRatio: 1,
 									alignItems: 'center',
-									justifyContent: 'center'
+									justifyContent: 'space-around',
+									flexWrap: 'wrap',
+									flexDirection: 'column',
 								}}>
-									<View style={{
-										width: '100%',
-										aspectRatio: 1,
-										alignItems: 'center',
-										justifyContent: 'space-around',
-										flexWrap: 'wrap',
-										flexDirection: 'column',
+									<Text style={{
+										fontSize: 11, 
+										fontWeight: 'bold',
+										marginBottom: 10,
 									}}>
-										<Text style={{
-											fontSize: 11, 
-											fontWeight: 'bold',
-											marginBottom: 10,
-										}}>
-											Runner
-										</Text>
+										Runner
+									</Text>
 
-										<View style={styles.sectionTitle}>
-											<Text style={{
-												fontSize: 10, 
-											}}>
-												Runners: {runnerCount}
-											</Text>
-										</View>
+									<View style={styles.sectionTitle}>
+										<Text style={{
+											fontSize: 10, 
+										}}>
+											Runners: {runnerCount}
+										</Text>
 									</View>
 								</View>
-								
 							</View>
-						</ShadowedBox>
+							
+						</View>
+					</ShadowedBox>
 
 
-						<ShadowedBox 
-							width={140} 
-							height={110}
-							//square 
-							margin={5}
-							touchable
-							onPress={() => navigation.navigate('Manager Dashboard')}>
+					<ShadowedBox 
+						width={140} 
+						height={110}
+						//square 
+						margin={5}
+						touchable
+						onPress={() => navigation.navigate('Manager Dashboard')}>
+						<View style={{
+							width: '100%',
+							aspectRatio: 1,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}>
+							<Image
+								source={require('assets/Manager.png')}
+								style={{
+									width: '50%',
+									height: '50%',
+									overflow: 'hidden',
+									resizeMode: 'contain',
+									margin: 5
+								}} />
+							
 							<View style={{
-								width: '100%',
+								width: '40%',
 								aspectRatio: 1,
-								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center'
 							}}>
-								<Image
-									source={require('assets/Manager.png')}
-									style={{
-										width: '50%',
-										height: '50%',
-										overflow: 'hidden',
-										resizeMode: 'contain',
-										margin: 5
-									}} />
-								
 								<View style={{
-									width: '40%',
+									width: '100%',
 									aspectRatio: 1,
 									alignItems: 'center',
-									justifyContent: 'center'
+									justifyContent: 'space-around',
+									flexWrap: 'wrap',
+									flexDirection: 'column',
 								}}>
-									<View style={{
-										width: '100%',
-										aspectRatio: 1,
-										alignItems: 'center',
-										justifyContent: 'space-around',
-										flexWrap: 'wrap',
-										flexDirection: 'column',
+									<Text style={{
+										fontSize: 11, 
+										fontWeight: 'bold',
+										marginBottom: 10,
 									}}>
-										<Text style={{
-											fontSize: 11, 
-											fontWeight: 'bold',
-											marginBottom: 10,
-										}}>
-											Manager
-										</Text>
+										Manager
+									</Text>
 
-										<View style={styles.sectionTitle}>
-											<Text style={{
-												fontSize: 9, 
-											}}>
-												Managers: 1
-											</Text>
-										</View>
+									<View style={styles.sectionTitle}>
+										<Text style={{
+											fontSize: 9, 
+										}}>
+											Managers: 1
+										</Text>
 									</View>
 								</View>
-								
 							</View>
-						</ShadowedBox>
-					</View>
-				</ScrollView>
-			</View>
+							
+						</View>
+					</ShadowedBox>
+				</View>
+			</ScrollView>
 		</View>
 	);
 }

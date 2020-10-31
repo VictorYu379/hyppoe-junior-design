@@ -94,7 +94,7 @@ export default function PickYourTablet({route, navigation }) {
 	
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -107,12 +107,10 @@ export default function PickYourTablet({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
-			}}>
-				<ScrollView style={{
+			<ScrollView style={{
 					width:'100%',
 					maxHeight:'100%',
+					marginLeft:'16%'
 				}}>
 					<View style={{
 						flexWrap: 'wrap',
@@ -121,11 +119,9 @@ export default function PickYourTablet({route, navigation }) {
 						//height: '60%',
 						paddingLeft: '2%',
 					}}>
-					{tabletList}
-						
+						{tabletList}	
 					</View>
 				</ScrollView>
-			</View>
 		</View>
 	);
 }

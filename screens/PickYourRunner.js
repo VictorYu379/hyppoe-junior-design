@@ -33,7 +33,7 @@ export default function PickYourRunner({route, navigation }) {
 				//square 
 				margin={5}
 				touchable
-				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerKey:item.key})}>
+				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id})}>
 				<View style={{
 					width: '100%',
 					aspectRatio: 1,
@@ -96,7 +96,7 @@ export default function PickYourRunner({route, navigation }) {
 	
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -109,25 +109,20 @@ export default function PickYourRunner({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
+			<ScrollView style={{
+				width:'100%',
+				maxHeight:'100%',
+				marginLeft:'16%'
 			}}>
-				<ScrollView style={{
-					width:'100%',
-					maxHeight:'100%',
+				<View style={{
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					width: '100%',
+					//height: '60%'
 				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						//height: '60%',
-						paddingLeft: '2%',
-					}}>
 					{runnerList}
-						
-					</View>
-				</ScrollView>
-			</View>
+				</View>
+			</ScrollView>
 		</View>
 	);
 }
