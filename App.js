@@ -296,6 +296,14 @@ export default function App() {
 							}}
 						/>
 						<Stack.Screen
+							name="Total Inventory"
+							component={TotalInventoryScreen}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
 							name="Station Alerts Screen"
 							component={StationAlertsScreen}
 							options={{

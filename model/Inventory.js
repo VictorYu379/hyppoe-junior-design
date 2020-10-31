@@ -144,7 +144,7 @@ export default class Inventory {
         return Promise.all([this.updateDrinkTypeInfo(drink), this.updateDrinkQuantity(drink)]);
     }
 
-    addDrink(drink) {
+    addDrinkType(drink) {
         return Promise.all([
             dbManager.createDrinkTypeInfo({
                 icon : drink.icon || "",
@@ -154,7 +154,13 @@ export default class Inventory {
                 pricePerUnit : drink.pricePerUnit,
                 alert : drink.alert,
                 costPerUnit : drink.costPerUnit
-            }), 
+            }),  
+        ])
+    }
+
+    addDrink(drink) {
+        console.log("Type: ", drink.typeId);
+        return Promise.all([
             dbManager.createDrinkInventory(this.id, {
                 details: drink.details || "",
                 drinkType: drink.typeId || "",
