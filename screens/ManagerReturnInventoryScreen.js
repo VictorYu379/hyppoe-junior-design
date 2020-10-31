@@ -137,7 +137,6 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                                 var onPress = () => {
                                     var station = this.state.stations[this.state.stationSelected];
                                     var selectedDrink = station.findDrinkWithDrinkType(this.state.drinks[index].name);
-                                    console.log(selectedDrink);
                                     this.returnInventoryModal.inputDrinkAndStation(selectedDrink, station.name);
                                     this.setState({
                                         returnInventoryModalVisible: true,

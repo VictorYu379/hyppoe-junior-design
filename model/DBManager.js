@@ -163,9 +163,7 @@ class DBManager {
 
     async updateDrinkInStation(stationId, updated) {
         var data = await this.getDrinksInStationHandle(stationId).where("drinkType", "==", updated.drinkType).get();
-        var id = data.docs[0].id;
-        console.log(id, updated);
-        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).update(updated);
+        this.getDrinksInStationHandle(stationId).doc(data.docs[0].id).set(updated);
     }
 
     updateDrinkInInventory(inventoryId, drinkId, data) {
@@ -196,30 +194,12 @@ class DBManager {
         .catch(e => {console.log(e)});
     }
 
-    upload_Image(eventId, imgFile) {
-        // Unimplemented.
-        /*const blob = FetchBlob.polyfill.Blob;
-        const fs = FetchBlob.fs;
-        window.XMLHttpRequest = FetchBlob.XMLHttpRequest;
-        window.Blob = blob;
-        const image = FetchBlob.wrap(imgFile);
-
-        let photoBlob = null;
-        let url = null;
-        ref = this.store.ref().child(eventId).child("drinks");
-        blob.build(image, {type: "image/jpg"})
-            .then((blob) => {
-                photoBlob = blob;
-                return ref.put(blob, {contentType: "image/jpg"});
-            })
-            .then((snap) => {
-                url = snap.downloadURL;
-                photoBlob.close();
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-        return url;*/
+    uploadImage(eventId, imgFile) {
+        console.log("Event: ", eventId);
+        fetch(imgFile).then(data => {
+            console.log("imgFile: ", imgFile);
+            this.store.ref().child(eventId).child("drinks").put(data).catch(e => console.log(e));
+        }).catch(e => console.log(e));
     }
 
     // return Promise<DocumentReference>
@@ -234,52 +214,36 @@ class DBManager {
         return this.dbh.collection("DrinkType").add(data);
     }
 
-    async createNewJob(job, drinks, pairItems) {
+    async createNewJob(job, pairItems) {
         const res = await this.dbh.collection("Jobs").add(job);
-        console.log(res.id);
+        // console.log(res.id);
         const id = res.id;
-        const ref = this.dbh.collection("Jobs").doc(id);
-        for (let drink of drinks) {
-            await ref.collection("drinks").add(drink);
-        }
+        const ref = this.getJobHandle(id);
         for (let pairItem of pairItems) {
             await ref.collection("pairItems").add(pairItem);
         }
         return id;
     }
 
-    updateJob(drink, stationKey, status, runnerId) {
+    updateJob(id, drink, status, runnerId) {
+        console.log(id);
         const baseRef = this.dbh.collection("Jobs");
         baseRef.get()
         .then(snapshot => {
 		    console.log("Drinks: ", snapshot.size);
 		    snapshot.forEach(snap => {
-                if (snap.data().stationKey === stationKey) {
-                    let found = false;
-                    let id = "";
-                    baseRef.doc(snap.id)
-                        .collection("drinks")
-                        .get()
-                        .then(snapshot => {
-                            snapshot.forEach(function(childSnapshot) {
-                                if (childSnapshot.data().drinkType == drink.drinkType) {
-                                    found = true;
-                                    id = childSnapshot.id;
-                                    console.log("Found: ", id);
-                                }
-                            });
-                        });
-                    if (found) {
-                        let newData = snap.data();
-                        if (status != null) {
-                            newData.status = status;
-                        }
-                        if (runnerId != null) {
-                            newData.runnderId = runnerId;
-                        }
-                        baseRef.doc(snap.id).update(newData);
-                        baseRef.doc(snap.id).collection("drinks").doc(id).update(drink);
+                
+                if (snap.id === id) {
+                    console.log("found: ", id);
+                    let newData = snap.data();
+                    if (status != null) {
+                        newData.status = status;
                     }
+                    if (runnerId != null) {
+                        newData.runnerId = runnerId;
+                    }
+                    newData.drink = drink;
+                    baseRef.doc(snap.id).update(newData);
                 }
 		       	console.log("snap id: ", snap.id);
 		    })

@@ -469,7 +469,7 @@ export default class InputBlankInventoryModal extends React.Component {
                                         drinkType: {
                                             ...this.state.drink.drinkType,
                                             id:   this.processName(this.state.Item.Name),
-                                            icon: this.state.Item.ImageURI,
+                                            icon: this.state.Item.Image.uri,
                                             name: this.state.Item.Name,
                                             costPerUnit: this.state.Item.Cost,
                                             ouncePerUnit: this.state.Item.Ounces,

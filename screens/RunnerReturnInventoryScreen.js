@@ -5,22 +5,23 @@ import StationBox from 'components/StationBox';
 import DrinkBox from 'components/DrinkBox';
 import InventoryTopBox from 'components/InventoryTopBox';
 import ReturnInventoryModal from 'components/ReturnInventoryModal';
-import { getGlobalStations } from 'model/Station';
+import Station, { getGlobalStations, getGlobalStation } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
+import Job from 'model/Job';
 
-export default class ManagerReturnInventoryScreen extends React.Component {
+export default class RunnerReturnInventoryScreen extends React.Component {
     state = {
         inventorySelected: null,
         scrollViewHeight: 0,
         elementHeight: 0,
         stationModalVisible: false,
-        stations: {},
+        station: new Station(),
         drinks: [],
+        pairItems: [],
         availableDrinkType: [],
-        curStation: null,
-        stationSelected: null,
+        stationSelected: false,
         totalValue: 0,
-        returnInventoryModalVisible: false
+        assignInventoryModalVisible: false
     };
 
      _scrollView1 = React.createRef();
@@ -33,30 +34,20 @@ export default class ManagerReturnInventoryScreen extends React.Component {
         this.setState({elementHeight: event.nativeEvent.layout.height});
     }
 
-    onDrinkBoxPressed(index) {
-        this.setState({inventorySelected: index});
-        this._scrollView1.current.scrollTo({
-            y: (this.state.elementHeight * 1.1) * index - 0.3 * this.state.scrollViewHeight
-        });
-    }
-
     onReturnInvModalSave(drink) {
-        var drinkToUpdate = this.state.drinks[this.state.inventorySelected];
+        var drinkToUpdate = this.state.station.drinks.find(drink => {
+            return drink.name === this.state.drinks[this.state.inventorySelected].name;
+        });
         drinkToUpdate.subtract(drink);
-        globalInventory.updateDrinkQuantity(drinkToUpdate);
-        Job.createNewJob(drink, this.state.stations[this.state.stationSelected].key, this.state.pairItems, "Transfer");
+        this.state.station.updateDrink(drinkToUpdate);
+        Job.createNewJob(drink, this.state.station.key, this.state.pairItems, "Transfer");
         this.setState({
             assignInventoryModalVisible: false,
             inventorySelected: null,
-            stationSelected: null,
+            stationSelected: false,
             availableDrinkType: [],
         });
         this.updateData();
-
-        this.setState({
-            returnInventoryModalVisible: false
-        });
-        this.state.curStation.updateDrink(drink);
     }
 
     updateData() {
@@ -68,8 +59,8 @@ export default class ManagerReturnInventoryScreen extends React.Component {
             newStations[station.key] = station;
         });
         this.setState({
+            station: getGlobalStation(this.props.route.params.stationId),
             drinks: globalInventory.drinks,
-            stations: newStations,
             totalValue: newTotalValue
         });
     }
@@ -82,12 +73,12 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                 touchable
                 onPress={() => this.setState({
                     inventorySelected: null,
-                    stationSelected: null,
+                    stationSelected: false,
                     availableDrinkType: [],
                 })}>
                 <ReturnInventoryModal
                     ref={m => {this.returnInventoryModal = m}}
-                    visible={this.state.returnInventoryModalVisible} 
+                    visible={this.state.assignInventoryModalVisible} 
                     onSave={this.onReturnInvModalSave.bind(this)} />
                 <InventoryTopBox inventory={"Return"} touchable onPress={() => this.props.navigation.navigate("Return Inventory Detailed Data")}/>
                 <View style={styles.scrollsContainer}>
@@ -97,29 +88,18 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                             contentContainerStyle={{
                                 alignItems: 'center'
                             }}>
-                            {Object.keys(this.state.stations).map((stationId, index) => {
-                                var station = this.state.stations[stationId];
-                                if (station.deleted === true) {
-                                    return;
-                                }
-                                return (
-                                    <StationBox
-                                        verb={"Return to"}
-                                        key={index}
-                                        station={station}
-                                        totalValue={this.state.totalValue}
-                                        inventorySelected={this.state.stationSelected === station.key ? this.state.stationSelected : null}
-                                        greyed={this.state.stationSelected !== null && this.state.stationSelected !== station.key}
-                                        onPressStats={() => {
-                                            this.setState({
-                                                stationSelected: station.key,
-                                                curStation: station,
-                                                availableDrinkType: station.drinks.map(drink => drink.name)
-                                            });
-                                        }}
-                                        />
-                                );
-                            })}
+                            <StationBox
+                                verb={"Return to"}
+                                station={this.state.station}
+                                totalValue={this.state.totalValue}
+                                inventorySelected={this.state.stationSelected ? "" : null}
+                                onPressStats={() => {
+                                    this.setState({
+                                        stationSelected: true,
+                                        availableDrinkType: this.state.station.drinks.map(drink => drink.name)
+                                    });
+                                }}
+                                />
                         </ScrollView>
                     </View>
                     <View
@@ -135,11 +115,12 @@ export default class ManagerReturnInventoryScreen extends React.Component {
                                 var disabled = this.state.availableDrinkType.length == 0 || 
                                                 !this.state.availableDrinkType.includes(drink.name);
                                 var onPress = () => {
-                                    var station = this.state.stations[this.state.stationSelected];
-                                    var selectedDrink = station.findDrinkWithDrinkType(this.state.drinks[index].name);
-                                    console.log(selectedDrink);
-                                    this.returnInventoryModal.inputDrinkAndStation(selectedDrink, station.name);
-                                    this.setState({ returnInventoryModalVisible: true, });
+                                    var selectedDrink = this.state.station.findDrinkWithDrinkType(this.state.drinks[index].name);
+                                    this.returnInventoryModal.inputDrinkAndStation(selectedDrink, this.state.station.name);
+                                    this.setState({
+                                        assignInventoryModalVisible: true,
+                                        inventorySelected: index
+                                    });
                                 };
                                 return (
                                     <DrinkBox

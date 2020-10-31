@@ -177,13 +177,7 @@ export default function ManagerIndividualStationDataScreen({ route, navigation }
 								Available Inventory
 						</Text>
 					</View>
-
-		
-
 				</View>
-
-
-
 			</ShadowedBox>
 
 

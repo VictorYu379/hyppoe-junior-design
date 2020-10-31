@@ -17,7 +17,7 @@ export default function ServerPendingInventoryScreen({ route, navigation }) {
 		setJobList(JobList);
 	}, [])
 
-	console.log(JobList)
+	// console.log(JobList)
 
 	const getstationKey = () => {
 		return getGlobalStation(stationId).key

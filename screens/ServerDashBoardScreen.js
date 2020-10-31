@@ -344,7 +344,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => {navigation.navigate("Server Return Inventory Screen");}}
+					onPress={() => {navigation.navigate("Server Return Inventory Screen", { stationId });}}
 				>
 
 
@@ -564,7 +564,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => {navigation.navigate("Server Request Inventory Screen");}}
+					onPress={() => {navigation.navigate("Server Request Inventory Screen", { stationId });}}
 				>
 
 					<View style={{
