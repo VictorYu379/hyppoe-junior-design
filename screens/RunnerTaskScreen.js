@@ -25,21 +25,18 @@ export default class RunnerTaskScreen extends React.Component {
 
 	updateData() {
 		const jobs = getGlobalJobs();
-		
+		console.log(jobs);
 		let UpdatedJobs = [];
 		let cnt = 0;
 		for (let job of jobs) {
-			for (let drink of job.drinks) {
-				cnt++;
-				UpdatedJobs.push({
-					id: cnt + "",
-					type: job.type,
-					status: job.status,
-					runnerId: job.runner === undefined ? "Unassigned" : job.runner.name,
-					stationKey: job.stationKey,
-					drink: drink
-				});
-			}
+			UpdatedJobs.push({
+				id: job.id,
+				type: job.type,
+				status: job.status,
+				runnerId: job.runner === undefined ? "Unassigned" : job.runner.name,
+				stationKey: job.stationKey,
+				drink: job.drink
+			});
 		}
 		const runnerJobs = Job.getRunnerJobs(this.state.runnerId);
 		let displayJobs = runnerJobs.map(job => {return {station: job.stationKey, status: job.status}});
@@ -90,7 +87,7 @@ export default class RunnerTaskScreen extends React.Component {
 		})
 		const taskList = this.state.tasks.map((task, index) => {
 			return (
-				<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				<ShadowedBox width={'40%'} height={100} key={task.id} margin={5} touchable onPress={() => {
 						this.setState({
 							confirmInventoryModalVisible: true,
 							taskSelected: this.state.tasks[index],
