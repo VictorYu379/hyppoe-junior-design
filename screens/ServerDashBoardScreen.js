@@ -10,7 +10,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
-	const stationId = "P7HFuidmDgcaRRovoRjK"
+	const {stationId, tabletKey} = route.params
 	// Reading server from global storage
 	// const [server, setServer] = useState();
 	const [stationInventorySummary, setstationInventorySummary] = useState([]);
@@ -96,7 +96,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 							Station {serverDashboardHeaderStat[1]}:{serverDashboardHeaderStat[2]}
 						</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>
-							Server Tablet: {serverDashboardHeaderStat[0]}
+							Server Tablet: {tabletKey}
 						</Text>
 					</View>
 

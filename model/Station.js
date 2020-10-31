@@ -3,6 +3,8 @@ import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Server from 'model/Server';
 import { globalEvent } from 'model/Event';
+import { globalRunner } from 'model/Runner';
+//import { get } from 'http';
 
 const STATION_KEY = "@station"
 
@@ -288,6 +290,50 @@ export default class Station {
         }
         
         return [res, key, name];
+    }
+
+
+    //returns list of all stations with [id, name, stationkey]
+    static getPickYourStationData() {
+        var stations = getGlobalStations();
+        var res = []
+        stations.map(station => {
+            var item = {id:station.id, name:station.name, stationkey:station.key}
+            res.push(item)
+        })
+        return res
+    }
+
+    //return list of all servers with [id, serverkey] in station
+    static getPickYourTabletData(stationId) {
+        var station = globalStations[stationId];
+        var res = []
+        if (station != undefined) {
+            station.servers.map(server => {
+                var item = {id: server.id, key: server.tabletId}
+                res.push(item)
+            })
+        }
+        return res
+    }
+
+    //return list of all runners with [id, runnerkey] in station
+    static getPickYourRunnerData(stationId) {
+        var station = globalStations[stationId];
+        var res = []
+        if (station != undefined) {
+            console.log(station.runners)
+            station.runners.map(runnerId => {
+                actualRunner = globalRunner[runnerId]
+
+                if (actualRunner != undefined) {
+                    console.log(actualRunner)
+                    var item = {id: actualRunner.id, key: actualRunner.key}
+                    res.push(item)
+                }
+            })
+        }
+        return res
     }
 
     // Returns the station inventory details (avail of total qty, total available percentage) based on stationId.
