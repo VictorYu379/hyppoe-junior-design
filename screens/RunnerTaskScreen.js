@@ -6,6 +6,7 @@ import { getGlobalStations } from 'model/Station';
 import { globalInventory } from 'model/Inventory';
 import Job, { getGlobalJobs } from '../model/Job';
 import Runner, { globalRunner } from '../model/Runner';
+import { globalStations } from '../model/Station';
 
 
 export default class RunnerTaskScreen extends React.Component {
@@ -13,6 +14,7 @@ export default class RunnerTaskScreen extends React.Component {
 		confirmInventoryModalVisible: false,
 		taskIndexSelected: 0,
 		taskSelected: null,
+		taskPickUp: false,
 		tasks: [],
 		runnerId: "",
 		runnerName: "",
@@ -25,7 +27,6 @@ export default class RunnerTaskScreen extends React.Component {
 
 	updateData() {
 		const jobs = getGlobalJobs();
-		console.log(jobs);
 		let UpdatedJobs = [];
 		let cnt = 0;
 		for (let job of jobs) {
@@ -39,7 +40,17 @@ export default class RunnerTaskScreen extends React.Component {
 			});
 		}
 		const runnerJobs = Job.getRunnerJobs(this.state.runnerId);
-		let displayJobs = runnerJobs.map(job => {return {station: job.stationKey, status: job.status}});
+		// generate station key to name map
+		this.keyNameMap = new Map();
+		for (let val of Object.values(globalStations)) {
+			this.keyNameMap.set(Number(val.key), val.name);
+		}
+		let displayJobs = runnerJobs.map(job => {
+			return {
+				station: this.keyNameMap.get(Number(job.to.substring(8))), 
+				status: job.status
+			}
+		});
         this.setState({
 			tasks: UpdatedJobs,
 			displayJobs: displayJobs,
@@ -51,19 +62,20 @@ export default class RunnerTaskScreen extends React.Component {
 
 	onConfirmInvModalSave(drink) {
 		let curTask = this.state.taskSelected;
+		console.log("Cur task: ", curTask.status);
 		if (this.state.taskSelected.status === "Unstarted") {
 			Job.updateJob(drink, this.state.taskSelected.stationKey, "In transit", this.state.runnerId);
 			curTask.status = "In transit";
 			curTask.drink = drink;
 			curTask.runnerId = this.state.runnerName;
 		} else if (this.state.taskSelected.status === "In transit") {
-			Job.updateJob(drink, this.state.taskSelected.stationKey, "Completed", null);
-			curTask.status = "Completed";
+			Job.updateJob(drink, this.state.taskSelected.stationKey, "Complete", null);
+			curTask.status = "Complete";
 			curTask.drink = drink;
+			this.state.displayJobs[this.state.taskIndexSelected].status = "Complete";
 		}
 		const tasks = this.state.tasks;
 		tasks[this.state.taskIndexSelected] = curTask;
-		console.log(tasks.length);
 		this.setState({
 			tasks: tasks,
 			confirmInventoryModalVisible: false
@@ -73,13 +85,13 @@ export default class RunnerTaskScreen extends React.Component {
 	render() {
 		const displayJobList = this.state.displayJobs.map((task, index) => {
 			return (
-				<View key="index" style={styles.rowView}>
+				<View key={index} style={styles.rowView}>
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 12, color: 'gray', justifyContent: 'flex-start'}}> 
-							Station { task.stationKey }
+							Station { index }: { task.station }
 						</Text>
-						<Text style={[task.status == "Complete"? styles.completedText : styles.pendingText]}>
-								{task.status == "Complete"?"Complete":"Pending"}
+						<Text style={[task.status === "Complete"? styles.completedText : styles.pendingText]}>
+								{task.status === "Complete"?"Complete":"Pending"}
 						</Text>
 					</View>
 				</View>
@@ -87,12 +99,14 @@ export default class RunnerTaskScreen extends React.Component {
 		})
 		const taskList = this.state.tasks.map((task, index) => {
 			return (
-				<ShadowedBox width={'40%'} height={100} key={task.id} margin={5} touchable onPress={() => {
+				<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
 						this.setState({
 							confirmInventoryModalVisible: true,
 							taskSelected: this.state.tasks[index],
-							taskIndexSelected: index
+							taskIndexSelected: index,
+							taskPickUp: task.status === "Unstarted" ? true : false
 						});
+						console.log("Down Cur status: ", this.state.tasks[index].status);
 						this.confirmInventoryModal
 							.inputDrinkAndStation(
 								this.state.tasks[index].drink, 
@@ -139,8 +153,8 @@ export default class RunnerTaskScreen extends React.Component {
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 							Inventory
 						</Text>
-						<Text style={styles.completedText}>
-								{"Complete"}
+						<Text style={[task.status !== "Unstarted"? styles.completedText : styles.pendingText]}>
+								{ task.status == "Complete" || task.status == "Confirmed" ? "Complete" : "Pending" }
 						</Text>
 					</View>
 
@@ -171,6 +185,7 @@ export default class RunnerTaskScreen extends React.Component {
 				<ConfirmInventoryModal
 					ref={m => {this.confirmInventoryModal = m}}
 					visible={this.state.confirmInventoryModalVisible}
+					pickUp={this.state.taskPickUp}
 					onSave={this.onConfirmInvModalSave.bind(this)}
 				/>
 				<ShadowedBox 
