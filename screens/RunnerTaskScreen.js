@@ -30,7 +30,7 @@ export default class RunnerTaskScreen extends React.Component {
 		let cnt = 0;
 		for (let job of jobs) {
 			UpdatedJobs.push({
-				id: cnt + "",
+				id: job.id,
 				type: job.type,
 				status: job.status,
 				runnerId: job.runner === undefined ? "Unassigned" : job.runner.name,
@@ -87,7 +87,7 @@ export default class RunnerTaskScreen extends React.Component {
 		})
 		const taskList = this.state.tasks.map((task, index) => {
 			return (
-				<ShadowedBox width={'40%'} height={100} key={index} margin={5} touchable onPress={() => {
+				<ShadowedBox width={'40%'} height={100} key={task.id} margin={5} touchable onPress={() => {
 						this.setState({
 							confirmInventoryModalVisible: true,
 							taskSelected: this.state.tasks[index],
