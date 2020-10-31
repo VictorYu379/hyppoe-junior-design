@@ -101,7 +101,9 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 					height={'23%'}  
 					margin={5}
 					touchable
-					onPress={() => {navigation.navigate("Runner Task Screen");}}
+					onPress={() => {navigation.navigate("Runner Task Screen", {
+						stationId: stationId,
+					});}}
 				>
 					<View style={{
 						flexDirection: 'row',
