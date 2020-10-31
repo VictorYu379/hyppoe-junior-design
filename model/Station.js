@@ -3,7 +3,7 @@ import Drink from 'model/Drink';
 import PairItem from 'model/PairItem';
 import Server from 'model/Server';
 import { globalEvent } from 'model/Event';
-import { globalRunner } from 'model/Runner';
+import Runner, { globalRunner } from 'model/Runner';
 //import { get } from 'http';
 
 const STATION_KEY = "@station"
@@ -19,13 +19,13 @@ export default class Station {
     pairItems;  // List<PairItems>
 
     // Can be deprecated as now we have direct access to globalStations of an Event
-    static getStations(ids) {
-        var promises = ids.map(id => {
-            var station = new Station({id});
-            return station.init();
-        });
-        return Promise.all(promises);
-    }
+    // static getStations(ids) {
+    //     var promises = ids.map(id => {
+    //         var station = new Station({id});
+    //         return station.init();
+    //     });
+    //     return Promise.all(promises);
+    // }
 
     // deprecated functions
     // static async setInstance(id) {
@@ -322,15 +322,9 @@ export default class Station {
         var station = globalStations[stationId];
         var res = []
         if (station != undefined) {
-            console.log(station.runners)
-            station.runners.map(runnerId => {
-                actualRunner = globalRunner[runnerId]
-
-                if (actualRunner != undefined) {
-                    console.log(actualRunner)
-                    var item = {id: actualRunner.id, key: actualRunner.key}
-                    res.push(item)
-                }
+            station.runners.map(runner => {
+                var item = {id: runner.id, key: runner.key}
+                res.push(item)
             })
         }
         return res
@@ -412,25 +406,26 @@ export default class Station {
         Object.assign(this, data);
     }
 
-    async init() {
-        var station = await dbManager.getStation(this.id);
-        Object.assign(this, station.data());
-        var [drinks, pairItems] = await Promise.all([
-            dbManager.getDrinksInStation(this.id),
-            dbManager.getPairItemsInStation(this.id)
-        ]);
-        this.drinks = drinks.docs.map(drink => new Drink({
-            ...drink.data(),
-            id: drink.id
-        }));
-        this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
-        await Promise.all(this.drinks.map(drink => drink.init()));
-        await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
-        this.servers = this.servers.filter(server => server !== "")
-                                       .map(server => new Server(server));
-        await Promise.all(this.servers.map(server => server.init()));
-        return this;
-    }
+    // deprecated
+    // async init() {
+    //     var station = await dbManager.getStation(this.id);
+    //     Object.assign(this, station.data());
+    //     var [drinks, pairItems] = await Promise.all([
+    //         dbManager.getDrinksInStation(this.id),
+    //         dbManager.getPairItemsInStation(this.id)
+    //     ]);
+    //     this.drinks = drinks.docs.map(drink => new Drink({
+    //         ...drink.data(),
+    //         id: drink.id
+    //     }));
+    //     this.pairItems = pairItems.docs.map(pairItem => new PairItem(pairItem.data()));
+    //     await Promise.all(this.drinks.map(drink => drink.init()));
+    //     await Promise.all(this.pairItems.map(pairItem => pairItem.init()));
+    //     this.servers = this.servers.filter(server => server !== "")
+    //                                    .map(server => new Server(server));
+    //     await Promise.all(this.servers.map(server => server.init()));
+    //     return this;
+    // }
 
     getTotalValue() {
         var totalValue = 0;
@@ -466,7 +461,10 @@ async function update(data) {
     });
     station.servers = station.servers.filter(server => server !== "")
                                      .map(server => new Server(server));
+    station.runners = station.runners.filter(runner => runner !== "")
+                                     .map(runner => new Runner(runner));
     await Promise.all(station.servers.map(server => server.init()));
+    await Promise.all(station.runners.map(runner => runner.init()));
     globalStations[station.id] = station;
 }
 
