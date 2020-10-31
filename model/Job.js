@@ -351,9 +351,9 @@ export default class Job {
             .catch(e => console.log(e)); 
     }
 
-    static updateJob(drink, stationKey, status, runnerId) {
+    static updateJob(id, drink, status, runnerId) {
         drink = Drink.parseDrink(drink);
-        dbManager.updateJob(drink, stationKey, status, runnerId);
+        dbManager.updateJob(id, drink, status, runnerId);
     }
 }
 

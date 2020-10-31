@@ -70,7 +70,7 @@ export default function RunnerTaskScreen({ navigation }) {
 		} else if (taskSelected.status === "In transit") {
 			curStatus = "Complete";
 		}
-		Job.updateJob(drink, taskSelected.type === "Return" ? taskSelected.from : taskSelected.to, curStatus, null);
+		Job.updateJob(curTask.jobId, drink, curStatus, curRunner);
 		curTask.drink = drink;
 		curTask.status = curStatus;
 		curTask.runner = curRunner;
