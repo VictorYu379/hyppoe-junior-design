@@ -47,6 +47,12 @@ import ReturnInventoryDetailedDataScreen from './screens/ReturnInventoryDetailed
 import StationAlertsScreen from './screens/StationAlertsScreen';
 import RunnerTaskScreen from './screens/RunnerTaskScreen';
 
+//Pick Your Roles
+import PickYourRole from './screens/PickYourRole';
+import ServerPickYourStation from './screens/ServerPickYourStation';
+import PickYourTablet from './screens/PickYourTablet';
+import RunnerPickYourStation from './screens/RunnerPickYourStation';
+import PickYourRunner from './screens/PickYourRunner';
 
 
 const Stack = createStackNavigator();
@@ -67,6 +73,46 @@ export default function App() {
 						<Stack.Screen
 							name="Dummy Page"
 							component={DummyScreen}/>
+						<Stack.Screen
+							name="Pick Your Role"
+							component={PickYourRole}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Server Pick Your Station"
+							component={ServerPickYourStation}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Runner Pick Your Station"
+							component={RunnerPickYourStation}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Pick Your Tablet"
+							component={PickYourTablet}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
+						<Stack.Screen
+							name="Pick Your Runner"
+							component={PickYourRunner}
+							options={{
+								header: ({ navigation, props }) => {
+									return <HyppoeHeader navigation={navigation} mode="full"/>;
+								}
+							}}/>
 						<Stack.Screen
 							name="Manager Dashboard"
 							component={ManagerDashBoardScreen}
