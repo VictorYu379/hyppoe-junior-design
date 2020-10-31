@@ -194,30 +194,12 @@ class DBManager {
         .catch(e => {console.log(e)});
     }
 
-    upload_Image(eventId, imgFile) {
-        // Unimplemented.
-        /*const blob = FetchBlob.polyfill.Blob;
-        const fs = FetchBlob.fs;
-        window.XMLHttpRequest = FetchBlob.XMLHttpRequest;
-        window.Blob = blob;
-        const image = FetchBlob.wrap(imgFile);
-
-        let photoBlob = null;
-        let url = null;
-        ref = this.store.ref().child(eventId).child("drinks");
-        blob.build(image, {type: "image/jpg"})
-            .then((blob) => {
-                photoBlob = blob;
-                return ref.put(blob, {contentType: "image/jpg"});
-            })
-            .then((snap) => {
-                url = snap.downloadURL;
-                photoBlob.close();
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-        return url;*/
+    uploadImage(eventId, imgFile) {
+        console.log("Event: ", eventId);
+        fetch(imgFile).then(data => {
+            console.log("imgFile: ", imgFile);
+            this.store.ref().child(eventId).child("drinks").put(data).catch(e => console.log(e));
+        }).catch(e => console.log(e));
     }
 
     // return Promise<DocumentReference>

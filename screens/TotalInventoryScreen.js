@@ -6,6 +6,7 @@ import InputUpdateInventoryModal from 'components/InputUpdateInventoryModal';
 import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import { globalInventory } from 'model/Inventory';
 import { globalEvent } from 'model/Event';
+import { dbManager } from '../model/DBManager';
 
 
 export default class TotalInventory extends React.Component {
@@ -23,6 +24,7 @@ export default class TotalInventory extends React.Component {
 	onInvModalSave(drink) {
 		var newDrinks = this.state.drinks;
 		newDrinks[this.state.selectedDrink] = drink;
+		console.log(drink);
 		this.setState({
 			inputInvUpdateModalVisible: false,
 			drinks: newDrinks
@@ -35,6 +37,8 @@ export default class TotalInventory extends React.Component {
 		// create a new drinkType here
 		//let url = dbManager.uploadImage(this.state.inventoryId, drink.drinkType.icon);
 		//drink.drinkType.icon = url;
+		console.log("Icon: ", drink.drinkType.icon);
+		//dbManager.uploadImage(globalEvent.id, drink.drinkType.icon)
 
 		let newDrinks = this.state.drinks
 		newDrinks.push(drink);
@@ -45,7 +49,13 @@ export default class TotalInventory extends React.Component {
 		});
 
 		console.log("OK\n");
-		globalInventory.addDrink(drink).then(r => this.updateData());
+		globalInventory.addDrinkType(drink).then(r => {
+			console.log("Return value:", r[0].id);
+			let newDrink = {typeId: r[0].id, ...drink};
+			console.log("Type: ", newDrink.typeId);
+			globalInventory.addDrink(newDrink).catch(e => console.log(e));
+			this.updateData();
+		}).catch(e => console.log(e));
 	}
 
 	componentDidMount() {
@@ -54,6 +64,7 @@ export default class TotalInventory extends React.Component {
 
 	updateData() {
 		var [quantity, value] = globalInventory.getTotalInventory();
+		console.log(globalInventory.drinks);
 		this.setState({
 			drinks: globalInventory.drinks,
 			percentage: quantity > 0 ? 100 : 0,
