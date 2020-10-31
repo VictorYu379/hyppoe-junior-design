@@ -25,21 +25,18 @@ export default class RunnerTaskScreen extends React.Component {
 
 	updateData() {
 		const jobs = getGlobalJobs();
-		
+		console.log(jobs);
 		let UpdatedJobs = [];
 		let cnt = 0;
 		for (let job of jobs) {
-			for (let drink of job.drinks) {
-				cnt++;
-				UpdatedJobs.push({
-					id: cnt + "",
-					type: job.type,
-					status: job.status,
-					runnerId: job.runner === undefined ? "Unassigned" : job.runner.name,
-					stationKey: job.stationKey,
-					drink: drink
-				});
-			}
+			UpdatedJobs.push({
+				id: cnt + "",
+				type: job.type,
+				status: job.status,
+				runnerId: job.runner === undefined ? "Unassigned" : job.runner.name,
+				stationKey: job.stationKey,
+				drink: job.drink
+			});
 		}
 		const runnerJobs = Job.getRunnerJobs(this.state.runnerId);
 		let displayJobs = runnerJobs.map(job => {return {station: job.stationKey, status: job.status}});
