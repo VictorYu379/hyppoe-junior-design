@@ -233,7 +233,7 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 					height={'23%'} 
 					margin={5} 
 					touchable
-					onPress={() => {navigation.navigate("Runner Request Inventory");}}
+					onPress={() => {navigation.navigate("Runner Request Inventory", { stationId });}}
 				>
 					<View style={{
 						flexDirection: 'row',
@@ -295,7 +295,7 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 					height={'23%'}  
 					margin={5} 
 					touchable
-					onPress={() => {navigation.navigate("Runner Return Inventory");}}
+					onPress={() => {navigation.navigate("Runner Return Inventory", { stationId });}}
 				>
 					<View style={{
 						flexDirection: 'row',

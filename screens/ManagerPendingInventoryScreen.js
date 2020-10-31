@@ -31,7 +31,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 	const filterStation = () => {
 		let StationJobList = []
 		JobList.map(item => {
-			if(item.status == "Complete" || item.status == "Confirmed"){
+			if(item.status == "Complete"){
 				StationJobList.push(item)
 			}
 		});
@@ -207,7 +207,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 
 					<View style={styles.rowView}>
 						<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-							{item.from}
+							{item.to}
 						</Text>
 						<Text style={[styles.completedText]}>
 							Complete
