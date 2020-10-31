@@ -9,8 +9,8 @@ import Event from 'model/Event';
 export default function RunnerDashBoardScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
-	const stationId = "P7HFuidmDgcaRRovoRjK"
-	const runnerId = "GsvETNQP29tOOH9iwBRA"
+	//console.log(route.params)
+	const {runnerId, runnerKey, stationId} = route.params
 
 	// Reading runner from global storage
 	// const [runner, setRunner] = useState();
@@ -19,6 +19,7 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 	const [runnerTasks, setrunnerTasks] = useState([]);
 	const [requestStat, setrequestStat] = useState([]);
 	const [runnerHistorySummary, setrunnerHistorySummary] = useState([]);
+	const [runnerDashboardHeaderStat, setrunnerDashboardHeaderStat] = useState([]);
 	const [alerts, setalerts] = useState([]);
 	// The second argument [] is to make useEffect run only once (like componentDidMount)
 	useEffect(() => {
@@ -36,6 +37,8 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 		setrequestStat(requestStat);
 		var runnerHistorySummary = Job.getRunnerHistorySummary(runnerId);
 		setrunnerHistorySummary(runnerHistorySummary);
+		var runnerDashboardHeaderStat = Station.getServerDashboardHeaderData(stationId);
+		setrunnerDashboardHeaderStat(runnerDashboardHeaderStat);
 		var alerts = Event.getNumOfAlerts();
 		setalerts(alerts);
 		// Station.getInstance().then(station => console.log(station.name));
@@ -81,9 +84,15 @@ export default function RunnerDashBoardScreen({ route, navigation }) {
 							alignItems: 'flex-start',
 							margin: 10
 					}}>	
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:20, marginLeft:20}}>Runner DashBoard</Text>
-						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>Station1:Big Tent</Text>
-						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>Runner: 1</Text>
+						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:20, marginLeft:20}}>
+							Runner DashBoard
+						</Text>
+						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>
+							Station {runnerDashboardHeaderStat[1]}: {runnerDashboardHeaderStat[2]}
+						</Text>
+						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:8, marginLeft:20}}>
+							Runner: {runnerKey}
+						</Text>
 					</View>
 			</ShadowedBox>
 

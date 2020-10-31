@@ -9,6 +9,7 @@ import Event, { globalEvent } from 'model/Event';
 import Manager from 'model/Manager';
 import Job from 'model/Job';
 import Inventory from 'model/Inventory';
+import {globalServers} from 'model/Server';
 
 
 export default function PickYourRole({ navigation }) {
@@ -18,7 +19,7 @@ export default function PickYourRole({ navigation }) {
 	const [runnerCount, setrunnerCount] = useState([]);
 
 	useEffect(() => {
-		const serverCount = Station.getNumOfStations();
+		const serverCount = Station.getNumOfServers();
 		setserverCount(serverCount);
 		const runnerCount = Station.getNumOfRunners();
 		setrunnerCount(runnerCount);

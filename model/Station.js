@@ -389,6 +389,17 @@ export default class Station {
         return getGlobalStations().length;
     }
 
+    static getNumOfServers() {
+        var stations = getGlobalStations()
+        var res = 0
+        if (stations != undefined) {
+            stations.map(station => {
+                res += station.servers.length
+            })
+        }
+        return res
+    }
+
     static createNewStation(data) {
         var newStation = new Station(data);
         return dbManager.getStationCollectionHandle().add({

@@ -33,7 +33,7 @@ export default function PickYourRunner({route, navigation }) {
 				//square 
 				margin={5}
 				touchable
-				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerKey:item.key})}>
+				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id, runnerKey:item.key})}>
 				<View style={{
 					width: '100%',
 					aspectRatio: 1,
@@ -109,10 +109,8 @@ export default function PickYourRunner({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
-			}}>
 				<ScrollView style={{
+					marginLeft: '14%',
 					width:'100%',
 					maxHeight:'100%',
 				}}>
@@ -124,10 +122,9 @@ export default function PickYourRunner({route, navigation }) {
 						paddingLeft: '2%',
 					}}>
 					{runnerList}
-						
 					</View>
 				</ScrollView>
-			</View>
+			
 		</View>
 	);
 }

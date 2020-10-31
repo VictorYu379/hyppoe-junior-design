@@ -107,12 +107,10 @@ export default function PickYourTablet({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<View style={{
-				justifyContent:'center', 
-			}}>
 				<ScrollView style={{
 					width:'100%',
 					maxHeight:'100%',
+					marginLeft:'14%',
 				}}>
 					<View style={{
 						flexWrap: 'wrap',
@@ -125,7 +123,6 @@ export default function PickYourTablet({route, navigation }) {
 						
 					</View>
 				</ScrollView>
-			</View>
 		</View>
 	);
 }
