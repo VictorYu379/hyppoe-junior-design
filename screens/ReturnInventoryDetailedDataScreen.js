@@ -13,7 +13,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 	
 	const images = {
 		dropDownIcon: require('../assets/drop-down-arrow.png'),
-		dropUpIcon: require('../assets/drop-up-arrow.png')
+		dropUpIcon: require('../assets/drop-down-arrow.png')
 	}
 
 	const returnList = [
@@ -120,7 +120,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 					<Text style={styles.rowTitle}>{item.name}</Text>
 					<Text style={{
 						...styles.rowTitle, 
-						color: '#0070F7', 
+						color: '#0A47E9', 
 						fontSize: 20,
 						textAlign: "right",
 						flex: 1
@@ -154,7 +154,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 					renderHeader={listTitle}
 					renderContent={stationItemList}
 					onChange={setStations}
-					underlayColor='#f2f2f2'
+					underlayColor='#0A47E9'
 					expandMultiple={true}
 				/>
 			</View>
@@ -195,7 +195,7 @@ export default function ReturnInventoryDetailedDataScreen({ navigation }) {
 					/>
 					<Text style={{
 						...styles.rowTitle, 
-						color: '#0070F7', 
+						color: '#0A47E9', 
 						fontSize: 20,
 						textAlign: "right",
 						flex: 1

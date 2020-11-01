@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function RunnerTaskScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
@@ -26,15 +26,15 @@ export default function DummyScreen({ navigation }) {
 						<View style={styles.rowView}>
 							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
 								<Text style={{fontSize: 12, color: 'gray'}}>
-									Station 1: 
+									Station 1: Big Tent
 								</Text>
 								<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gray', marginLeft:0}}>
-									Big Tent
+									   {/* Big Tent  */}
 								</Text>
 							</View>
 
 
-							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
+							<Text style={{fontSize: 12, fontWeight: 'bold', color: '#ffcc00', margin:8}}>
 									Pending
 							</Text>
 						</View>
@@ -42,15 +42,15 @@ export default function DummyScreen({ navigation }) {
 						<View style={styles.rowView}>
 							<View style={{...styles.rowViewclose,width:'60%',margin:8}}>
 								<Text style={{fontSize: 12, color: 'gray'}}>
-									Station 2: 
+									Station 2: Small Tent
 								</Text>
 								<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gray', marginLeft:0}}>
-									Small Tent
+									{/* Small  */}
 								</Text>
 							</View>
 
 
-							<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gold', margin:8}}>
+							<Text style={{fontSize: 12, fontWeight: 'bold', color: '#ffcc00', margin:8}}>
 									Pending
 							</Text>
 						</View>
@@ -102,7 +102,7 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 								Inventory
 							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
 									Pending
 							</Text>
 						</View>
@@ -117,7 +117,7 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 								Station 1
 							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
 									Pending
 							</Text>
 						</View>
@@ -159,7 +159,7 @@ export default function DummyScreen({ navigation }) {
 								Inventory
 							</Text>
 							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'green'}}>
-									Completed
+									Complete
 							</Text>
 						</View>
 
@@ -173,7 +173,7 @@ export default function DummyScreen({ navigation }) {
 							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
 								Station 1
 							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gold'}}>
+							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
 									Pending
 							</Text>
 						</View>

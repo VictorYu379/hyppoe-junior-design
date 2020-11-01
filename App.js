@@ -11,12 +11,29 @@ import TotalInventoryStationOverviewScreen from './screens/TotalInventoryStation
 import AssignInventoryCreateStationScreen from './screens/AssignInventoryCreateStationScreen';
 import RunnerRequestInventoryScreen from './screens/RunnerRequestInventoryScreen';
 import RunnerReturnInventoryScreen from './screens/RunnerReturnInventoryScreen';
+import RunnerStationInventoryScreen from './screens/RunnerStationInventoryScreen';
 import HyppoeHeader from './components/HyppoeHeader';
 import ManagerReturnInventoryScreen from './screens/ManagerReturnInventoryScreen';
 import ManagerAssignInventoryScreen from './screens/ManagerAssignInventoryScreen';
 import ServerConfirmInventoryScreen from './screens/ServerConfirmInventoryScreen';
 import ServerRequestInventoryScreen from './screens/ServerRequestInventoryScreen';
 import ServerReturnInventoryScreen from './screens/ServerReturnInventoryScreen';
+import ServerPickYourStationScreen from './screens/ServerPickYourStationScreen';
+import IndividualStationInventoryDetailedDataScreen from './screens/IndividualStationInventoryDetailedDataScreen';
+import StationAlertsScreen from './screens/StationAlertsScreen';
+// import ManagerServerInventoryScreen from './screens/ManagerServerInventoryScreen';
+import RunnerHistoryScreen from './screens/RunnerHistoryScreen';
+import ReturnInventoryDetailedDataScreen from './screens/ReturnInventoryDetailedDataScreen';
+import TotalStationInventoryDetailedDataScreen from './screens/TotalStationInventoryDetailedDataScreen';
+import ManagerPendingInventoryScreen from './screens/TotalStationInventoryDetailedDataScreen';
+import ManagerIndividualStationDataScreen from './screens/ManagerIndividualStationDataScreen';
+import ManagerAvailableInventoryScreen from './screens/ManagerAvailableInventoryScreen';
+import ManagerDashBoardScreen from './screens/ManagerDashBoardScreen';
+import RunnerDashBoardScreen from './screens/RunnerDashBoardScreen';
+import RunnerTaskScreen from './screens/RunnerTaskScreen';
+import ServerDashBoardScreen from './screens/ServerDashBoardScreen';
+import ServerIndividualStationDataScreen from './screens/ServerIndividualStationDataScreen';
+import ServerPendingInventoryScreen from './screens/ServerPendingInventoryScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,7 +50,7 @@ export default function App() {
 				{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 				<NavigationContainer>
 					<Stack.Navigator>
-						<Stack.Screen name="Dummy" component={DummyScreen} />
+						<Stack.Screen name="RunnerTaskScreen" component={RunnerTaskScreen} />
 						<Stack.Screen
 							name="Server Return Inventory"
 							component={ServerReturnInventoryScreen}

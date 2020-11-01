@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } f
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function ServerDashBoardScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
@@ -26,7 +26,7 @@ export default function DummyScreen({ navigation }) {
 					}}>
 							
 						<Text style={{fontSize: 16, fontWeight:"bold", margin:10, marginTop:10, marginLeft:20}}>Server DashBoard</Text>
-						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Station 1:Big Tent</Text>
+						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Station 1: Big Tent</Text>
 						<Text style={{fontSize: 12, color: 'gray', margin:10, marginTop:5, marginLeft:20}}>Server Tablet: 1</Text>
 					</View>
 
@@ -83,8 +83,8 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={{fontSize: 9, color: 'gray'}}> 
-									19032 Users
+								<Text style={{fontSize: 9, color: 'gray', left: 10}}> 
+									19,032 Users
 								</Text>
 							</View>
 						</View>
@@ -149,10 +149,10 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400 Qty
+									2,400 Qty 
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									86400$
+									$86,400
 								</Text>
 							</View>
 						</View>
@@ -220,7 +220,7 @@ export default function DummyScreen({ navigation }) {
 									Qty:
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									{stationStats.currentValue} of {stationStats.stationCapacity}
+									{"28,055"} of {"40,080"}
 								</Text>
 							</View>
 						</View>
@@ -292,7 +292,7 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									1200$
+									$1,200
 								</Text>
 							</View>
 						</View>
@@ -361,10 +361,10 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400Qty
+									2,400 Qty
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									28800$
+									$28,800
 								</Text>
 							</View>
 						</View>
@@ -425,8 +425,8 @@ export default function DummyScreen({ navigation }) {
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
-								<Text style={{fontSize: 9, color: 'gray'}}> 
-									Pending Tasks:2
+								<Text style={{fontSize: 9, color: 'gray', left: 10}}> 
+									Pending Tasks: 2
 								</Text>
 							</View>
 						</View>
@@ -489,10 +489,10 @@ export default function DummyScreen({ navigation }) {
 								alignItems: 'center',
 							}}>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									2400 Qty
+									2,400 Qty
 								</Text>
 								<Text style={{fontSize: 9, color: 'gray'}}> 
-									10802$
+									$10,802
 								</Text>
 							</View>
 						</View>

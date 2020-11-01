@@ -3,17 +3,17 @@ import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function ServerIndividualStationDataScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	const stationStats = {stationCapacity:40080, currentValue: 28055, value: 43286, server: 4, runners: 2}
 
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
+		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'Bud Light'},
+		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coors Light'},
 		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
 		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
+		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smart Water'},
 		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
 	]
 	const iconList = imageList.map(item => {
@@ -36,17 +36,17 @@ export default function DummyScreen({ navigation }) {
 						source={item.img}
 						style={{
 							width: '60%',
-							height: '100%',
+							height: '50%',
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 							borderRadius: 15,
 							overflow: 'hidden',
 							resizeMode: 'contain',
-							marginHorizontal: 2
+							marginHorizontal: 2,
+							marginLeft: 50,
+							marginBottom: 5
 							// borderWidth: 5
 						}} />
-
-
 
 					<View style={{
 						width: '40%',
@@ -55,14 +55,14 @@ export default function DummyScreen({ navigation }) {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
-						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
+						<Text style={{fontSize: 12, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start', bottom: 30, right: 70}}> {item.name}</Text>
+						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center', right: 70, top: 30}}>
 						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
 							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
 							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
 							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
 						</View>
-						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
+						<Text style={{fontSize: 7, color: 'gray', bottom: -30, right: 70}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
 					
 				</View>
@@ -75,14 +75,11 @@ export default function DummyScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<ShadowedBox width={'80%'} height={'20%'} margin={10}>
-
-
 				<View style={{
 							flexDirection: 'row',
 							justifyContent: 'center',
 							alignItems: 'center',
 				}}>
-
 
 					<View style={{
 							width: '70%',
@@ -100,7 +97,7 @@ export default function DummyScreen({ navigation }) {
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
 						}}>
-							<View  style={styles.sectionTitle}>
+							<View  style={styles.stationsectionTitle}>
 							<Text style={{fontSize: 20, fontWeight:"bold"}}>Station 1:</Text>
 							</View>
 							<Text style={{fontSize: 10, color: 'gray'}}>{stationStats.currentValue} of {stationStats.stationCapacity}</Text>
@@ -116,16 +113,9 @@ export default function DummyScreen({ navigation }) {
 							alignItems: 'flex-start',
 						}}>
 							<Text style={{fontSize: 11, color: 'gray'}}>Servers:      {stationStats.server}</Text>
-							<Text style={{fontSize: 11, color: 'gray'}}>Runners:      {stationStats.runners}</Text>
+							<Text style={{fontSize: 11, color: 'gray'}}>Runners:     {stationStats.runners}</Text>
 						</View>
 					</View>
-
-
-
-
-
-
-
 
 					<View style={{
 							width: '30%',
@@ -198,8 +188,19 @@ const styles = StyleSheet.create({
 		textAlign: "left",
         borderBottomColor: "grey",
         borderBottomWidth: 1,
-        width: "100%"
-    },
+		width: "100%",
+		right: 5
+	},
+	stationsectionTitle: {
+		color: "lightgrey",
+        fontFamily: "Arial-BoldMT",
+        fontSize: 20,
+        fontWeight: "bold",
+		textAlign: "left",
+        borderBottomColor: "grey",
+        borderBottomWidth: 1,
+		width: "100%",
+	},
 	rowView: {
         width: "100%",
         flexDirection: "row",
@@ -211,16 +212,17 @@ const styles = StyleSheet.create({
     },
 
 	maxCapacityText: {
-        color: 'dodgerblue'
+		color: 'dodgerblue',
     },
     sixtyText: {
-        color: 'limegreen'
+		color: 'limegreen',
     },
     thirtyText: {
-        color: 'darkkhaki'
+		color: '#b3b300',
+		bottom: 2.5
 	},
 	criticalText: {
-        color: 'red'
+		color: 'red',
 	},
 	percentageHeaderBoxTextSize: {
 		fontSize: 24,  

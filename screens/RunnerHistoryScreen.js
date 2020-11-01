@@ -6,9 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 export default function RunnerHistoryScreen({ navigation }) {
 
 	const taskList = [
-		{key: 1, item: 'Sweetwater', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Unstarted'},
-		{key: 2, item: 'Coors Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'In transit'},
-		{key: 3, item: 'Bud Light', from: 'Inventory', to: 'Sta. 1 Big Tent', status: 'Complete'},
+		{key: 1, item: 'Sweetwater', from: 'Inventory', to: 'Station 1        Big Tent', status: 'Pending'},
+		{key: 2, item: 'Coors Light', from: 'Inventory', to: 'Station 1        Big Tent', status: 'In transit'},
+		{key: 3, item: 'Bud Light', from: 'Inventory', to: 'Station 1        Big Tent', status: 'Complete'},
 	]
 
 	const runner = '1'

@@ -20,7 +20,7 @@ export default function ButtonBlueButton(props) {
                 shadowOpacity: 0.32,
                 shadowRadius: 5.46,
                 elevation: 9,
-                backgroundColor: props.disable ? 'grey' : 'blue',
+                backgroundColor: props.disable ? 'grey' : '#0A47E9',
                 zIndex: 1
             }}
             onPress={props.onPress}

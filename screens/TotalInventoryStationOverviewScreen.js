@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import ShadowedBox from '../components/ShadowedBox';
 
-export default function DummyScreen({ navigation }) {
+export default function TotalInventoryStationOverviewScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
-	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
+	const stationStats = {stationCapacity:"4,080", currentValue:"28,055", value:"43,286", server:4, runners:2}
 
 	const imageList = [
-		{img:require('../assets/event-logo.png'), maxCapacity:8016, currentCapacity:2004, name:'BudLight'},
-		{img:require('../assets/coorslight.jpg'), maxCapacity:8016, currentCapacity:4008, name:'Coorslight'},
-		{img:require('../assets/terrapin.png'), maxCapacity:8016, currentCapacity:7214, name:'Terrapin'},
-		{img:require('../assets/truly.jpeg'), maxCapacity:8016, currentCapacity:7214, name:'Truly'},
-		{img:require('../assets/smartwater.png'), maxCapacity:8016, currentCapacity:8016, name:'smartWater'},
-		{img:require('../assets/cup.jpg'), maxCapacity:10000, currentCapacity:9500, name:'Cups'}
+		{img:require('../assets/event-logo.png'), maxCapacity:"8,016", currentCapacity:"2,004", name:'BudLight'},
+		{img:require('../assets/coorslight.jpg'), maxCapacity:"8,016", currentCapacity:"4,008", name:'Coorslight'},
+		{img:require('../assets/terrapin.png'), maxCapacity:"8,016", currentCapacity:"7,214", name:'Terrapin'},
+		{img:require('../assets/truly.jpeg'), maxCapacity:"8,016", currentCapacity:"7,214", name:'Truly'},
+		{img:require('../assets/smartwater.png'), maxCapacity:"8,016", currentCapacity:"8,016", name:'smartWater'},
+		{img:require('../assets/cup.jpg'), maxCapacity:"10,000", currentCapacity:"9,500", name:'Cups'}
 	]
 	const iconList = imageList.map(item => {
 		return (
@@ -29,7 +29,7 @@ export default function DummyScreen({ navigation }) {
 					margin: 3,
 					height: '80%',
 					alignItems: 'center',
-					// borderWidth: 1,
+					//borderWidth: 1,
 				}}>
 
 					<Image 
@@ -46,8 +46,6 @@ export default function DummyScreen({ navigation }) {
 							// borderWidth: 5
 						}} />
 
-
-
 					<View style={{
 						width: '40%',
 						height: '50%',
@@ -55,14 +53,14 @@ export default function DummyScreen({ navigation }) {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<Text style={{fontSize: 7.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
+						<Text style={{fontSize: 8.5, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> {item.name}</Text>
 						<View style={{...styles.sectionTitle, justifyContent: 'center', alignItems: 'center',}}>
 						<Text style={[styles.percentageSmallboxTextSize, (item.currentCapacity/item.maxCapacity).toFixed(2) == 1 
 							? styles.maxCapacityText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.7 
 							? styles.sixtyText : (item.currentCapacity/item.maxCapacity).toFixed(2) >= 0.26 
 							? styles.thirtyText : styles.criticalText]}>{(item.currentCapacity*100/item.maxCapacity).toFixed(0)}%</Text>
 						</View>
-						<Text style={{fontSize: 6, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
+						<Text style={{fontSize: 7, color: 'gray'}}> {item.currentCapacity} of {item.maxCapacity}</Text>
 					</View>
 					
 				</View>
@@ -188,7 +186,7 @@ const styles = StyleSheet.create({
 	},
 	normalText: {
 		fontSize: 17,
-		fontFamily: 'Arial'
+		fontFamily: 'Arial',
 	},
     sectionTitle: {
         color: "lightgrey",
@@ -198,7 +196,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
         borderBottomColor: "grey",
         borderBottomWidth: 1,
-        width: "100%"
+		width: "100%",
     },
 	rowView: {
         width: "100%",
@@ -208,6 +206,7 @@ const styles = StyleSheet.create({
 	},
 	percentageSmallboxTextSize: {
 		fontSize: 16, 
+		paddingBottom: 10
     },
 
 	maxCapacityText: {

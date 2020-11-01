@@ -75,7 +75,7 @@ export default class AssignInventoryCreateStationScreen extends React.Component 
                     this.setState({inventorySelected: null});
                 }}>
                 <BottomBlueButton
-                    text={"Finish Stations"}
+                    text={"Finish Stations?"}
                     onPress={() => console.log("haha")}
                     disable={this.state.inventorySelected !== null} />
                 <InventoryTopBox inventory={"Assign"} />
@@ -209,5 +209,8 @@ const styles = StyleSheet.create({
         width: '90%',
         flexDirection: 'row',
         justifyContent: 'center'
+    },
+    buttonColor: {
+        backgroundColor: '#DDDDDD'
     }
 });

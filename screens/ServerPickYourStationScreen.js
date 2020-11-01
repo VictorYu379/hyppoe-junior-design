@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import ShadowedBox from '../components/ShadowedBox';
-import { color } from 'react-native-reanimated';
 
-export default function ServerPendingInventoryScreen({ navigation }) {
+export default function DummyScreen({ navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
 
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'10%'} margin={10}>
+			<ShadowedBox width={'80%'} height={'12%'} margin={10}>
+
+
 
 					<View style={{
 							marginVertical: 20,
@@ -19,14 +20,17 @@ export default function ServerPendingInventoryScreen({ navigation }) {
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'flex-start',
-							margin: 10
+							margin: 10,
+							marginTop: 10,
 					}}>
 							
-						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pending Inventory:</Text>
+						<Text style={{fontSize: 16, fontWeight:"bold", margin:4, marginLeft:12}}>Pick Your Station:</Text>
 						
 						
 					</View>
 
+
+					
 			</ShadowedBox>
 
 
@@ -50,46 +54,39 @@ export default function ServerPendingInventoryScreen({ navigation }) {
 						//borderWidth: 1,
 					}}>
 
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Runner 1:
+					<View style={{
+							width: '50%',
+							height: '100%',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginLeft: 60
+						}}>
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+								marginTop: 20
+							}}>
+								<Text style={{fontSize: 12, fontWeight: 'bold', color: "#5C5A5A", justifyContent: 'flex-start'}}> 
+									Station 1
 								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
+								<Text style={{fontSize: 12, fontWeight: 'bold', color: "#5C5A5A", justifyContent: 'flex-start'}}> 
+									Big Tent
 								</Text>
+								<View  style={styles.sectionTitle}></View>
+							</View>
+
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
 							</View>
 						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Pick Up:
-							</Text>
-						</View>
 
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
-									Pending
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
-									Pending
-							</Text>
-						</View>
 					</View>
 
 
@@ -104,50 +101,44 @@ export default function ServerPendingInventoryScreen({ navigation }) {
 						width: '90%',
 						alignItems: 'flex-start',
 						//borderWidth: 1,
+						marginTop: 3
 					}}>
-
-						<View style={styles.sectionTitle}>
-							<View style={{...styles.rowView, width:'90%'}}>
-								<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-									Station 1:
+					
+					<View style={{
+							width: '50%',
+							height: '100%',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginLeft: 60
+						}}>
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+								<Text style={{fontSize: 12, fontWeight: 'bold', color: "#5C5A5A", justifyContent: 'flex-start'}}> 
+									Station 2
 								</Text>
-								<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-									Bud Light
+								<Text style={{fontSize: 12, fontWeight: 'bold', color: "#5C5A5A", justifyContent: 'flex-start'}}> 
+									Main
+								</Text>
+								<Text style={{fontSize: 12, fontWeight: 'bold', color: "#5C5A5A", justifyContent: 'flex-start'}}> 
+									Stage
 								</Text>
 							</View>
-						</View>
-							
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Drop off:
-							</Text>
+
+							<View style={{
+								width: '100%',
+								height: '50%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+							</View>
 						</View>
 
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Inventory
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#2eb82e'}}>
-								Complete
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: 'gray', justifyContent: 'flex-start'}}> 
-								Confirmed:
-							</Text>
-						</View>
-
-						<View style={styles.rowView}>
-							<Text style={{fontSize: 10, color: 'gray', justifyContent: 'flex-start'}}> 
-								Station 1
-							</Text>
-							<Text style={{fontSize: 10, fontWeight: 'bold', color: '#ffcc00'}}>
-									Pending
-							</Text>
-						</View>
 					</View>
-
 
 				</ShadowedBox>
 
@@ -173,15 +164,17 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
 		textAlign: "left",
-        borderBottomColor: "grey",
+        borderBottomColor: "#B8C4BB",
         borderBottomWidth: 1,
-        width: "100%"
+		width: "80%",
+		marginTop: 30
     },
 	rowView: {
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 2
+		padding: 2,
+		marginLeft: 60
 	},
 	percentageSmallboxTextSize: {
 		fontSize: 16, 
@@ -207,7 +200,7 @@ const styles = StyleSheet.create({
 	pendingText:{
 		fontSize: 10, 
 		fontWeight: 'bold', 
-		color: '#ffcc00'
+		color: 'gold'
 	},
 	percentageHeaderBoxTextSize: {
 		fontSize: 20,  
@@ -244,5 +237,5 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 2
-    },
+	},
 });
