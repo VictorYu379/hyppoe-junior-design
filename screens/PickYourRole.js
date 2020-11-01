@@ -1,35 +1,25 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
-import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
-import ShadowedBox from 'components/ShadowedBox';
+import { ScrollView } from 'react-native-gesture-handler';import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
-import Event, { globalEvent } from 'model/Event';
-import Manager from 'model/Manager';
-import Job from 'model/Job';
-import Inventory from 'model/Inventory';
+import Event from 'model/Event';
 
 
 export default function PickYourRole({ navigation }) {
 	
 
-	const [serverCount, setserverCount] = useState([]);
-	const [runnerCount, setrunnerCount] = useState([]);
+	const [serverCount, setServerCount] = useState(0);
+	const [runnerCount, setRunnerCount] = useState(0);
+	const [managerCount, setManagerCount] = useState(0);
 
 	useEffect(() => {
-		const serverCount = Station.getNumOfStations();
-		setserverCount(serverCount);
-		const runnerCount = Station.getNumOfRunners();
-		setrunnerCount(runnerCount);
+		var serverCount = Station.getNumOfServers();
+		setServerCount(serverCount);
+		var runnerCount = Station.getNumOfRunners();
+		setRunnerCount(runnerCount);
+		var managerCount = Event.getNumOfManagers();
+		setManagerCount(managerCount);
 	}, [])
-	
-	
-	
-
-
-	
-
 	
 	return (
 		<View style={styles.container}>
@@ -228,7 +218,7 @@ export default function PickYourRole({ navigation }) {
 										<Text style={{
 											fontSize: 9, 
 										}}>
-											Managers: 1
+											Managers: {managerCount}
 										</Text>
 									</View>
 								</View>

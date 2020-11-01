@@ -71,6 +71,14 @@ export default class Event {
         return res;
     }
 
+    static getNumOfManagers() {
+        var res = 0;
+        if (globalEvent.managers != undefined) {
+            res = globalEvent.managers.length;
+        }
+        return res;
+    }
+
     addJobToEvent(jobId) {
         return dbManager.getEventHandle(this.id).update({
             "jobs": this.jobs.concat([jobId])
