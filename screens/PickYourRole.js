@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';import ShadowedBox from 'components/ShadowedBox';
+import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
 import Event from 'model/Event';
 
@@ -36,198 +36,192 @@ export default function PickYourRole({ navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<ScrollView style={{
-				width:'100%',
-				maxHeight:'100%',
-				marginLeft:'16%'
+			<View style={{
+				flexWrap: 'wrap',
+				flexDirection: 'row',
+				width: '100%',
+				height: '100%',
+				paddingLeft: '2%',
+				marginLeft: '14%'
 			}}>
-				<View style={{
-					flexWrap: 'wrap',
-					flexDirection: 'row',
-					width: '100%',
-					//height: '60%',
-					paddingLeft: '2%',
-				}}>
-					
-					<ShadowedBox 
-						width={140} 
-						height={110}
-						//square 
-						margin={5}
-						touchable
-						onPress={() => navigation.navigate('Server Pick Your Station')}>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'20%'}
+					//square 
+					margin={5}
+					touchable
+					onPress={() => navigation.navigate('Server Pick Your Station')}>
+					<View style={{
+						width: '100%',
+						aspectRatio: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+						<Image
+							source={require('assets/Server.png')}
+							style={{
+								width: '50%',
+								height: '50%',
+								overflow: 'hidden',
+								resizeMode: 'contain',
+								margin: 5
+							}} />
+						
 						<View style={{
-							width: '100%',
+							width: '40%',
 							aspectRatio: 1,
-							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'center'
 						}}>
-							<Image
-								source={require('assets/Server.png')}
-								style={{
-									width: '50%',
-									height: '50%',
-									overflow: 'hidden',
-									resizeMode: 'contain',
-									margin: 5
-								}} />
-							
 							<View style={{
-								width: '40%',
+								width: '100%',
 								aspectRatio: 1,
 								alignItems: 'center',
-								justifyContent: 'center'
+								justifyContent: 'space-around',
+								flexWrap: 'wrap',
+								flexDirection: 'column',
 							}}>
-								<View style={{
-									width: '100%',
-									aspectRatio: 1,
-									alignItems: 'center',
-									justifyContent: 'space-around',
-									flexWrap: 'wrap',
-									flexDirection: 'column',
+								<Text style={{
+									fontSize: 11, 
+									fontWeight: 'bold',
+									marginBottom: 10,
 								}}>
-									<Text style={{
-										fontSize: 11, 
-										fontWeight: 'bold',
-										marginBottom: 10,
-									}}>
-										Server
-									</Text>
+									Server
+								</Text>
 
-									<View style={styles.sectionTitle}>
-										<Text style={{
-											fontSize: 10, 
-										}}>
-											Servers: {serverCount}
-										</Text>
-									</View>
+								<View style={styles.sectionTitle}>
+									<Text style={{
+										fontSize: 10, 
+									}}>
+										Servers: {serverCount}
+									</Text>
 								</View>
 							</View>
-							
 						</View>
-					</ShadowedBox>
+						
+					</View>
+				</ShadowedBox>
 
-					<ShadowedBox 
-						width={140} 
-						height={110}
-						//square 
-						margin={5}
-						touchable
-						onPress={() => navigation.navigate('Runner Pick Your Station')}>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'20%'}
+					//square 
+					margin={5}
+					touchable
+					onPress={() => navigation.navigate('Runner Pick Your Station')}>
+					<View style={{
+						width: '100%',
+						aspectRatio: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+						<Image
+							source={require('assets/Runner.png')}
+							style={{
+								width: '50%',
+								height: '50%',
+								overflow: 'hidden',
+								resizeMode: 'contain',
+								margin: 5
+							}} />
+						
 						<View style={{
-							width: '100%',
+							width: '40%',
 							aspectRatio: 1,
-							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'center'
 						}}>
-							<Image
-								source={require('assets/Runner.png')}
-								style={{
-									width: '50%',
-									height: '50%',
-									overflow: 'hidden',
-									resizeMode: 'contain',
-									margin: 5
-								}} />
-							
 							<View style={{
-								width: '40%',
+								width: '100%',
 								aspectRatio: 1,
 								alignItems: 'center',
-								justifyContent: 'center'
+								justifyContent: 'space-around',
+								flexWrap: 'wrap',
+								flexDirection: 'column',
 							}}>
-								<View style={{
-									width: '100%',
-									aspectRatio: 1,
-									alignItems: 'center',
-									justifyContent: 'space-around',
-									flexWrap: 'wrap',
-									flexDirection: 'column',
+								<Text style={{
+									fontSize: 11, 
+									fontWeight: 'bold',
+									marginBottom: 10,
 								}}>
-									<Text style={{
-										fontSize: 11, 
-										fontWeight: 'bold',
-										marginBottom: 10,
-									}}>
-										Runner
-									</Text>
+									Runner
+								</Text>
 
-									<View style={styles.sectionTitle}>
-										<Text style={{
-											fontSize: 10, 
-										}}>
-											Runners: {runnerCount}
-										</Text>
-									</View>
+								<View style={styles.sectionTitle}>
+									<Text style={{
+										fontSize: 10, 
+									}}>
+										Runners: {runnerCount}
+									</Text>
 								</View>
 							</View>
-							
 						</View>
-					</ShadowedBox>
+						
+					</View>
+				</ShadowedBox>
 
 
-					<ShadowedBox 
-						width={140} 
-						height={110}
-						//square 
-						margin={5}
-						touchable
-						onPress={() => navigation.navigate('Manager Dashboard')}>
+				<ShadowedBox 
+					width={'40%'} 
+					height={'20%'}
+					//square 
+					margin={5}
+					touchable
+					onPress={() => navigation.navigate('Manager Dashboard')}>
+					<View style={{
+						width: '100%',
+						aspectRatio: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+						<Image
+							source={require('assets/Manager.png')}
+							style={{
+								width: '50%',
+								height: '50%',
+								overflow: 'hidden',
+								resizeMode: 'contain',
+								margin: 5
+							}} />
+						
 						<View style={{
-							width: '100%',
+							width: '40%',
 							aspectRatio: 1,
-							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'center'
 						}}>
-							<Image
-								source={require('assets/Manager.png')}
-								style={{
-									width: '50%',
-									height: '50%',
-									overflow: 'hidden',
-									resizeMode: 'contain',
-									margin: 5
-								}} />
-							
 							<View style={{
-								width: '40%',
+								width: '100%',
 								aspectRatio: 1,
 								alignItems: 'center',
-								justifyContent: 'center'
+								justifyContent: 'space-around',
+								flexWrap: 'wrap',
+								flexDirection: 'column',
 							}}>
-								<View style={{
-									width: '100%',
-									aspectRatio: 1,
-									alignItems: 'center',
-									justifyContent: 'space-around',
-									flexWrap: 'wrap',
-									flexDirection: 'column',
+								<Text style={{
+									fontSize: 11, 
+									fontWeight: 'bold',
+									marginBottom: 10,
 								}}>
-									<Text style={{
-										fontSize: 11, 
-										fontWeight: 'bold',
-										marginBottom: 10,
-									}}>
-										Manager
-									</Text>
+									Manager
+								</Text>
 
-									<View style={styles.sectionTitle}>
-										<Text style={{
-											fontSize: 9, 
-										}}>
-											Managers: {managerCount}
-										</Text>
-									</View>
+								<View style={styles.sectionTitle}>
+									<Text style={{
+										fontSize: 9, 
+									}}>
+										Managers: {managerCount}
+									</Text>
 								</View>
 							</View>
-							
 						</View>
-					</ShadowedBox>
-				</View>
-			</ScrollView>
+						
+					</View>
+				</ShadowedBox>
+			</View>
 		</View>
 	);
 }
@@ -248,7 +242,7 @@ const styles = StyleSheet.create({
         fontFamily: "Arial-BoldMT",
         fontSize: 20,
         fontWeight: "bold",
-		textAlign: "left",
+		alignItems: 'center',
         borderTopColor: "grey",
         borderTopWidth: 1,
         width: "100%"
