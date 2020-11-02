@@ -1,14 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
-import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
-import Event, { globalEvent } from 'model/Event';
-import Manager from 'model/Manager';
-import Job from 'model/Job';
-import Inventory from 'model/Inventory';
 
 
 export default function PickYourTablet({route, navigation }) {
@@ -18,7 +11,6 @@ export default function PickYourTablet({route, navigation }) {
 	useEffect(() => {
 		const tablets = Station.getPickYourTabletData(stationId);
 		settablets(tablets);
-		console.log(Station.getPickYourTabletData(stationId))
 	}, [])
 	
 	
@@ -26,8 +18,8 @@ export default function PickYourTablet({route, navigation }) {
 	const tabletList = tablets.map((item, index) => {
 		return (
 			<ShadowedBox 
-				width={140} 
-				height={110}
+				width={'40%'} 
+				height={'20%'}
 				//square 
 				margin={5}
 				touchable
@@ -107,21 +99,16 @@ export default function PickYourTablet({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-			<ScrollView style={{
-					width:'100%',
-					maxHeight:'100%',
-					marginLeft:'16%'
-				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						//height: '60%',
-						paddingLeft: '2%',
-					}}>
-						{tabletList}	
-					</View>
-				</ScrollView>
+			<View style={{
+				flexWrap: 'wrap',
+				flexDirection: 'row',
+				width: '100%',
+				height: '100%',
+				paddingLeft: '2%',
+				marginLeft: '14%'
+			}}>
+				{tabletList}	
+			</View>
 		</View>
 	);
 }
