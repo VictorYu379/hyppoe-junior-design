@@ -62,22 +62,22 @@ export default function RunnerTaskScreen({ navigation }) {
 		const curTask = taskSelected;
 		let curRunner = null;
 		let curStatus = "";
-		if (taskSelected.status === "Complete") {
-			curStatus = "Confirmed";
-		} else if (taskSelected.status === "Unstarted") {
-			curStatus = "In transit";
-			curRunner = globalRunner.id;
-		} else if (taskSelected.status === "In transit") {
-			curStatus = "Complete";
-		}
-		Job.updateJob(curTask.jobId, drink, curStatus, curRunner);
-		curTask.drink = drink;
-		curTask.status = curStatus;
-		curTask.runner = "Runner " + globalRunner.key;
-		if (isRunnerSelected) {
-			runnerJobs[taskIndexSelected] = curTask;
-		} else {
-			StationJobsList[taskIndexSelected] = curTask;
+		if (taskSelected.status !== "Complete") { // Runner can't confirm the inventory.
+			if (taskSelected.status === "Unstarted") {
+				curStatus = "In transit";
+				curRunner = globalRunner.id;
+			} else if (taskSelected.status === "In transit") {
+				curStatus = "Complete";
+			}
+			Job.updateJob(curTask.jobId, drink, curStatus, curRunner);
+			curTask.drink = drink;
+			curTask.status = curStatus;
+			curTask.runner = "Runner " + globalRunner.key;
+			if (isRunnerSelected) {
+				runnerJobs[taskIndexSelected] = curTask;
+			} else {
+				StationJobsList[taskIndexSelected] = curTask;
+			}
 		}
 		setConfirmInventoryModalVisible(false);
 	}
@@ -94,6 +94,7 @@ export default function RunnerTaskScreen({ navigation }) {
 					item.type === "Return" ? item.from : item.to,
 					pairItems
 				);
+				confirmInventoryModal.inputJobType(item.type);
 				confirmInventoryModal.inputStatus(item.status);
 			}}>
 
@@ -183,8 +184,8 @@ export default function RunnerTaskScreen({ navigation }) {
 					item.type === "Return" ? item.from : item.to,
 					pairItems
 				);
-				confirmInventoryModal.inputStatus(item.status);
 				confirmInventoryModal.inputJobType(item.type);
+				confirmInventoryModal.inputStatus(item.status);
 			}}>
 
 				<View style={{
