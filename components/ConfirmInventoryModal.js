@@ -69,6 +69,7 @@ export default class ConfirmInventoryModal extends React.Component {
     }
 
     inputStatus(status) {
+        console.log("Status: ", status);
         if (status === "In transit") {
             this.setState({isDropOff: true});
         } else if (status === "Unstarted") {
@@ -79,6 +80,7 @@ export default class ConfirmInventoryModal extends React.Component {
     }
 
     inputJobType(type) {
+        console.log("Job type: ", type);
         if (type === "Return") {
             this.setState({isReturn: true});
         } else {

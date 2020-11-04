@@ -84,6 +84,7 @@ export default function ManagerPendingInventoryScreen({ navigation }) {
 					runnerJobs[index].type === "Return" ? runnerJobs[index].from : runnerJobs[index].to,
 					pairItems
 				);
+				confirmInventoryModal.inputJobType(runnerJobs[index].type);
 				confirmInventoryModal.inputStatus(runnerJobs[index].status);
 			}}>
 
