@@ -20,7 +20,7 @@ export default function StationRunnersScreen({ navigation }) {
 		} else if (text == 'Unstarted') {
 			return '#CD594A'
 		}
-		return 'black'
+		return '#0070F7'
 	}
 
 	const taskHistory = taskList.map(task => {
