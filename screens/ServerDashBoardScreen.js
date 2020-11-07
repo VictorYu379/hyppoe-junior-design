@@ -108,10 +108,11 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				width: '100%',
 				//height: '60%',
-				paddingLeft: '2%'
+				paddingLeft: '2%',
+				marginLeft: 50
 			}}>
 
 		
@@ -415,12 +416,12 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 
 				</ShadowedBox>
 
-				<ShadowedBox 
+				{/* <ShadowedBox 
 					width={'40%'} 
 					height={'19%'}  
 					margin={5}
 					touchable
-					onPress={() => {navigation.navigate("Server Confirm Inventory Screen");}}
+					//onPress={() => {navigation.navigate("Server Confirm Inventory Screen");}}
 				>
 
 
@@ -489,7 +490,7 @@ export default function ServerDashBoardScreen({ route, navigation }) {
 					</View>
 
 
-				</ShadowedBox>
+				</ShadowedBox> */}
 				<ShadowedBox 
 					width={'40%'} 
 					height={'19%'}  

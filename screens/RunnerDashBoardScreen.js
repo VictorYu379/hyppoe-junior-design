@@ -9,12 +9,7 @@ import Event from 'model/Event';
 export default function RunnerDashBoardScreen({ route, navigation }) {
 	const [stationModalVisible, setStationModalVisible] = useState(false);
 	const stationStats = {stationCapacity:40080, currentValue:28055, value:43286, server:4, runners:2}
-<<<<<<< HEAD
-	//console.log(route.params)
-	const {runnerId, runnerKey, stationId} = route.params
-=======
-	const {stationId, runnerId} = route.params;
->>>>>>> 86d36d386615caa145a2b4a21e4ff0ad5aab80f4
+	const {stationId, runnerId, runnerKey} = route.params;
 
 	// Reading runner from global storage
 	// const [runner, setRunner] = useState();

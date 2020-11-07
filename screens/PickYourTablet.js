@@ -99,24 +99,6 @@ export default function PickYourTablet({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-<<<<<<< HEAD
-				<ScrollView style={{
-					width:'100%',
-					maxHeight:'100%',
-					marginLeft:'14%',
-				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						//height: '60%',
-						paddingLeft: '2%',
-					}}>
-					{tabletList}
-						
-					</View>
-				</ScrollView>
-=======
 			<View style={{
 				flexWrap: 'wrap',
 				flexDirection: 'row',
@@ -127,7 +109,6 @@ export default function PickYourTablet({route, navigation }) {
 			}}>
 				{tabletList}	
 			</View>
->>>>>>> 86d36d386615caa145a2b4a21e4ff0ad5aab80f4
 		</View>
 	);
 }

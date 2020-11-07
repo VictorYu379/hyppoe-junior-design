@@ -7,7 +7,6 @@ import Manager from 'model/Manager';
 import Job from 'model/Job';
 import Inventory from 'model/Inventory';
 import {globalServers} from 'model/Server';
-import Event from 'model/Event';
 
 
 export default function PickYourRole({ navigation }) {

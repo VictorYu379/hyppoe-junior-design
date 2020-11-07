@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
@@ -24,7 +24,7 @@ export default function PickYourRunner({route, navigation }) {
 				//square 
 				margin={5}
 				touchable
-				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id})}>
+				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id, runnerKey:item.key})}>
 				<View style={{
 					width: '100%',
 					aspectRatio: 1,
@@ -100,22 +100,16 @@ export default function PickYourRunner({route, navigation }) {
 
 				</View>
 			</ShadowedBox>
-				<ScrollView style={{
-					marginLeft: '14%',
-					width:'100%',
-					maxHeight:'100%',
+				<View style={{
+					flexWrap: 'wrap',
+					flexDirection: 'row',
+					width: '100%',
+					height: '100%',
+					paddingLeft: '2%',
+					marginLeft: '14%'
 				}}>
-					<View style={{
-						flexWrap: 'wrap',
-						flexDirection: 'row',
-						width: '100%',
-						height: '100%',
-						paddingLeft: '2%',
-						marginLeft: '14%'
-					}}>
-					{runnerList}
-					</View>
-				</ScrollView>
+					{runnerList}	
+				</View>
 			
 		</View>
 	);

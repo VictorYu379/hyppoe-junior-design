@@ -55,7 +55,7 @@ export default class Job {
         jobs.map(job => {
             if (job.runnerId == runnerId) {
                 total+=1
-                if (job.status != "Complete" || job.status != "Confirmed") {
+                if (job.status == "In transit" || job.status == "Unstarted") {
                     pending += 1
                 }
             }
@@ -181,6 +181,7 @@ export default class Job {
     // Returns the total number of unconfirmed jobs and their total qty/value if stationId is omitted.
     static getNumOfJobsPending(stationId) {
         var jobs = getGlobalJobs();
+        console.log(jobs)
         var res = 0;
         var qty = 0;
         var val = 0;
