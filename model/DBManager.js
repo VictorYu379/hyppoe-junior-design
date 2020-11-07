@@ -239,6 +239,7 @@ class DBManager {
                     if (status != null) {
                         newData.status = status;
                     }
+                    
                     if (runnerId != null) {
                         newData.runnerId = runnerId;
                     }
