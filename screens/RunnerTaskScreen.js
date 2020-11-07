@@ -66,14 +66,14 @@ export default function RunnerTaskScreen({ navigation }) {
 			curStatus = "Confirmed";
 		} else if (taskSelected.status === "Unstarted") {
 			curStatus = "In transit";
-			curRunner = globalRunner.name;
+			curRunner = globalRunner.id;
 		} else if (taskSelected.status === "In transit") {
 			curStatus = "Complete";
 		}
 		Job.updateJob(curTask.jobId, drink, curStatus, curRunner);
 		curTask.drink = drink;
 		curTask.status = curStatus;
-		curTask.runner = curRunner;
+		curTask.runner = "Runner " + globalRunner.key;
 		if (isRunnerSelected) {
 			runnerJobs[taskIndexSelected] = curTask;
 		} else {

@@ -1,14 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmInventoryModal from 'components/ConfirmInventoryModal';
-import InputBlankInventoryModal from 'components/InputBlankInventoryModal';
 import ShadowedBox from 'components/ShadowedBox';
 import Station from 'model/Station';
-import Event, { globalEvent } from 'model/Event';
-import Manager from 'model/Manager';
-import Job from 'model/Job';
-import Inventory from 'model/Inventory';
 
 
 export default function PickYourRunner({route, navigation }) {
@@ -17,10 +10,8 @@ export default function PickYourRunner({route, navigation }) {
 	const [runners, setrunners] = useState([]);
 
 	useEffect(() => {
-		//console.log(Station.getPickYourRunnerData(stationId))
 		const runners = Station.getPickYourRunnerData(stationId);
 		setrunners(runners);
-		
 	}, [])
 	
 	
@@ -28,12 +19,12 @@ export default function PickYourRunner({route, navigation }) {
 	const runnerList = runners.map((item, index) => {
 		return (
 			<ShadowedBox 
-				width={140} 
-				height={110}
+				width={'40%'} 
+				height={'20%'}
 				//square 
 				margin={5}
 				touchable
-				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id, runnerKey:item.key})}>
+				onPress={() => navigation.navigate('Runner Dashboard',{stationId: stationId, runnerId:item.id})}>
 				<View style={{
 					width: '100%',
 					aspectRatio: 1,
@@ -96,7 +87,7 @@ export default function PickYourRunner({route, navigation }) {
 	
 	return (
 		<View style={styles.container}>
-			<ShadowedBox width={'80%'} height={'15%'} margin={10} touchable onPress={() => navigation.navigate('Manager Available Inventory Detailed Data List')}>
+			<ShadowedBox width={'80%'} height={'15%'} margin={10}>
 				<View style={styles.rowView}>
 
 					<Text style={{
@@ -118,8 +109,9 @@ export default function PickYourRunner({route, navigation }) {
 						flexWrap: 'wrap',
 						flexDirection: 'row',
 						width: '100%',
-						//height: '60%',
+						height: '100%',
 						paddingLeft: '2%',
+						marginLeft: '14%'
 					}}>
 					{runnerList}
 					</View>

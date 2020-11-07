@@ -260,10 +260,20 @@ export default class Station {
     }
 
 
+    static getNumOfServers(stationId) {
+        var res = 0;
+        if (stationId === undefined) {
+            var stations = getGlobalStations();
+            stations.map(station => { res += station.servers.length });
+        } else {
+            var station = globalStations[stationId];
+            if (station != undefined) {
+                res = station.servers.length;
+            }
+        }
+        return res;
+    }
     
-
-    // Returns the number of returned items of station based on stationId.
-    // Returns the total number of returned items if stationId is omitted.
     static getNumOfRunners(stationId) {
         var res = 0;
         if (stationId === undefined) {
