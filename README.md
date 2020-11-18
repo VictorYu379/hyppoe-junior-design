@@ -38,7 +38,7 @@ Download and install latest LTS version of Node.js supported on your operating s
 [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you have not already.
 - Make sure `git` is a valid command by running `git --version` in your command prompt/terminal, the current installed version number (e.g. `git version 2.16.0.windows.2`) is expected to show up.
 
-### Download Instructions
+### Download Instruction
 Clone the current repository to your local directory using:
 ```
 git clone https://github.com/VictorYu379/hyppoe-junior-design.git
@@ -68,7 +68,7 @@ To run on **emulators**
   - Create an Android vidtual device following [*this guide*](https://developer.android.com/studio/run/managing-avds).
 - Click on *“Run on Android device/emulator”* or *“Run on iOS simulator”* on Expo DevTools to run our application in your installed emulator.
 
-## Troubleshooting
+### Troubleshooting
 - `'npm' is not recognized as interal or external command` or `npm: command not found`
   - npm is now distributed with Node.js. Make sure you download and install the latest LTS version of Node.js, which should automatically install the LTS version of npm. ([*link to official download*](https://nodejs.org/en/download/))
 - `Package not found`
