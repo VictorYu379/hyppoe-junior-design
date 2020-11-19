@@ -21,6 +21,9 @@ Georgia Tech Junior Design Fall 2020
 
 ### Known bugs and defects
 - Uploading images for new drink types hasn’t been implemented due to different native behavior across iOS and Android for using images from camera roll.
+   - React Native and Expo provides very limited access to the file system of the mobile device. Could avoid this if the project is written in native language to the machine (E.G. Swift/Objective-C for iOS, Java/Kotlin for Android) 
+   - Need a lot of processing since Expo file APIs only support reading files as string, and we didn't have enough time or experience to accomplish the file processing.
+   - Users could directly upload the image for their new drinks to firebase as a work-around. Make sure to manually update the icon url link in drink type information in the firebase as well.
 - Notifications regarding new job status or low inventory stock hasn’t been implemented.
 - Cloud Firestore currently applies basic security rules for test mode. The security rules need to be updated before deploying to production.
 
